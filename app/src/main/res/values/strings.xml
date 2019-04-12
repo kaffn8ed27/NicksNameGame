@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">NicksNameGame</string>
+    <!--label for splash screen-->
+    <string name="launch_activity_name">Select Game Mode</string>
+    <!--label for default game screen-->
+    <string name="game_activity_name">Name That Co-Worker!</string>
+    <!--placeholders for the labels that will identify the people in the pictures-->
+    <string name="photo_label_1" translatable="false">John</string>
+    <string name="photo_label_2" translatable="false">Paul</string>
+    <string name="photo_label_3" translatable="false">George</string>
+    <string name="photo_label_4" translatable="false">Ringo</string>
+    <string name="photo_label_5" translatable="false">Oh no!</string>
+
+</resources>
