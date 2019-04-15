@@ -5,10 +5,12 @@
     <!--label for default game screen-->
     <string name="game_activity_name">Name That Co-Worker!</string>
     <!--placeholders for the labels that will identify the people in the pictures-->
-    <string name="photo_label_1" translatable="false">John</string>
-    <string name="photo_label_2" translatable="false">Paul</string>
-    <string name="photo_label_3" translatable="false">George</string>
-    <string name="photo_label_4" translatable="false">Ringo</string>
-    <string name="photo_label_5" translatable="false">Oh no!</string>
+    <string name="John" translatable="false">John</string>
+    <string name="Paul" translatable="false">Paul</string>
+    <string name="George" translatable="false">George</string>
+    <string name="Ringo" translatable="false">Ringo</string>
+    <string name="Yoko" translatable="false">Oh no!</string>
+    <!--placeholder for prompt to choose the co-worker's photo-->
+    <string name="game_prompt" translatable="true">Who is Ringo?</string>
 
 </resources>
