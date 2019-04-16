@@ -1,6 +1,7 @@
 package android.example.nicksnamegame.game;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,7 +26,7 @@ public class GameActivity extends AppCompatActivity {
 
         people = (RecyclerView) findViewById(R.id.rv_photos);
 
-        LinearLayoutManager photoManager = new LinearLayoutManager(this);
+        GridLayoutManager photoManager = new GridLayoutManager(this, 2);
         people.setLayoutManager(photoManager);
         people.setHasFixedSize(true);
 

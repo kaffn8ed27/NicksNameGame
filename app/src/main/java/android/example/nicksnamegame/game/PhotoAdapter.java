@@ -20,7 +20,6 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
 
     private List<Person> coworkers;
     private int index;
-    private String name;
 
     public PhotoAdapter(PeopleShuffler.ShuffledList shuffledList) {
         this.coworkers = shuffledList.getPeople();
