@@ -32,6 +32,4 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@drawable/john" />
 
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

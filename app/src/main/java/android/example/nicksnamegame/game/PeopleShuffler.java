@@ -2,7 +2,8 @@ package android.example.nicksnamegame.game;
 
 import android.content.Context;
 import android.example.nicksnamegame.R;
-import android.util.Log;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,9 +12,12 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class PeopleShuffler {
 
+    private static final int NUM_COWORKERS_TO_SHOW = 6;
+
     public PeopleShuffler () {}
 
     public ShuffledList createShuffledList (Context context) {
+
 
         List<Person> personArrayList = new ArrayList<>();
 

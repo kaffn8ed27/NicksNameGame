@@ -28,5 +28,5 @@
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!-- TODO Add layout for landscape mode -->
+<!-- TODO Add layout for landscape mode - now that it's a grid, how would that be done?-->
 <!-- TODO Add layout for larger screens (tablet looks weird) -->

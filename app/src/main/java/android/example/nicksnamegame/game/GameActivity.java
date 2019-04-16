@@ -12,6 +12,12 @@ import java.util.List;
 
 public class GameActivity extends AppCompatActivity {
 
+    // TODO - add "next group" functionality
+    /* TODO - tracking: if answered right on the first try, remove coworker from the pool.
+       If there are fewer than 6 names remaining, return "known" coworkers to pool
+       Once all coworkers are "known", prompt player to start over
+     */
+
     private RecyclerView people;
     private PhotoAdapter photoAdapter;
     private PeopleShuffler peopleShuffler;
