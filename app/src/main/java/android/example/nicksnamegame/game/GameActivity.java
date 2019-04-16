@@ -6,15 +6,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.example.nicksnamegame.R;
 import android.os.Bundle;
+import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class GameActivity extends AppCompatActivity{
+public class GameActivity extends AppCompatActivity {
 
     private RecyclerView people;
     private PhotoAdapter photoAdapter;
-    private List<Person> peopleToChooseFrom = new ArrayList<>();
+    private PeopleShuffler peopleShuffler;
+    private PeopleShuffler.ShuffledList shuffledList;
+    private TextView game_prompt_text_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,20 +29,25 @@ public class GameActivity extends AppCompatActivity{
         people.setLayoutManager(photoManager);
         people.setHasFixedSize(true);
 
-        Person john = new Person(this.getString(R.string.John), R.drawable.john);
-        Person paul = new Person(this.getString(R.string.Paul), R.drawable.paul);
-        Person george = new Person(this.getString(R.string.George), R.drawable.george);
-        Person ringo = new Person(this.getString(R.string.Ringo), R.drawable.ringo);
-        Person yoko = new Person(this.getString(R.string.Yoko), R.drawable.yoko);
+        // create a shuffled list of people
+        peopleShuffler = new PeopleShuffler();
+        shuffledList = peopleShuffler.createShuffledList(this);
 
-        peopleToChooseFrom.add(john);
-        peopleToChooseFrom.add(paul);
-        peopleToChooseFrom.add(george);
-        peopleToChooseFrom.add(ringo);
-        peopleToChooseFrom.add(yoko);
-
-        photoAdapter = new PhotoAdapter(peopleToChooseFrom);
+        // pass the list of people to the adapter
+        photoAdapter = new PhotoAdapter(shuffledList);
         people.setAdapter(photoAdapter);
+
+        // set the text of the game prompt
+        game_prompt_text_view = findViewById(R.id.game_prompt);
+        game_prompt_text_view.setText(setName());
+    }
+
+    private String setName() {
+        // extract the correct name from the ShuffledList object and set the prompt text
+        int index = shuffledList.getIndex();
+        List<Person> peopleToChooseFrom = shuffledList.getPeople();
+        String name = peopleToChooseFrom.get(index).getName();
+        String namePrompt = "Who is " + name + "?";
+        return namePrompt;
     }
 }
-

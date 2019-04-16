@@ -9,8 +9,6 @@
     <string name="Paul" translatable="false">Paul</string>
     <string name="George" translatable="false">George</string>
     <string name="Ringo" translatable="false">Ringo</string>
-    <string name="Yoko" translatable="false">Oh no!</string>
-    <!--placeholder for prompt to choose the co-worker's photo-->
-    <string name="game_prompt" translatable="true">Who is Ringo?</string>
+    <string name="Yoko" translatable="false">Yoko</string>
 
 </resources>
