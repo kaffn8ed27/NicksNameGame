@@ -2,6 +2,8 @@
     <string name="app_name">NicksNameGame</string>
     <!--label for splash screen-->
     <string name="launch_activity_name">Select Game Mode</string>
+    <!--default game mode button text-->
+    <string name="default_game_button">Start learning names!</string>
     <!--label for default game screen-->
     <string name="game_activity_name">Name That Co-Worker!</string>
     <!--placeholders for the labels that will identify the people in the pictures-->

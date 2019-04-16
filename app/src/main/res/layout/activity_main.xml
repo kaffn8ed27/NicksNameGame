@@ -6,14 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".launcher.MainActivity">
 
-    <TextView
-        android:id="@+id/default_game_text_view"
+    <Button
+        android:id="@+id/default_game_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Launch Game"
+        android:text="@string/default_game_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!-- TODO Make it...less...un-pretty -->
+<!-- TODO Add landscape and large screen layouts? -->
