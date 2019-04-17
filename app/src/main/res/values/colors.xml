@@ -4,5 +4,5 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="chose_wisely">#39E600</color>
-    <color name="chose_poorly">#FF3333</color>
+    <color name="chose_poorly">#C00000</color>
 </resources>

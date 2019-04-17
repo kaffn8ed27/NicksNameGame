@@ -13,5 +13,7 @@
     <string name="George" translatable="false">George</string>
     <string name="Ringo" translatable="false">Ringo</string>
     <string name="Yoko" translatable="false">Yoko</string>
+    <!--URL for the API-->
+    <string name="api_url">http://www.willowtreeapps.com/api/v1.0/profiles</string>
 
 </resources>
