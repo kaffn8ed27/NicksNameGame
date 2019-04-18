@@ -4,7 +4,7 @@ package android.example.nicksnamegame.game;
 import androidx.annotation.DrawableRes;
 
 class Person {
-    private String name; // for now, just type it in; eventually this will also come from the API
+    private String name; // for now, just type it in; eventually this will come from the API
     @DrawableRes
     private int photoId; // temporary - to pull from resources in project
 
