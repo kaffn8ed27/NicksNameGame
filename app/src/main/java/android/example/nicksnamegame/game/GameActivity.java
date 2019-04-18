@@ -2,16 +2,20 @@ package android.example.nicksnamegame.game;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.example.nicksnamegame.R;
+import android.example.nicksnamegame.data.model.PersonConverter;
 import android.os.Bundle;
 import android.widget.TextView;
 
 import java.util.List;
 
 public class GameActivity extends AppCompatActivity {
+
+    private static final boolean SHOULD_USE_LIVE_DATA = false; // cannot be set to true until Picasso is implemented
+
+    private List<Person> personList;
 
     // TODO - add "next group" functionality
     /* TODO - tracking: if answered right on the first try, remove coworker from the pool.
@@ -36,9 +40,17 @@ public class GameActivity extends AppCompatActivity {
         people.setLayoutManager(photoManager);
         people.setHasFixedSize(true);
 
-        // create a shuffled list of people
-        peopleShuffler = new PeopleShuffler();
-        shuffledList = peopleShuffler.createShuffledList(this);
+
+        if (SHOULD_USE_LIVE_DATA) {
+            personList = new PersonConverter().retrievePersonList();
+            peopleShuffler = new PeopleShuffler(personList);
+            peopleShuffler.chooseCoworkers();
+            // use Picasso to set the image views
+        } else {
+            peopleShuffler = new PeopleShuffler();
+            // create a shuffled list of people: Beatles demo version
+            shuffledList = peopleShuffler.createShuffledList(this);
+        }
 
         // pass the list of people to the adapter
         photoAdapter = new PhotoAdapter(shuffledList);
