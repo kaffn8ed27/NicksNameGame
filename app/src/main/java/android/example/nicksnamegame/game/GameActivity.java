@@ -45,7 +45,7 @@ public class GameActivity extends AppCompatActivity {
             personList = new PersonConverter().retrievePersonList();
             peopleShuffler = new PeopleShuffler(personList);
             peopleShuffler.chooseCoworkers();
-            // TODO: use Picasso to set the image views
+            // TODO: `use Picasso to set the image views
         } else {
             peopleShuffler = new PeopleShuffler();
             // create a shuffled list of people: Beatles demo version
