@@ -11,9 +11,9 @@ public class PersonResponse implements Parcelable {
     private final HeadshotResponse headshot;
 
     public PersonResponse(String id,
-                  String firstName,
-                  String lastName,
-                  HeadshotResponse headshot) {
+                          String firstName,
+                          String lastName,
+                          HeadshotResponse headshot) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -27,10 +27,21 @@ public class PersonResponse implements Parcelable {
         this.headshot = in.readParcelable(HeadshotResponse.class.getClassLoader());
     }
 
-    public String getId() { return this.id; }
-    public String getFirstName() { return  this.firstName; }
-    public String getLastName() { return this.lastName; }
-    public HeadshotResponse getHeadshot() { return this.headshot; }
+    public String getId() {
+        return this.id;
+    }
+
+    public String getFirstName() {
+        return this.firstName;
+    }
+
+    public String getLastName() {
+        return this.lastName;
+    }
+
+    public HeadshotResponse getHeadshot() {
+        return this.headshot;
+    }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {

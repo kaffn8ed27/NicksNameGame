@@ -29,7 +29,7 @@ public class HeadshotResponse implements Parcelable {
     }
 
     public String getHeadshotUrl() {
-        if(this.url != null) {
+        if (this.url != null) {
             // already properly formatted
             if (this.url.startsWith("http")) {
                 return this.url;
@@ -42,9 +42,18 @@ public class HeadshotResponse implements Parcelable {
             return "https://img.icons8.com/nolan/64/000000/user.png";
         }
     }
-    public String getType() { return this.type; }
-    public int getHeight() { return this.height; }
-    public int getWidth() { return this.width; }
+
+    public String getType() {
+        return this.type;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
@@ -56,12 +65,18 @@ public class HeadshotResponse implements Parcelable {
 
     public static final Creator<HeadshotResponse> CREATOR = new Creator<HeadshotResponse>() {
         @Override
-        public HeadshotResponse createFromParcel(Parcel source) { return new HeadshotResponse(source); }
+        public HeadshotResponse createFromParcel(Parcel source) {
+            return new HeadshotResponse(source);
+        }
 
         @Override
-        public HeadshotResponse[] newArray(int size) { return new HeadshotResponse[size]; }
+        public HeadshotResponse[] newArray(int size) {
+            return new HeadshotResponse[size];
+        }
     };
 
     @Override
-    public int describeContents() { return 0; }
+    public int describeContents() {
+        return 0;
+    }
 }

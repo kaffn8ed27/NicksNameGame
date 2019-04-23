@@ -23,7 +23,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHolder>
-implements Parcelable {
+        implements Parcelable {
 
     ClickedState clickedState = new ClickedState();
 
@@ -92,7 +92,7 @@ implements Parcelable {
     }
 
     class PersonViewHolder extends RecyclerView.ViewHolder
-    implements View.OnClickListener {
+            implements View.OnClickListener {
 
         TextView personNameView;
         ImageView personPhotoView;
@@ -113,7 +113,7 @@ implements Parcelable {
             // TODO: move foreground color logic to bind method
             Person person = coworkers.get(getAdapterPosition());
             String id;
-            if(person.getId() != null) {
+            if (person.getId() != null) {
                 id = person.getId();
                 clickedState.registerNewClickedPerson(id);
                 Log.d(TAG, "Clicked state: " + clickedState.toString());
@@ -130,11 +130,11 @@ implements Parcelable {
             personNameView.setVisibility(View.VISIBLE);
         }
 
-        void bind (Person person) {
+        void bind(Person person) {
             String headshotUrl;
             if (person.getHeadshotUrl() != null) {
                 headshotUrl = person.getHeadshotUrl();
-            Picasso.with(PhotoAdapter.this.context).load(headshotUrl).into(this.personPhotoView);
+                Picasso.with(PhotoAdapter.this.context).load(headshotUrl).into(this.personPhotoView);
             } else {
                 Log.d(TAG, "No URL for headshot");
             }
@@ -146,7 +146,7 @@ implements Parcelable {
         private List<String> clickedIds = new ArrayList<>();
 
         public void registerNewClickedPerson(String id) {
-            if(!clickedIds.contains(id)) {
+            if (!clickedIds.contains(id)) {
                 clickedIds.add(id);
             }
         }
