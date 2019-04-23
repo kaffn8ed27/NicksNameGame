@@ -38,22 +38,4 @@ public class PeopleShuffler {
         return new ShuffledList(listToQuery, correctAnswerIndex);
     }
 
-    public class ShuffledList {
-
-        private List<Person> people;
-        private int index;
-
-        public ShuffledList (List<Person> people, int index) {
-            this.people = people;
-            this.index = index;
-        }
-
-        public List<Person> getPeople () {
-            return this.people;
-        }
-
-        public int getIndex() {
-            return this.index;
-        }
-    }
 }
