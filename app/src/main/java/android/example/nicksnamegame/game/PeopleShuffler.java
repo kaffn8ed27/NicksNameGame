@@ -1,8 +1,5 @@
 package android.example.nicksnamegame.game;
 
-import android.content.Context;
-import android.example.nicksnamegame.R;
-import android.provider.Contacts;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -15,14 +12,15 @@ public class PeopleShuffler {
 
 
     private static final String TAG = PeopleShuffler.class.getSimpleName();
-    private static final int NUM_COWORKERS_TO_SHOW = 12;
+    private static int NUM_COWORKERS_TO_SHOW;
     private List<Person> personList = new ArrayList<>();
     int correctAnswerIndex;
 
     public PeopleShuffler() {}
 
-    public PeopleShuffler(List<Person> personList) {
+    public PeopleShuffler(List<Person> personList, int num_coworkers_to_show) {
         this.personList = personList;
+        this.NUM_COWORKERS_TO_SHOW = num_coworkers_to_show;
     }
 
     synchronized public ShuffledList chooseCoworkers() {

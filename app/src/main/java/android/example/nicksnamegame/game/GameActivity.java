@@ -36,16 +36,18 @@ public class GameActivity extends AppCompatActivity {
 
         people = (RecyclerView) findViewById(R.id.rv_photos);
 
-        GridLayoutManager photoManager = new GridLayoutManager(this, 2);
+        int numberOfColumns = this.getResources().getInteger(R.integer.number_game_columns);
+        GridLayoutManager photoManager = new GridLayoutManager(this, numberOfColumns);
         people.setLayoutManager(photoManager);
         people.setHasFixedSize(true);
 
+        final int numberOfPhotos = this.getResources().getInteger(R.integer.number_game_photos);
 
             new PersonConverter().retrievePersonList(new PersonConverter.PersonListHandler() {
                 @Override
                 public void onReceivePersonList(List<Person> personList) {
                     if (personList != null) {
-                        peopleShuffler = new PeopleShuffler(personList);
+                        peopleShuffler = new PeopleShuffler(personList, numberOfPhotos);
                         shuffledList = peopleShuffler.chooseCoworkers();
                     } else {
                         Log.d(TAG, "List of co-workers not found");
