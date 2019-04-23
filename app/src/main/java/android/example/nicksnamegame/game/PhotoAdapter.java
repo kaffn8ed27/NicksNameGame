@@ -4,11 +4,14 @@ import android.content.Context;
 import android.example.nicksnamegame.R;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -18,12 +21,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHolder> {
 
+    private static final String TAG = PhotoAdapter.class.getSimpleName();
+
     private List<Person> coworkers;
     private int index;
+    private Context context;
 
-    public PhotoAdapter(PeopleShuffler.ShuffledList shuffledList) {
+    public PhotoAdapter(PeopleShuffler.ShuffledList shuffledList, Context context) {
         this.coworkers = shuffledList.getPeople();
         this.index = shuffledList.getIndex();
+        this.context = context;
     }
 
     @NonNull
@@ -82,7 +89,14 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
         }
 
         void bind (Person person) {
-            personPhotoView.setImageResource(person.getId());
+            String headshotUrl = "";
+            if (person.getHeadshotUrl() != null) {
+                headshotUrl = person.getHeadshotUrl();
+                Log.d(TAG, "Headshot URL: " + headshotUrl);
+            Picasso.with(PhotoAdapter.this.context).load(headshotUrl).into(this.personPhotoView);
+            } else {
+                Log.d(TAG, "No URL for headshot");
+            }
             personNameView.setText(person.getName());
         }
     }
