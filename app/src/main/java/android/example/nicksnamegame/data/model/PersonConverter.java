@@ -4,6 +4,7 @@ import android.example.nicksnamegame.game.Person;
 import android.example.nicksnamegame.data.NameGameApi;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -18,7 +19,7 @@ public class PersonConverter {
 
     public List<Person> personList;
 
-    public List<Person> retrievePersonList() {
+    synchronized public void retrievePersonList(final PersonListHandler responseHandler) {
         NameGameApi api = new Retrofit.Builder()
                 .baseUrl("https://www.willowtreeapps.com")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -31,20 +32,27 @@ public class PersonConverter {
             @Override
             public void onResponse(Call<List<PersonResponse>> call, Response<List<PersonResponse>> response) {
                 List<PersonResponse> responseList = response.body();
+                personList = new ArrayList<>();
                 for (PersonResponse personResponse : responseList) {
                     String name = formatName(personResponse.getFirstName(), personResponse.getLastName());
                     String headshotUrl = personResponse.getHeadshot().getHeadshotUrl();
                     personList.add(new Person(name, headshotUrl));
                 }
+                Log.d(TAG, "People: " + personList);
+                responseHandler.onReceivePersonList(personList);
             }
 
             @Override
             public void onFailure(Call<List<PersonResponse>> call, Throwable t) {
-                Log.d(TAG, "Response unsuccessful");
+                Log.d(TAG, "API call unsuccessful");
                 t.printStackTrace();
             }
         });
-        return null;
+    }
+
+    public interface PersonListHandler {
+
+        void onReceivePersonList(List<Person> personList);
     }
 
     private String formatName(String firstName, String lastName) {

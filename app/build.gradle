@@ -18,8 +18,8 @@ android {
     }
 }
 
-// TODO: add Picasso dependency & implement away
 dependencies {
+    implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
