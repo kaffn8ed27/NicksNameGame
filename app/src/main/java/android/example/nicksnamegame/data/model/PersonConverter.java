@@ -38,7 +38,6 @@ public class PersonConverter {
                     String headshotUrl = personResponse.getHeadshot().getHeadshotUrl();
                     personList.add(new Person(name, headshotUrl));
                 }
-                Log.d(TAG, "People: " + personList);
                 responseHandler.onReceivePersonList(personList);
             }
 

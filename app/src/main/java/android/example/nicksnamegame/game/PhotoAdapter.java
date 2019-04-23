@@ -4,6 +4,8 @@ import android.content.Context;
 import android.example.nicksnamegame.R;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +21,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHolder> {
+public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHolder>
+implements Parcelable {
 
     private static final String TAG = PhotoAdapter.class.getSimpleName();
 
@@ -27,11 +30,29 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
     private int index;
     private Context context;
 
-    public PhotoAdapter(PeopleShuffler.ShuffledList shuffledList, Context context) {
+    public PhotoAdapter(ShuffledList shuffledList, Context context) {
         this.coworkers = shuffledList.getPeople();
         this.index = shuffledList.getIndex();
         this.context = context;
     }
+
+    protected PhotoAdapter(Parcel in) {
+        this.index = in.readInt();
+        this.coworkers = in.readParcelable(ShuffledList.class.getClassLoader());
+        this.context = in.readParcelable(Context.class.getClassLoader());
+    }
+
+    public static final Creator<PhotoAdapter> CREATOR = new Creator<PhotoAdapter>() {
+        @Override
+        public PhotoAdapter createFromParcel(Parcel in) {
+            return new PhotoAdapter(in);
+        }
+
+        @Override
+        public PhotoAdapter[] newArray(int size) {
+            return new PhotoAdapter[size];
+        }
+    };
 
     @NonNull
     @Override
@@ -57,6 +78,16 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
         return coworkers.size();
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(index);
+    }
+
     class PersonViewHolder extends RecyclerView.ViewHolder
     implements View.OnClickListener {
 
@@ -76,6 +107,8 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
              Correct face clicked: chose_wisely
              Incorrect face clicked: chose_poorly
              */
+            // TODO: move foreground color logic to bind method
+            // TODO: set a flag for whether this person has been clicked
             int foregroundColor =
                     this.getAdapterPosition() == index ? R.color.chose_wisely : R.color.chose_poorly;
             // create the drawable for the foreground color
@@ -89,10 +122,10 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
         }
 
         void bind (Person person) {
-            String headshotUrl = "";
+            // TODO: save person's id in a "clickedState" object
+            String headshotUrl;
             if (person.getHeadshotUrl() != null) {
                 headshotUrl = person.getHeadshotUrl();
-                Log.d(TAG, "Headshot URL: " + headshotUrl);
             Picasso.with(PhotoAdapter.this.context).load(headshotUrl).into(this.personPhotoView);
             } else {
                 Log.d(TAG, "No URL for headshot");
