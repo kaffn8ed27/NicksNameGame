@@ -15,5 +15,7 @@
     <string name="Yoko" translatable="false">Yoko</string>
     <!--URL for the API-->
     <string name="api_url">http://www.willowtreeapps.com/api/v1.0/profiles</string>
+    <!--User-friendly generic error message-->
+    <string name="generic_error">Sorry! Something went wrong.</string>
 
 </resources>
