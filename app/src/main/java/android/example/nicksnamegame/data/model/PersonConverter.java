@@ -36,7 +36,8 @@ public class PersonConverter {
                 for (PersonResponse personResponse : responseList) {
                     String name = formatName(personResponse.getFirstName(), personResponse.getLastName());
                     String headshotUrl = personResponse.getHeadshot().getHeadshotUrl();
-                    personList.add(new Person(name, headshotUrl));
+                    String id = personResponse.getId();
+                    personList.add(new Person(name, headshotUrl, id));
                 }
                 responseHandler.onReceivePersonList(personList);
             }

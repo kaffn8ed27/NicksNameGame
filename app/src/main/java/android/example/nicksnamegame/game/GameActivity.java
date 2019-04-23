@@ -46,10 +46,10 @@ public class GameActivity extends AppCompatActivity {
 
         final int numberOfPhotos = this.getResources().getInteger(R.integer.number_game_photos);
 
-        new PersonConverter().retrievePersonList(new PersonConverter.PersonListHandler() {
-            @Override
-            public void onReceivePersonList(List<Person> personList) {
-                if (savedInstanceState == null) {
+        if (savedInstanceState == null) {
+            new PersonConverter().retrievePersonList(new PersonConverter.PersonListHandler() {
+                @Override
+                public void onReceivePersonList(List<Person> personList) {
                     // generate a new list of co-workers to play the game on
                     if (personList == null) {
                         Log.d(TAG, "List of co-workers not found");
@@ -66,22 +66,24 @@ public class GameActivity extends AppCompatActivity {
                         photoAdapter = new PhotoAdapter(shuffledList, GameActivity.this);
                         people.setAdapter(photoAdapter);
                     }
-                } else {
-                    Log.d(TAG, "Retrieving state: " + savedInstanceState);
-                    shuffledList = savedInstanceState.getParcelable(SHUFFLED_LIST_KEY);
-                    photoAdapter = savedInstanceState.getParcelable(PHOTO_ADAPTER_KEY);
-                    people.setAdapter(photoAdapter);
-                }
 
-                if (photoAdapter == null) {
-                    Log.d(TAG, "Failed to load photo adapter");
-                } else {
-                    // set the text of the game prompt
-                    game_prompt_text_view = findViewById(R.id.game_prompt);
-                    game_prompt_text_view.setText(setName());
+                    if (photoAdapter == null) {
+                        Log.d(TAG, "Failed to load photo adapter");
+                    } else {
+                        // set the text of the game prompt
+                        game_prompt_text_view = findViewById(R.id.game_prompt);
+                        game_prompt_text_view.setText(setName());
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            Log.d(TAG, "Retrieving state: " + savedInstanceState);
+            shuffledList = savedInstanceState.getParcelable(SHUFFLED_LIST_KEY);
+            photoAdapter = savedInstanceState.getParcelable(PHOTO_ADAPTER_KEY);
+            people.setAdapter(photoAdapter);
+            game_prompt_text_view = findViewById(R.id.game_prompt);
+            game_prompt_text_view.setText(setName());
+        }
     }
 
     @Override

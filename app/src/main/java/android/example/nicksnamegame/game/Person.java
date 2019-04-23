@@ -1,30 +1,22 @@
 package android.example.nicksnamegame.game;
 
-
-import androidx.annotation.DrawableRes;
-
 public class Person {
-    private String name; // for now, just type it in; eventually this will come from the API
-
+    private String name;
     private String headshotUrl;
+    private String id;
 
-    @DrawableRes
-    private int photoId; // temporary - to pull from resources in project
-
-    public Person (String name, String headshotUrl) {
+    public Person (String name, String headshotUrl, String id) {
         this.name = name;
         this.headshotUrl = headshotUrl;
+        this.id = id;
     }
 
     public String getName () {
         return this.name;
     }
 
-    public int getId () {
-        return this.photoId;
-    }
+    public String getHeadshotUrl () { return this.headshotUrl; }
 
-    public String getHeadshotUrl () {
-        return this.headshotUrl;
-    }
+    public String getId () { return this.id; }
+
 }

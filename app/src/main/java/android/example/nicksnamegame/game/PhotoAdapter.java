@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHolder>
 implements Parcelable {
+
+    ClickedState clickedState = new ClickedState();
 
     private static final String TAG = PhotoAdapter.class.getSimpleName();
 
@@ -108,7 +111,13 @@ implements Parcelable {
              Incorrect face clicked: chose_poorly
              */
             // TODO: move foreground color logic to bind method
-            // TODO: set a flag for whether this person has been clicked
+            Person person = coworkers.get(getAdapterPosition());
+            String id;
+            if(person.getId() != null) {
+                id = person.getId();
+                clickedState.registerNewClickedPerson(id);
+                Log.d(TAG, "Clicked state: " + clickedState.toString());
+            }
             int foregroundColor =
                     this.getAdapterPosition() == index ? R.color.chose_wisely : R.color.chose_poorly;
             // create the drawable for the foreground color
@@ -122,7 +131,6 @@ implements Parcelable {
         }
 
         void bind (Person person) {
-            // TODO: save person's id in a "clickedState" object
             String headshotUrl;
             if (person.getHeadshotUrl() != null) {
                 headshotUrl = person.getHeadshotUrl();
@@ -131,6 +139,22 @@ implements Parcelable {
                 Log.d(TAG, "No URL for headshot");
             }
             personNameView.setText(person.getName());
+        }
+    }
+
+    class ClickedState {
+        private List<String> clickedIds = new ArrayList<>();
+
+        public void registerNewClickedPerson(String id) {
+            if(!clickedIds.contains(id)) {
+                clickedIds.add(id);
+            }
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return clickedIds.toString();
         }
     }
 }
