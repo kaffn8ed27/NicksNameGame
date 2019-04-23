@@ -11,12 +11,6 @@ public class Person {
     @DrawableRes
     private int photoId; // temporary - to pull from resources in project
 
-    // constructor for demo version: remove once everything's coming in from teh interwebz
-    public Person (String name, @DrawableRes int photoId) {
-        this.name = name;
-        this.photoId = photoId;
-    }
-
     public Person (String name, String headshotUrl) {
         this.name = name;
         this.headshotUrl = headshotUrl;
