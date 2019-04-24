@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHolder>
         implements Parcelable {
 
-    ClickedState clickedState = new ClickedState();
+    ClickedPeople clickedPeople = new ClickedPeople();
 
     private static final String TAG = PhotoAdapter.class.getSimpleName();
 
@@ -73,7 +73,8 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
 
     @Override
     public void onBindViewHolder(@NonNull PersonViewHolder holder, int position) {
-        holder.bind(coworkers.get(position));
+        Person person = coworkers.get(position);
+        holder.bind(person);
     }
 
     @Override
@@ -106,28 +107,15 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
 
         @Override
         public void onClick(View v) {
-            /* set the color for the foreground to change to
-             Correct face clicked: chose_wisely
-             Incorrect face clicked: chose_poorly
-             */
-            // TODO: move foreground color logic to bind method
+            // Add the person's ID to the list of clicked people
             Person person = coworkers.get(getAdapterPosition());
             String id;
             if (person.getId() != null) {
                 id = person.getId();
-                clickedState.registerNewClickedPerson(id);
-                Log.d(TAG, "Clicked state: " + clickedState.toString());
+                clickedPeople.registerNewClickedPerson(id);
+                Log.d(TAG, "Clicked state: " + clickedPeople.toString());
             }
-            int foregroundColor =
-                    this.getAdapterPosition() == index ? R.color.chose_wisely : R.color.chose_poorly;
-            // create the drawable for the foreground color
-            Drawable foreground = new ColorDrawable(ContextCompat.getColor(v.getContext(), foregroundColor));
-            // make it partially transparent
-            foreground.setAlpha(127);
-
-            // draw the color over the photo and show the name of the clicked person
-            personPhotoView.setForeground(foreground);
-            personNameView.setVisibility(View.VISIBLE);
+            bind(person);
         }
 
         void bind(Person person) {
@@ -138,11 +126,32 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
             } else {
                 Log.d(TAG, "No URL for headshot");
             }
-            personNameView.setText(person.getName());
+            if (person.getName() != null) {
+                personNameView.setText(person.getName());
+            }
+
+            // If the person has been clicked, color the photo foreground appropriately
+            if (person.getId() != null) {
+                if (clickedPeople.clickedIds.contains(person.getId())) {
+                    int foregroundColor =
+                            this.getAdapterPosition() == index ? R.color.chose_wisely : R.color.chose_poorly;
+                    // create the drawable for the foreground color
+                    Drawable foreground = new ColorDrawable(ContextCompat.getColor(PhotoAdapter.this.context, foregroundColor));
+                    // make it partially transparent
+                    foreground.setAlpha(127);
+                    // draw the color over the photo and show the name of the clicked person
+                    personPhotoView.setForeground(foreground);
+                    personNameView.setVisibility(View.VISIBLE);
+
+                } else {
+                    personPhotoView.setForeground(null);
+                    personNameView.setVisibility(View.INVISIBLE);
+                }
+            }
         }
     }
 
-    class ClickedState {
+    class ClickedPeople {
         private List<String> clickedIds = new ArrayList<>();
 
         public void registerNewClickedPerson(String id) {
