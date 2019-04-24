@@ -32,7 +32,7 @@ public class PeopleShuffler {
             listToQuery.add(personList.get(i));
         }
         // pseudo-randomly generate the index of the correct answer for this round
-        correctAnswerIndex = ThreadLocalRandom.current().nextInt(0, listToQuery.size());
+        correctAnswerIndex = (int) (Math.random() * listToQuery.size());
         // create and return a ShuffledList from the randomly generated list of people
         Log.d(TAG, listToQuery.toString());
         return new ShuffledList(listToQuery, correctAnswerIndex);

@@ -140,11 +140,11 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
                     // make it partially transparent
                     foreground.setAlpha(127);
                     // draw the color over the photo and show the name of the clicked person
-                    personPhotoView.setForeground(foreground);
+                    itemView.setForeground(foreground);
                     personNameView.setVisibility(View.VISIBLE);
 
                 } else {
-                    personPhotoView.setForeground(null);
+                    itemView.setForeground(null);
                     personNameView.setVisibility(View.INVISIBLE);
                 }
             }
