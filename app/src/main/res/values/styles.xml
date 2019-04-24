@@ -14,10 +14,23 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">16dp</item>
         <item name="android:layout_marginBottom">32dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="game_prompt">
+        <item name="android:textSize">32sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@android:color/background_light</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:visibility">invisible</item>
     </style>
 
     <style name="coworker_photo">
-        <item name="android:layout_height">75dp</item>
+        <item name="android:layout_height">80dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_marginTop">8dp</item>
     </style>
