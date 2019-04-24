@@ -42,7 +42,6 @@ public class GameActivity extends AppCompatActivity {
         GridLayoutManager photoManager = new GridLayoutManager(this, numberOfColumns);
         people.setLayoutManager(photoManager);
         people.setHasFixedSize(true);
-        // TODO: receive clicked flag from PhotoAdapter
 
         final int numberOfPhotos = this.getResources().getInteger(R.integer.number_game_photos);
 

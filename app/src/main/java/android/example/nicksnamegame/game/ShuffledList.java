@@ -15,7 +15,7 @@ public class ShuffledList implements Parcelable {
         this.index = index;
     }
 
-    public List<Person> getPeople () {
+    public List<Person> getPeople() {
         return this.people;
     }
 
