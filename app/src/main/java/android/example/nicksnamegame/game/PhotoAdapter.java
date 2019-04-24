@@ -32,6 +32,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
     private List<Person> coworkers;
     private int index;
     private Context context;
+    private boolean correctAnswerFound = false;
 
     public PhotoAdapter(ShuffledList shuffledList, Context context) {
         this.coworkers = shuffledList.getPeople();
@@ -107,15 +108,17 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
 
         @Override
         public void onClick(View v) {
-            // Add the person's ID to the list of clicked people
-            Person person = coworkers.get(getAdapterPosition());
-            String id;
-            if (person.getId() != null) {
-                id = person.getId();
-                clickedPeople.registerNewClickedPerson(id);
-                Log.d(TAG, "Clicked state: " + clickedPeople.toString());
+            if (!correctAnswerFound) {
+                // Add the person's ID to the list of clicked people
+                Person person = coworkers.get(getAdapterPosition());
+                String id;
+                if (person.getId() != null) {
+                    id = person.getId();
+                    clickedPeople.registerNewClickedPerson(id);
+                    Log.d(TAG, "Clicked state: " + clickedPeople.toString());
+                }
+                bind(person);
             }
-            bind(person);
         }
 
         void bind(Person person) {
@@ -133,8 +136,14 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
             // If the person has been clicked, color the photo foreground appropriately
             if (person.getId() != null) {
                 if (clickedPeople.clickedIds.contains(person.getId())) {
-                    int foregroundColor =
-                            this.getAdapterPosition() == index ? R.color.chose_wisely : R.color.chose_poorly;
+                    int foregroundColor = R.color.chose_poorly;
+                    if (this.getAdapterPosition() == index) {
+                        foregroundColor = R.color.chose_wisely;
+                        /* if the correct answer is clicked, flag the game as such
+                         * this will affect several aspects of the game - no more clicking allowed,
+                         * "next" button enabled, etc. */
+                        correctAnswerFound = true;
+                    }
                     // create the drawable for the foreground color
                     Drawable foreground = new ColorDrawable(ContextCompat.getColor(PhotoAdapter.this.context, foregroundColor));
                     // make it partially transparent
