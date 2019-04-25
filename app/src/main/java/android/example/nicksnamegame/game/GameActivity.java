@@ -99,17 +99,40 @@ public class GameActivity extends AppCompatActivity {
 
         new PersonConverter().retrievePersonList(new PersonConverter.PersonListHandler() {
             @Override
-            public void onReceivePersonList(List<Person> personList) {
+            public void onReceivePersonList(CopyOnWriteArrayList<Person> personList) {
+
                 // generate a new list of co-workers to play the game on
                 if (personList == null) {
                     Log.d(TAG, "List of co-workers not found");
                 } else {
-                    // use retrieved list of people
+                    // create a peopleShuffler to clean & randomize the list
                     peopleShuffler = new PeopleShuffler(personList, numberOfPhotos);
                     shuffledList = peopleShuffler.chooseCoworkers();
                 }
-            });
-        }
+
+                if (shuffledList == null) {
+                    Log.d(TAG, "Failed to load shuffled list");
+                } else {
+                    // pass the list of people to the adapter
+                    photoAdapter = new PhotoAdapter(shuffledList, GameActivity.this);
+                    people.setAdapter(photoAdapter);
+                }
+
+                if (photoAdapter == null) {
+                    Log.d(TAG, "Failed to load photo adapter");
+                } else {
+                    // set the text of the game prompt
+                    game_prompt_text_view = findViewById(R.id.game_prompt);
+                    game_prompt_text_view.setText(setName());
+                    // show the game prompt
+                    game_prompt_text_view.setVisibility(View.VISIBLE);
+                    // loading finished: hide the progress bar
+                    progressBar.setVisibility(View.INVISIBLE);
+                    // show the photos
+                    people.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     private String setName() {
