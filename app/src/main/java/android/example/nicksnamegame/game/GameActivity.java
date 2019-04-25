@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -38,6 +39,8 @@ public class GameActivity extends AppCompatActivity {
     private PeopleShuffler peopleShuffler;
     private ShuffledList shuffledList;
     private TextView game_prompt_text_view;
+
+    public static CopyOnWriteArrayList<Person> personList;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {

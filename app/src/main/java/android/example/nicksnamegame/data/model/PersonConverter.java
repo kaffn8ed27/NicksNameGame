@@ -4,8 +4,8 @@ import android.example.nicksnamegame.game.Person;
 import android.example.nicksnamegame.data.NameGameApi;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -17,7 +17,7 @@ public class PersonConverter {
 
     private static final String TAG = PersonConverter.class.getSimpleName();
 
-    public List<Person> personList;
+    public CopyOnWriteArrayList<Person> personList;
 
     synchronized public void retrievePersonList(final PersonListHandler responseHandler) {
         NameGameApi api = new Retrofit.Builder()
@@ -32,7 +32,7 @@ public class PersonConverter {
             @Override
             public void onResponse(Call<List<PersonResponse>> call, Response<List<PersonResponse>> response) {
                 List<PersonResponse> responseList = response.body();
-                personList = new ArrayList<>();
+                personList = new CopyOnWriteArrayList<>();
                 for (PersonResponse personResponse : responseList) {
                     String name = formatName(personResponse.getFirstName(), personResponse.getLastName());
                     String headshotUrl = personResponse.getHeadshot().getHeadshotUrl();
@@ -52,7 +52,7 @@ public class PersonConverter {
 
     public interface PersonListHandler {
 
-        void onReceivePersonList(List<Person> personList);
+        void onReceivePersonList(CopyOnWriteArrayList<Person> personList);
     }
 
     private String formatName(String firstName, String lastName) {

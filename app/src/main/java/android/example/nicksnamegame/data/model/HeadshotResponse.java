@@ -2,7 +2,8 @@ package android.example.nicksnamegame.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
+
+import androidx.annotation.Nullable;
 
 public class HeadshotResponse implements Parcelable {
 
@@ -11,10 +12,10 @@ public class HeadshotResponse implements Parcelable {
     private int height;
     private int width;
 
-    public HeadshotResponse(String headshotUrl,
-                            String type,
-                            int height,
-                            int width) {
+    public HeadshotResponse(@Nullable String headshotUrl,
+                            @Nullable String type,
+                            @Nullable int height,
+                            @Nullable int width) {
         this.url = headshotUrl;
         this.type = type;
         this.height = height;
@@ -37,10 +38,7 @@ public class HeadshotResponse implements Parcelable {
                 // missing "http:" or "https:"
                 return "https:" + this.url;
             }
-        } else {
-            // if no url use an open source avatar I found
-            return "https://img.icons8.com/nolan/64/000000/user.png";
-        }
+        } else return null;
     }
 
     public String getType() {
