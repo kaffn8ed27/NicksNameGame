@@ -32,7 +32,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
     private List<Person> coworkers;
     private int index;
     private Context context;
-    private boolean correctAnswerFound = false;
+    public boolean correctAnswerClicked = false;
 
     public PhotoAdapter(ShuffledList shuffledList, Context context) {
         this.coworkers = shuffledList.getPeople();
@@ -108,7 +108,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
 
         @Override
         public void onClick(View v) {
-            if (!correctAnswerFound) {
+            if (!correctAnswerClicked) {
                 // Add the person's ID to the list of clicked people
                 Person person = coworkers.get(getAdapterPosition());
                 String id;
@@ -142,7 +142,8 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
                         /* if the correct answer is clicked, flag the game as such
                          * this will affect several aspects of the game - no more clicking allowed,
                          * "next" button enabled, etc. */
-                        correctAnswerFound = true;
+                        correctAnswerClicked = true;
+                        GameActivity.onCorrectAnswerClicked();
                     }
                     // create the drawable for the foreground color
                     Drawable foreground = new ColorDrawable(ContextCompat.getColor(PhotoAdapter.this.context, foregroundColor));

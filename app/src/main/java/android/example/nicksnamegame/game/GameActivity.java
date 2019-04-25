@@ -31,7 +31,7 @@ public class GameActivity extends AppCompatActivity {
      *  until the pool is empty and the game is restarted
      */
 
-    private FloatingActionButton nextButton;
+    private static FloatingActionButton nextButton;
     private ProgressBar progressBar;
     private RecyclerView people;
     private PhotoAdapter photoAdapter;
@@ -41,20 +41,17 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        people = (RecyclerView) findViewById(R.id.rv_photos);
+        progressBar = findViewById(R.id.progress_bar);
+
         // prepare the nextButton FAB
         nextButton = findViewById(R.id.next_button);
-
-        // show the loading indicator
-        progressBar = findViewById(R.id.progress_bar);
-        progressBar.setVisibility(View.VISIBLE);
-
-
-        // hide the recycler view while the game board loads
-        people = (RecyclerView) findViewById(R.id.rv_photos);
-        people.setVisibility(View.INVISIBLE);
+        nextButton.hide();
+        nextButton.setOnClickListener(v -> generateGameGrid());
 
         int numberOfColumns = this.getResources().getInteger(R.integer.number_game_columns);
         GridLayoutManager photoManager = new GridLayoutManager(this, numberOfColumns);
@@ -70,9 +67,11 @@ public class GameActivity extends AppCompatActivity {
             game_prompt_text_view = findViewById(R.id.game_prompt);
             game_prompt_text_view.setText(setName());
             game_prompt_text_view.setVisibility(View.VISIBLE);
+            // loading finished: hide the progress bar
+            progressBar.setVisibility(View.INVISIBLE);
+            // show the photos
+            people.setVisibility(View.VISIBLE);
         }
-        progressBar.setVisibility(View.INVISIBLE);
-        people.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -80,9 +79,18 @@ public class GameActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putParcelable(PHOTO_ADAPTER_KEY, photoAdapter);
         outState.putParcelable(SHUFFLED_LIST_KEY, shuffledList);
+        Log.d(TAG, "SAVING...");
     }
 
     protected void generateGameGrid() {
+
+        nextButton.hide();
+
+        // hide the recycler view while the game board loads
+        people.setVisibility(View.INVISIBLE);
+
+        // show the loading indicator
+        progressBar.setVisibility(View.VISIBLE);
 
         final int numberOfPhotos = this.getResources().getInteger(R.integer.number_game_photos);
 
@@ -97,24 +105,8 @@ public class GameActivity extends AppCompatActivity {
                     peopleShuffler = new PeopleShuffler(personList, numberOfPhotos);
                     shuffledList = peopleShuffler.chooseCoworkers();
                 }
-
-                if (shuffledList == null) {
-                    Log.d(TAG, "Failed to load shuffled list");
-                } else {
-                    photoAdapter = new PhotoAdapter(shuffledList, GameActivity.this);
-                    people.setAdapter(photoAdapter);
-                }
-
-                if (photoAdapter == null) {
-                    Log.d(TAG, "Failed to load photo adapter");
-                } else {
-                    // set the text of the game prompt
-                    game_prompt_text_view = findViewById(R.id.game_prompt);
-                    game_prompt_text_view.setText(setName());
-                    game_prompt_text_view.setVisibility(View.VISIBLE);
-                }
-            }
-        });
+            });
+        }
     }
 
     private String setName() {
@@ -129,5 +121,9 @@ public class GameActivity extends AppCompatActivity {
             namePrompt = getString(R.string.generic_error);
         }
         return namePrompt;
+    }
+
+    public static void onCorrectAnswerClicked() {
+        nextButton.show();
     }
 }
