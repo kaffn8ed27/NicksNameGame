@@ -66,8 +66,20 @@ public class PeopleShuffler implements Parcelable {
         // shuffle the entire list of people
         Collections.shuffle(personList);
         // select first n people and put them in a new list
-        for (int i = 0; i < NUM_COWORKERS_TO_SHOW; i++) {
-            listToQuery.add(personList.get(i));
+        while (listToQuery.size() < NUM_COWORKERS_TO_SHOW) {
+            boolean duplicate = false;
+            int index = (int) (Math.random() * personList.size());
+            Person candidate = personList.get(index);
+            for (Person person : listToQuery) {
+                if (candidate.getName() == person.getName()) {
+                    Log.d(TAG, "Person named " + candidate.getName() + " already in list");
+                    duplicate = true;
+                    break;
+                }
+            }
+            if (!duplicate) {
+                listToQuery.add(candidate);
+            }
         }
         // generate the index of the correct answer for this round
         correctAnswerIndex = (int) (Math.random() * listToQuery.size());
