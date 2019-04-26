@@ -13,7 +13,8 @@
         android:theme="@style/Theme.AppCompat">
         <activity
             android:name=".game.GameActivity"
-            android:label="@string/game_activity_name"></activity>
+            android:label="@string/game_activity_name"
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
         <activity
             android:name=".launcher.MainActivity"
             android:label="@string/launcher_label">
