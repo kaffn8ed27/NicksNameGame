@@ -1,5 +1,7 @@
 package android.example.nicksnamegame.game;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -8,7 +10,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
-public class PeopleShuffler {
+public class PeopleShuffler implements Parcelable {
 
 
     private static final String TAG = PeopleShuffler.class.getSimpleName();
@@ -42,6 +44,23 @@ public class PeopleShuffler {
         this.NUM_COWORKERS_TO_SHOW = num_coworkers_to_show;
     }
 
+    protected PeopleShuffler(Parcel in) {
+        personList = in.createTypedArrayList(Person.CREATOR);
+        correctAnswerIndex = in.readInt();
+    }
+
+    public static final Creator<PeopleShuffler> CREATOR = new Creator<PeopleShuffler>() {
+        @Override
+        public PeopleShuffler createFromParcel(Parcel in) {
+            return new PeopleShuffler(in);
+        }
+
+        @Override
+        public PeopleShuffler[] newArray(int size) {
+            return new PeopleShuffler[size];
+        }
+    };
+
     public ShuffledList chooseCoworkers() {
         List<Person> listToQuery = new ArrayList<>();
         // shuffle the entire list of people
@@ -55,5 +74,16 @@ public class PeopleShuffler {
         // create and return a ShuffledList from the randomly generated list of people
         Log.d(TAG, listToQuery.toString());
         return new ShuffledList(listToQuery, correctAnswerIndex);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(personList);
+        dest.writeInt(correctAnswerIndex);
     }
 }

@@ -23,6 +23,7 @@ public class GameActivity extends AppCompatActivity {
     private static final String TAG = GameActivity.class.getSimpleName();
     private static final String PHOTO_ADAPTER_KEY = "saved_photo_adapter";
     private static final String SHUFFLED_LIST_KEY = "saved_shuffled_list";
+    private static final String PEOPLE_SHUFFLER_KEY = "saved_people_shuffler";
 
     // TODO - add "next group" functionality
 
@@ -66,6 +67,7 @@ public class GameActivity extends AppCompatActivity {
             Log.d(TAG, "Retrieving state: " + savedInstanceState);
             shuffledList = savedInstanceState.getParcelable(SHUFFLED_LIST_KEY);
             photoAdapter = savedInstanceState.getParcelable(PHOTO_ADAPTER_KEY);
+            peopleShuffler = savedInstanceState.getParcelable(PEOPLE_SHUFFLER_KEY);
             people.setAdapter(photoAdapter);
             game_prompt_text_view = findViewById(R.id.game_prompt);
             game_prompt_text_view.setText(setName());
@@ -82,6 +84,7 @@ public class GameActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putParcelable(PHOTO_ADAPTER_KEY, photoAdapter);
         outState.putParcelable(SHUFFLED_LIST_KEY, shuffledList);
+        outState.putParcelable(PEOPLE_SHUFFLER_KEY, peopleShuffler);
         Log.d(TAG, "SAVING...");
     }
 
@@ -97,42 +100,70 @@ public class GameActivity extends AppCompatActivity {
 
         final int numberOfPhotos = this.getResources().getInteger(R.integer.number_game_photos);
 
-        new PersonConverter().retrievePersonList(new PersonConverter.PersonListHandler() {
-            @Override
-            public void onReceivePersonList(CopyOnWriteArrayList<Person> personList) {
+        if (peopleShuffler == null) {
+            new PersonConverter().retrievePersonList(new PersonConverter.PersonListHandler() {
+                @Override
+                public void onReceivePersonList(CopyOnWriteArrayList<Person> personList) {
+                    Log.d(TAG, "Retrieving new list from API");
 
-                // generate a new list of co-workers to play the game on
-                if (personList == null) {
-                    Log.d(TAG, "List of co-workers not found");
-                } else {
-                    // create a peopleShuffler to clean & randomize the list
-                    peopleShuffler = new PeopleShuffler(personList, numberOfPhotos);
-                    shuffledList = peopleShuffler.chooseCoworkers();
-                }
+                    // generate a new list of co-workers to play the game on
+                    if (personList == null) {
+                        Log.d(TAG, "List of co-workers not found");
+                    } else {
+                        // create a peopleShuffler to clean & randomize the list
+                        peopleShuffler = new PeopleShuffler(personList, numberOfPhotos);
+                        shuffledList = peopleShuffler.chooseCoworkers();
+                    }
 
-                if (shuffledList == null) {
-                    Log.d(TAG, "Failed to load shuffled list");
-                } else {
-                    // pass the list of people to the adapter
-                    photoAdapter = new PhotoAdapter(shuffledList, GameActivity.this);
-                    people.setAdapter(photoAdapter);
-                }
+                    if (shuffledList == null) {
+                        Log.d(TAG, "Failed to load shuffled list");
+                    } else {
+                        // pass the list of people to the adapter
+                        photoAdapter = new PhotoAdapter(shuffledList, GameActivity.this);
+                        people.setAdapter(photoAdapter);
+                    }
 
-                if (photoAdapter == null) {
-                    Log.d(TAG, "Failed to load photo adapter");
-                } else {
-                    // set the text of the game prompt
-                    game_prompt_text_view = findViewById(R.id.game_prompt);
-                    game_prompt_text_view.setText(setName());
-                    // show the game prompt
-                    game_prompt_text_view.setVisibility(View.VISIBLE);
-                    // loading finished: hide the progress bar
-                    progressBar.setVisibility(View.INVISIBLE);
-                    // show the photos
-                    people.setVisibility(View.VISIBLE);
+                    if (photoAdapter == null) {
+                        Log.d(TAG, "Failed to load photo adapter");
+                    } else {
+                        // set the text of the game prompt
+                        game_prompt_text_view = findViewById(R.id.game_prompt);
+                        game_prompt_text_view.setText(setName());
+                        // show the game prompt
+                        game_prompt_text_view.setVisibility(View.VISIBLE);
+                        // loading finished: hide the progress bar
+                        progressBar.setVisibility(View.INVISIBLE);
+                        // show the photos
+                        people.setVisibility(View.VISIBLE);
+                    }
                 }
+            });
+        } else {
+            Log.d(TAG, "Using saved list");
+            shuffledList = peopleShuffler.chooseCoworkers();
+
+            if (shuffledList == null) {
+                Log.d(TAG, "Failed to load shuffled list");
+            } else {
+                // pass the list of people to the adapter
+                photoAdapter = new PhotoAdapter(shuffledList, GameActivity.this);
+                people.setAdapter(photoAdapter);
             }
-        });
+
+            if (photoAdapter == null) {
+                Log.d(TAG, "Failed to load photo adapter");
+            } else {
+                // set the text of the game prompt
+                game_prompt_text_view = findViewById(R.id.game_prompt);
+                game_prompt_text_view.setText(setName());
+                // show the game prompt
+                game_prompt_text_view.setVisibility(View.VISIBLE);
+                // loading finished: hide the progress bar
+                progressBar.setVisibility(View.INVISIBLE);
+                // show the photos
+                people.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     private String setName() {
