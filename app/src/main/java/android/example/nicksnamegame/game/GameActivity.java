@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.SharedPreferences;
 import android.example.nicksnamegame.R;
 import android.example.nicksnamegame.data.model.PersonConverter;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -39,12 +41,19 @@ public class GameActivity extends AppCompatActivity {
     private ShuffledList shuffledList;
     private TextView game_prompt_text_view;
 
-    public static CopyOnWriteArrayList<Person> personList;
+
+    private void setupSharedPreferences() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean useDarkTheme = sharedPreferences.getBoolean(getString(R.string.pref_dark_theme_key), getResources().getBoolean(R.bool.pref_dark_theme_default));
+        int theme = useDarkTheme ? R.style.AppTheme_Dark_GameTheme : R.style.AppTheme_GameTheme;
+        setTheme(theme);
+    }
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        setupSharedPreferences();
         setContentView(R.layout.activity_game);
 
         people = (RecyclerView) findViewById(R.id.rv_photos);

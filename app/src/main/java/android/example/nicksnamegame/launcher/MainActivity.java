@@ -3,27 +3,58 @@ package android.example.nicksnamegame.launcher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.example.nicksnamegame.R;
 import android.example.nicksnamegame.game.GameActivity;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private Button defaultGameButton;
+    private static final String TAG = MainActivity.class.getSimpleName();
+    private boolean useDarkTheme;
+
+    private void setupSharedPreferences() {
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        useDarkTheme = sharedPreferences.getBoolean(getString(R.string.pref_dark_theme_key), getResources().getBoolean(R.bool.pref_dark_theme_default));
+        int theme = useDarkTheme ? R.style.AppTheme_Dark : R.style.AppTheme;
+        setTheme(theme);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(getString(R.string.pref_dark_theme_key))) {
+            useDarkTheme = sharedPreferences.getBoolean(key, getResources().getBoolean(R.bool.pref_dark_theme_default));
+            Log.d(TAG, "Theme preference changed from " + (useDarkTheme ? "light to dark" : "dark to light"));
+            recreate();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setupSharedPreferences();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        defaultGameButton = findViewById(R.id.default_game_button);
+        Button defaultGameButton = findViewById(R.id.default_game_button);
         defaultGameButton.setOnClickListener(v -> {
             Intent startGameIntent = new Intent(MainActivity.this, GameActivity.class);
             startActivity(startGameIntent);
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
