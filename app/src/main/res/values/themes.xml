@@ -11,4 +11,9 @@
         <!--custom theme attributes can also be applied-->
     </style>
 
+    <style name="AppTheme.GameTheme">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
 </resources>

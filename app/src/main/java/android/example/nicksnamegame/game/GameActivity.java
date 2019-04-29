@@ -25,8 +25,6 @@ public class GameActivity extends AppCompatActivity {
     private static final String SHUFFLED_LIST_KEY = "saved_shuffled_list";
     private static final String PEOPLE_SHUFFLER_KEY = "saved_people_shuffler";
 
-    // TODO - add "next group" functionality
-
     /* TODO - tracking: if answered right on the first try, remove coworker from the pool.
      *  If there aren't enough people left in the pool to fill the grid, allow "wrong" answers
      *  to come from the list of known people, but make sure they're never the "right" answer again
