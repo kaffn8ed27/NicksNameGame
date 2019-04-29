@@ -11,7 +11,18 @@
         <!--custom theme attributes can also be applied-->
     </style>
 
+    <style name="AppTheme_Dark" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
     <style name="AppTheme.GameTheme">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
+    <style name="AppTheme_Dark.GameTheme">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
     </style>

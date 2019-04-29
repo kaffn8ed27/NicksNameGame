@@ -7,6 +7,8 @@
     <string name="default_game_button">Start learning names!</string>
     <!--label for default game screen-->
     <string name="game_activity_name">Name That Co-Worker!</string>
+    <!--settings menu title-->
+    <string name="action_settings">Settings</string>
     <!--placeholders for the labels that will identify the people in the pictures-->
     <string name="John" translatable="false">John</string>
     <string name="Paul" translatable="false">Paul</string>
