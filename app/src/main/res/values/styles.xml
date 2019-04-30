@@ -1,17 +1,18 @@
 <resources>
 
-    <style name="coworker_photo_label">
+    <style name="coworker_photo_label" parent="AppTheme">
         <item name="android:visibility">invisible</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">16dp</item>
         <item name="android:layout_marginBottom">32dp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Large</item>
+        <item name="android:gravity">center</item>
     </style>
 
-    <style name="game_prompt">
-        <item name="android:textSize">32sp</item>
+    <style name="game_prompt" parent="AppTheme">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Display1</item>
         <item name="android:textStyle">bold</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -20,10 +21,13 @@
         <item name="android:visibility">invisible</item>
     </style>
 
-    <style name="coworker_photo">
-        <item name="android:layout_height">80dp</item>
+    <style name="coworker_photo" parent="AppTheme">
+        <item name="android:layout_height">87dp</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:cropToPadding">false</item>
     </style>
 
 </resources>

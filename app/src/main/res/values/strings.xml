@@ -1,4 +1,12 @@
 <resources>
+    <!--Preferences-->
+    <string name="pref_dark_theme_label">Theme (color scheme)</string>
+    <string name="pref_dark_theme_key" translatable="false">theme_dark</string>
+    <string name="pref_dark_theme_off">Light</string>
+    <string name="pref_dark_theme_on">Dark</string>
+
+
+
     <string name="app_name">NicksNameGame</string>
     <string name="launcher_label">Nick\'s Name Game</string>
     <!--label for splash screen-->
@@ -7,6 +15,8 @@
     <string name="default_game_button">Start learning names!</string>
     <!--label for default game screen-->
     <string name="game_activity_name">Name That Co-Worker!</string>
+    <!--settings menu title-->
+    <string name="action_settings">Settings</string>
     <!--placeholders for the labels that will identify the people in the pictures-->
     <string name="John" translatable="false">John</string>
     <string name="Paul" translatable="false">Paul</string>
