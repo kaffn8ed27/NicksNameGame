@@ -97,6 +97,7 @@ public class GameActivity extends AppCompatActivity {
 
     protected void generateGameGrid() {
 
+        nextButton.setClickable(false);
         nextButton.hide();
 
         // hide the recycler view while the game board loads
@@ -189,5 +190,6 @@ public class GameActivity extends AppCompatActivity {
 
     public static void onCorrectAnswerClicked() {
         nextButton.show();
+        nextButton.setClickable(true);
     }
 }
