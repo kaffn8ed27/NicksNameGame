@@ -17,20 +17,20 @@ public class PeopleShuffler implements Parcelable {
     private static final String TAG = PeopleShuffler.class.getSimpleName();
     private static int NUM_COWORKERS_TO_SHOW;
     private List<Person> personList;
-    int correctAnswerIndex;
+    private int correctAnswerIndex;
 
-    public PeopleShuffler(CopyOnWriteArrayList<Person> personList, int num_coworkers_to_show) {
+    PeopleShuffler(CopyOnWriteArrayList<Person> personList, int num_coworkers_to_show) {
         this.personList = personList;
 
         int totalResponses = personList.size();
         for (Person person : personList) {
-            String headshotUrl = person.getHeadshotUrl();
+            String headShotUrl = person.getHeadShotUrl();
             String name = person.getName();
-            if (headshotUrl == null) {
-                Log.d(TAG, "Removing " + name + ": missing headshot URL");
+            if (headShotUrl == null) {
+                Log.d(TAG, "Removing " + name + ": missing head shot URL");
                 personList.remove(person);
-            } else if (headshotUrl.contains("featured-image-TEST1.png")) {
-                Log.d(TAG, "Removing " + name + " from list: invalid headshot URL: " + headshotUrl);
+            } else if (headShotUrl.contains("featured-image-TEST1.png")) {
+                Log.d(TAG, "Removing " + name + " from list: invalid head shot URL: " + headShotUrl);
                 personList.remove(person);
             }
         }
@@ -38,10 +38,10 @@ public class PeopleShuffler implements Parcelable {
 
         // TODO: eliminate people whose picture does not have a face (Google Vision API?)
 
-        this.NUM_COWORKERS_TO_SHOW = num_coworkers_to_show;
+        NUM_COWORKERS_TO_SHOW = num_coworkers_to_show;
     }
 
-    protected PeopleShuffler(Parcel in) {
+    private PeopleShuffler(Parcel in) {
         personList = in.createTypedArrayList(Person.CREATOR);
         correctAnswerIndex = in.readInt();
     }
@@ -58,7 +58,7 @@ public class PeopleShuffler implements Parcelable {
         }
     };
 
-    public ShuffledList chooseCoworkers() {
+    ShuffledList chooseCoworkers() {
         List<Person> listToQuery = new ArrayList<>();
         // shuffle the entire list of people
         Collections.shuffle(personList);

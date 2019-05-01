@@ -5,18 +5,18 @@ import android.os.Parcelable;
 
 public class Person implements Parcelable {
     private String name;
-    private String headshotUrl;
+    private String headShotUrl;
     private String id;
 
-    public Person(String name, String headshotUrl, String id) {
+    public Person(String name, String headShotUrl, String id) {
         this.name = name;
-        this.headshotUrl = headshotUrl;
+        this.headShotUrl = headShotUrl;
         this.id = id;
     }
 
-    protected Person(Parcel in) {
+    private Person(Parcel in) {
         name = in.readString();
-        headshotUrl = in.readString();
+        headShotUrl = in.readString();
         id = in.readString();
     }
 
@@ -36,8 +36,8 @@ public class Person implements Parcelable {
         return this.name;
     }
 
-    public String getHeadshotUrl() {
-        return this.headshotUrl;
+    String getHeadShotUrl() {
+        return this.headShotUrl;
     }
 
     public String getId() {
@@ -52,7 +52,7 @@ public class Person implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
-        dest.writeString(headshotUrl);
+        dest.writeString(headShotUrl);
         dest.writeString(id);
     }
 }

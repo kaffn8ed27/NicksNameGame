@@ -17,7 +17,7 @@ public class PersonConverter {
 
     private static final String TAG = PersonConverter.class.getSimpleName();
 
-    public CopyOnWriteArrayList<Person> personList;
+    private CopyOnWriteArrayList<Person> personList;
 
     synchronized public void retrievePersonList(final PersonListHandler responseHandler) {
         NameGameApi api = new Retrofit.Builder()
@@ -33,11 +33,12 @@ public class PersonConverter {
             public void onResponse(Call<List<PersonResponse>> call, Response<List<PersonResponse>> response) {
                 List<PersonResponse> responseList = response.body();
                 personList = new CopyOnWriteArrayList<>();
+                assert responseList != null;
                 for (PersonResponse personResponse : responseList) {
                     String name = formatName(personResponse.getFirstName(), personResponse.getLastName());
-                    String headshotUrl = personResponse.getHeadshot().getHeadshotUrl();
+                    String headShotUrl = personResponse.getHeadShot().getHeadShotUrl();
                     String id = personResponse.getId();
-                    personList.add(new Person(name, headshotUrl, id));
+                    personList.add(new Person(name, headShotUrl, id));
                 }
                 responseHandler.onReceivePersonList(personList);
             }
@@ -56,8 +57,7 @@ public class PersonConverter {
     }
 
     private String formatName(String firstName, String lastName) {
-        String name = firstName + " " + lastName;
-        return name;
+        return firstName + " " + lastName;
     }
 }
 

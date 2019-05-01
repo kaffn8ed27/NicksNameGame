@@ -27,22 +27,22 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
 
     // TODO: is it possible to use Rx for clicked answers?
 
-    ClickedPeople clickedPeople = new ClickedPeople();
+    private ClickedPeople clickedPeople = new ClickedPeople();
 
     private static final String TAG = PhotoAdapter.class.getSimpleName();
 
     private List<Person> coworkers;
     private int index;
     private Context context;
-    public boolean correctAnswerClicked = false;
+    private boolean correctAnswerClicked = false;
 
-    public PhotoAdapter(ShuffledList shuffledList, Context context) {
+    PhotoAdapter(ShuffledList shuffledList, Context context) {
         this.coworkers = shuffledList.getPeople();
         this.index = shuffledList.getIndex();
         this.context = context;
     }
 
-    protected PhotoAdapter(Parcel in) {
+    private PhotoAdapter(Parcel in) {
         this.index = in.readInt();
         this.coworkers = in.readParcelable(ShuffledList.class.getClassLoader());
         this.context = in.readParcelable(Context.class.getClassLoader());
@@ -62,16 +62,14 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
 
     @NonNull
     @Override
-    public PersonViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public PersonViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         Context context = viewGroup.getContext();
         int layoutIdForPhotoGroup = R.layout.photo_group;
         LayoutInflater inflater = LayoutInflater.from(context);
         boolean shouldAttachToParentImmediately = false;
 
         View view = inflater.inflate(layoutIdForPhotoGroup, viewGroup, shouldAttachToParentImmediately);
-        PersonViewHolder viewHolder = new PersonViewHolder(view);
-
-        return viewHolder;
+        return new PersonViewHolder(view);
     }
 
     @Override
@@ -101,7 +99,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
         TextView personNameView;
         ImageView personPhotoView;
 
-        public PersonViewHolder(View v) {
+        PersonViewHolder(View v) {
             super(v);
             personNameView = v.findViewById(R.id.coworker_name);
             personPhotoView = v.findViewById(R.id.coworker_photo);
@@ -124,13 +122,14 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
         }
 
         void bind(Person person) {
-            String headshotUrl;
-            if (person.getHeadshotUrl() != null) {
-                headshotUrl = person.getHeadshotUrl();
-                Picasso.with(PhotoAdapter.this.context).load(headshotUrl).into(this.personPhotoView);
+            String headShotUrl;
+            if (person.getHeadShotUrl() != null) {
+                headShotUrl = person.getHeadShotUrl();
+                Picasso.with(PhotoAdapter.this.context).load(headShotUrl).into(this.personPhotoView);
             } else {
-                Log.d(TAG, "No URL for headshot");
+                Log.d(TAG, person.getName() + " has no head shot");
             }
+
             if (person.getName() != null) {
                 personNameView.setText(person.getName());
             }
@@ -166,7 +165,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
     class ClickedPeople {
         private List<String> clickedIds = new ArrayList<>();
 
-        public void registerNewClickedPerson(String id) {
+        void registerNewClickedPerson(String id) {
             if (!clickedIds.contains(id)) {
                 clickedIds.add(id);
             }

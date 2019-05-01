@@ -22,10 +22,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameActivity extends AppCompatActivity {
 
-    // TODO: use Rx Subscriptions to watch for API responses
-
-    // TODO: is it possible to use Rx for clicked answers?
-
     private static final String TAG = GameActivity.class.getSimpleName();
     private static final String PHOTO_ADAPTER_KEY = "saved_photo_adapter";
     private static final String SHUFFLED_LIST_KEY = "saved_shuffled_list";
@@ -60,7 +56,7 @@ public class GameActivity extends AppCompatActivity {
         setupSharedPreferences();
         setContentView(R.layout.activity_game);
 
-        people = (RecyclerView) findViewById(R.id.rv_photos);
+        people = findViewById(R.id.rv_photos);
         progressBar = findViewById(R.id.progress_bar);
 
         // prepare the nextButton FAB
@@ -112,41 +108,38 @@ public class GameActivity extends AppCompatActivity {
         final int numberOfPhotos = this.getResources().getInteger(R.integer.number_game_photos);
 
         if (peopleShuffler == null) {
-            new PersonConverter().retrievePersonList(new PersonConverter.PersonListHandler() {
-                @Override
-                public void onReceivePersonList(CopyOnWriteArrayList<Person> personList) {
-                    Log.d(TAG, "Retrieving new list from API");
+            new PersonConverter().retrievePersonList(personList -> {
+                Log.d(TAG, "Retrieving new list from API");
 
-                    // generate a new list of co-workers to play the game on
-                    if (personList == null) {
-                        Log.d(TAG, "List of co-workers not found");
-                    } else {
-                        // create a peopleShuffler to clean & randomize the list
-                        peopleShuffler = new PeopleShuffler(personList, numberOfPhotos);
-                        shuffledList = peopleShuffler.chooseCoworkers();
-                    }
+                // generate a new list of co-workers to play the game on
+                if (personList == null) {
+                    Log.d(TAG, "List of co-workers not found");
+                } else {
+                    // create a peopleShuffler to clean & randomize the list
+                    peopleShuffler = new PeopleShuffler(personList, numberOfPhotos);
+                    shuffledList = peopleShuffler.chooseCoworkers();
+                }
 
-                    if (shuffledList == null) {
-                        Log.d(TAG, "Failed to load shuffled list");
-                    } else {
-                        // pass the list of people to the adapter
-                        photoAdapter = new PhotoAdapter(shuffledList, GameActivity.this);
-                        people.setAdapter(photoAdapter);
-                    }
+                if (shuffledList == null) {
+                    Log.d(TAG, "Failed to load shuffled list");
+                } else {
+                    // pass the list of people to the adapter
+                    photoAdapter = new PhotoAdapter(shuffledList, GameActivity.this);
+                    people.setAdapter(photoAdapter);
+                }
 
-                    if (photoAdapter == null) {
-                        Log.d(TAG, "Failed to load photo adapter");
-                    } else {
-                        // set the text of the game prompt
-                        game_prompt_text_view = findViewById(R.id.game_prompt);
-                        game_prompt_text_view.setText(setName());
-                        // show the game prompt
-                        game_prompt_text_view.setVisibility(View.VISIBLE);
-                        // loading finished: hide the progress bar
-                        progressBar.setVisibility(View.INVISIBLE);
-                        // show the photos
-                        people.setVisibility(View.VISIBLE);
-                    }
+                if (photoAdapter == null) {
+                    Log.d(TAG, "Failed to load photo adapter");
+                } else {
+                    // set the text of the game prompt
+                    game_prompt_text_view = findViewById(R.id.game_prompt);
+                    game_prompt_text_view.setText(setName());
+                    // show the game prompt
+                    game_prompt_text_view.setVisibility(View.VISIBLE);
+                    // loading finished: hide the progress bar
+                    progressBar.setVisibility(View.INVISIBLE);
+                    // show the photos
+                    people.setVisibility(View.VISIBLE);
                 }
             });
         } else {
