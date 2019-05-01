@@ -65,7 +65,7 @@ public class PeopleShuffler implements Parcelable {
         List<Person> listToQuery = new ArrayList<>();
         // shuffle the entire list of people
         Collections.shuffle(personList);
-        // select first n people and put them in a new list
+        // select n people at random and put them in a new list
         while (listToQuery.size() < NUM_COWORKERS_TO_SHOW) {
             boolean duplicate = false;
             int index = (int) (Math.random() * personList.size());
