@@ -62,8 +62,10 @@ public class GameActivity extends AppCompatActivity {
         setupSharedPreferences();
         setContentView(R.layout.activity_game);
 
+        // initialize views
         people = findViewById(R.id.rv_photos);
         progressBar = findViewById(R.id.progress_bar);
+        game_prompt_text_view = findViewById(R.id.game_prompt);
 
         // prepare the nextButton FAB
         nextButton = findViewById(R.id.next_button);
@@ -82,14 +84,15 @@ public class GameActivity extends AppCompatActivity {
             photoAdapter = savedInstanceState.getParcelable(PHOTO_ADAPTER_KEY);
             peopleShuffler = savedInstanceState.getParcelable(PEOPLE_SHUFFLER_KEY);
             people.setAdapter(photoAdapter);
-            game_prompt_text_view = findViewById(R.id.game_prompt);
-            game_prompt_text_view.setText(setName());
-            game_prompt_text_view.setVisibility(View.VISIBLE);
+//            game_prompt_text_view.setText(setName());
+//            game_prompt_text_view.setVisibility(View.VISIBLE);
             // loading finished: hide the progress bar
             progressBar.setVisibility(View.INVISIBLE);
             // show the photos
             people.setVisibility(View.VISIBLE);
         }
+        game_prompt_text_view.setText(setName());
+        game_prompt_text_view.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -129,7 +132,7 @@ public class GameActivity extends AppCompatActivity {
                         if (personList == null) {
                             Log.d(TAG, "List of co-workers not found");
                         } else {
-                            // create a peopleShuffler to clean & randomize the list
+                            // create a peopleShuffler to randomize the list
                             peopleShuffler = new PeopleShuffler(personList, numberOfPhotos);
                             shuffledList = peopleShuffler.chooseCoworkers();
                         }
@@ -146,7 +149,6 @@ public class GameActivity extends AppCompatActivity {
                             Log.d(TAG, "Failed to load photo adapter");
                         } else {
                             // set the text of the game prompt
-                            game_prompt_text_view = findViewById(R.id.game_prompt);
                             game_prompt_text_view.setText(setName());
                             // show the game prompt
                             game_prompt_text_view.setVisibility(View.VISIBLE);
@@ -155,7 +157,11 @@ public class GameActivity extends AppCompatActivity {
                             // show the photos
                             people.setVisibility(View.VISIBLE);
                         }
+                    }, throwable -> {
+                        game_prompt_text_view.setText(R.string.generic_error);
+                        progressBar.setVisibility(View.INVISIBLE);
                     });
+
             disposables.add(personListSubscription);
         } else {
             Log.d(TAG, "Using saved list");
@@ -173,7 +179,7 @@ public class GameActivity extends AppCompatActivity {
                 Log.d(TAG, "Failed to load photo adapter");
             } else {
                 // set the text of the game prompt
-                game_prompt_text_view = findViewById(R.id.game_prompt);
+//                game_prompt_text_view = findViewById(R.id.game_prompt);
                 game_prompt_text_view.setText(setName());
                 // show the game prompt
                 game_prompt_text_view.setVisibility(View.VISIBLE);
@@ -194,7 +200,7 @@ public class GameActivity extends AppCompatActivity {
             String name = peopleToChooseFrom.get(index).getName();
             namePrompt = "Who is " + name + "?";
         } else {
-            namePrompt = getString(R.string.generic_error);
+            namePrompt = "";
         }
         return namePrompt;
     }
