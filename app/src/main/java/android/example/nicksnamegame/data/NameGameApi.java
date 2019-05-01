@@ -4,10 +4,10 @@ import android.example.nicksnamegame.data.model.PersonResponse;
 
 import java.util.List;
 
-import retrofit2.Call;
+import io.reactivex.Single;
 import retrofit2.http.GET;
 
 public interface NameGameApi {
     @GET ("/api/v1.0/profiles")
-    Call<List<PersonResponse>> fetchPeopleList();
+    Single<List<PersonResponse>> fetchPeopleList();
 }

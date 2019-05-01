@@ -12,8 +12,6 @@ public class HeadShotResponse implements Parcelable {
     private int height;
     private int width;
 
-    // TODO: use an Rx Subject to hold the API responses
-
     public HeadShotResponse(@Nullable String headShotUrl,
                             @Nullable String type,
                             int height,

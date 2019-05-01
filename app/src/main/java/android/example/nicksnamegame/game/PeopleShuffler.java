@@ -7,7 +7,6 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class PeopleShuffler implements Parcelable {
@@ -21,25 +20,9 @@ public class PeopleShuffler implements Parcelable {
     private List<Person> personList;
     private int correctAnswerIndex;
 
-    PeopleShuffler(CopyOnWriteArrayList<Person> personList, int num_coworkers_to_show) {
+    PeopleShuffler(List<Person> personList, int num_coworkers_to_show) {
+
         this.personList = personList;
-
-        int totalResponses = personList.size();
-        for (Person person : personList) {
-            String headShotUrl = person.getHeadShotUrl();
-            String name = person.getName();
-            if (headShotUrl == null) {
-                Log.d(TAG, "Removing " + name + ": missing head shot URL");
-                personList.remove(person);
-            } else if (headShotUrl.contains("featured-image-TEST1.png")) {
-                Log.d(TAG, "Removing " + name + " from list: invalid head shot URL: " + headShotUrl);
-                personList.remove(person);
-            }
-        }
-        Log.d(TAG, "Removed " + (totalResponses - personList.size()) + " people from list");
-
-        // TODO: eliminate people whose picture does not have a face (Google Vision API?)
-
         NUM_COWORKERS_TO_SHOW = num_coworkers_to_show;
     }
 
