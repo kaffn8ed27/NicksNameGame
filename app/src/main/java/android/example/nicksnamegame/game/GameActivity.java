@@ -22,6 +22,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameActivity extends AppCompatActivity {
 
+    // TODO: use Rx Subscriptions to watch for API responses
+
+    // TODO: is it possible to use Rx for clicked answers?
+
     private static final String TAG = GameActivity.class.getSimpleName();
     private static final String PHOTO_ADAPTER_KEY = "saved_photo_adapter";
     private static final String SHUFFLED_LIST_KEY = "saved_shuffled_list";

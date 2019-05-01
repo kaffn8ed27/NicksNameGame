@@ -12,6 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PeopleShuffler implements Parcelable {
 
+    // TODO: is it possible to use Rx for clicked answers?
 
     private static final String TAG = PeopleShuffler.class.getSimpleName();
     private static int NUM_COWORKERS_TO_SHOW;
@@ -20,10 +21,6 @@ public class PeopleShuffler implements Parcelable {
 
     public PeopleShuffler(CopyOnWriteArrayList<Person> personList, int num_coworkers_to_show) {
         this.personList = personList;
-
-        /* TODO eliminate people with same name
-         *  i.e. same person is listed twice (there IS at least one example of this)
-         */
 
         int totalResponses = personList.size();
         for (Person person : personList) {

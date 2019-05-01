@@ -25,6 +25,8 @@ import androidx.recyclerview.widget.RecyclerView;
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHolder>
         implements Parcelable {
 
+    // TODO: is it possible to use Rx for clicked answers?
+
     ClickedPeople clickedPeople = new ClickedPeople();
 
     private static final String TAG = PhotoAdapter.class.getSimpleName();

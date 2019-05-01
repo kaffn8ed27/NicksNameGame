@@ -10,6 +10,8 @@ public class PersonResponse implements Parcelable {
     private final String lastName;
     private final HeadshotResponse headshot;
 
+    // TODO: use an Rx Subject to hold the API responses
+
     public PersonResponse(String id,
                           String firstName,
                           String lastName,
