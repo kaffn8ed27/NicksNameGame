@@ -19,6 +19,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -41,14 +43,15 @@ public class GameActivity extends AppCompatActivity {
     private RecyclerView people;
     private TextView game_prompt_text_view;
 
-    /* TODO: turn PhotoAdapter, PeopleShuffler, ShuffledList into Dagger injections?
-     *  or even the entire GameActivity; then it can be an interface that several game modes can implement
-     */
+    // TODO: turn PhotoAdapter, PeopleShuffler, ShuffledList into Dagger injections?
+
     private PhotoAdapter photoAdapter;
     private PeopleShuffler peopleShuffler;
     private ShuffledList shuffledList;
 
     private CompositeDisposable disposables = new CompositeDisposable();
+
+    @Inject PeopleShufflerModule peopleShufflerModule;
 
 
     private void setupSharedPreferences() {
@@ -84,7 +87,10 @@ public class GameActivity extends AppCompatActivity {
         } else {
             Log.d(TAG, "Retrieving state: " + savedInstanceState);
             shuffledList = savedInstanceState.getParcelable(SHUFFLED_LIST_KEY);
-            photoAdapter = savedInstanceState.getParcelable(PHOTO_ADAPTER_KEY);
+            ((GameApplication) getApplication())
+                    .getGameComponent()
+                    .inject(GameActivity.this);
+//            photoAdapter = savedInstanceState.getParcelable(PHOTO_ADAPTER_KEY);
             peopleShuffler = savedInstanceState.getParcelable(PEOPLE_SHUFFLER_KEY);
             people.setAdapter(photoAdapter);
             // loading finished: hide the progress bar
