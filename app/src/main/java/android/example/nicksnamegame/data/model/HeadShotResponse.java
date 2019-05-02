@@ -5,31 +5,31 @@ import android.os.Parcelable;
 
 import androidx.annotation.Nullable;
 
-public class HeadshotResponse implements Parcelable {
+public class HeadShotResponse implements Parcelable {
 
     private String url;
     private String type;
     private int height;
     private int width;
 
-    public HeadshotResponse(@Nullable String headshotUrl,
+    public HeadShotResponse(@Nullable String headShotUrl,
                             @Nullable String type,
-                            @Nullable int height,
-                            @Nullable int width) {
-        this.url = headshotUrl;
+                            int height,
+                            int width) {
+        this.url = headShotUrl;
         this.type = type;
         this.height = height;
         this.width = width;
     }
 
-    private HeadshotResponse(Parcel in) {
+    private HeadShotResponse(Parcel in) {
         this.url = in.readString();
         this.type = in.readString();
         this.height = in.readInt();
         this.width = in.readInt();
     }
 
-    public String getHeadshotUrl() {
+    String getHeadShotUrl() {
         if (this.url != null) {
             // already properly formatted
             if (this.url.startsWith("http")) {
@@ -61,15 +61,15 @@ public class HeadshotResponse implements Parcelable {
         dest.writeInt(this.width);
     }
 
-    public static final Creator<HeadshotResponse> CREATOR = new Creator<HeadshotResponse>() {
+    public static final Creator<HeadShotResponse> CREATOR = new Creator<HeadShotResponse>() {
         @Override
-        public HeadshotResponse createFromParcel(Parcel source) {
-            return new HeadshotResponse(source);
+        public HeadShotResponse createFromParcel(Parcel source) {
+            return new HeadShotResponse(source);
         }
 
         @Override
-        public HeadshotResponse[] newArray(int size) {
-            return new HeadshotResponse[size];
+        public HeadShotResponse[] newArray(int size) {
+            return new HeadShotResponse[size];
         }
     };
 

@@ -8,12 +8,15 @@ public class PersonResponse implements Parcelable {
     private final String id;
     private final String firstName;
     private final String lastName;
-    private final HeadshotResponse headshot;
+    /* this "headshot" has to be all lowercase or else things break
+     *  Possibly related to writing/reading Parcel?
+     */
+    private final HeadShotResponse headshot;
 
     public PersonResponse(String id,
                           String firstName,
                           String lastName,
-                          HeadshotResponse headshot) {
+                          HeadShotResponse headshot) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -24,22 +27,22 @@ public class PersonResponse implements Parcelable {
         this.id = in.readString();
         this.firstName = in.readString();
         this.lastName = in.readString();
-        this.headshot = in.readParcelable(HeadshotResponse.class.getClassLoader());
+        this.headshot = in.readParcelable(HeadShotResponse.class.getClassLoader());
     }
 
     public String getId() {
         return this.id;
     }
 
-    public String getFirstName() {
+    String getFirstName() {
         return this.firstName;
     }
 
-    public String getLastName() {
+    String getLastName() {
         return this.lastName;
     }
 
-    public HeadshotResponse getHeadshot() {
+    HeadShotResponse getHeadShot() {
         return this.headshot;
     }
 
