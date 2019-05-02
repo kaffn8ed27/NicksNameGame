@@ -36,7 +36,7 @@ public class Person implements Parcelable {
         return this.name;
     }
 
-    String getHeadShotUrl() {
+    public String getHeadShotUrl() {
         return this.headShotUrl;
     }
 
