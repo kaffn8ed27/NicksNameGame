@@ -20,7 +20,7 @@ public class PersonConverter {
 
     private static final String TAG = PersonConverter.class.getSimpleName();
 
-    List<Person> mapResponse (List<PersonResponse> responseList) {
+    List<Person> mapResponse(List<PersonResponse> responseList) {
 
         ArrayList<Person> personList = new ArrayList<>();
         int totalResponses = personList.size();
@@ -31,8 +31,11 @@ public class PersonConverter {
             String id = personResponse.getId();
 
             Person person = new Person(name, headShotUrl, id);
-            if(headShotUrl == null || headShotUrl.contains("featured-image-TEST1.png")) {
-                Log.d(TAG, "Removing " + name + ": head shot URL missing or invalid");
+            if (headShotUrl == null) {
+                Log.d(TAG, "Removing " + name + ": no head shot URL");
+                continue;
+            } else if (headShotUrl.contains("featured-image-TEST1.png") || headShotUrl.contains("WT_Logo-Hye-tTeI0Z.png")) {
+                Log.d(TAG, "Removing " + name + ": invalid head shot URL");
                 continue;
             }
             personList.add(person);
