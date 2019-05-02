@@ -53,8 +53,8 @@ public class PeopleShuffler implements Parcelable {
             int index = (int) (Math.random() * personList.size());
             Person candidate = personList.get(index);
             for (Person person : listToQuery) {
-                if (candidate.getName().equals(person.getName())) {
-                    Log.d(TAG, "Person named " + candidate.getName() + " already in list");
+                if (candidate.getName().equals(person.getName()) || candidate.getHeadShotUrl().equals(person.getHeadShotUrl())) {
+                    Log.d(TAG, "Person named " + candidate.getName() + " already in list or has a duplicate");
                     duplicate = true;
                     break;
                 }
