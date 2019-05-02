@@ -8,6 +8,7 @@ public class PersonResponse implements Parcelable {
     private final String id;
     private final String firstName;
     private final String lastName;
+
     /* this "headshot" has to be all lowercase or else things break
      *  Possibly related to writing/reading Parcel?
      */

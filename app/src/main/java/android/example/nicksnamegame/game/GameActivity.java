@@ -18,7 +18,6 @@ import android.widget.TextView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -40,10 +39,14 @@ public class GameActivity extends AppCompatActivity {
     private static FloatingActionButton nextButton;
     private ProgressBar progressBar;
     private RecyclerView people;
+    private TextView game_prompt_text_view;
+
+    /* TODO: turn PhotoAdapter, PeopleShuffler, ShuffledList into Dagger injections?
+     *  or even the entire GameActivity; then it can be an interface that several game modes can implement
+     */
     private PhotoAdapter photoAdapter;
     private PeopleShuffler peopleShuffler;
     private ShuffledList shuffledList;
-    private TextView game_prompt_text_view;
 
     private CompositeDisposable disposables = new CompositeDisposable();
 
@@ -84,8 +87,6 @@ public class GameActivity extends AppCompatActivity {
             photoAdapter = savedInstanceState.getParcelable(PHOTO_ADAPTER_KEY);
             peopleShuffler = savedInstanceState.getParcelable(PEOPLE_SHUFFLER_KEY);
             people.setAdapter(photoAdapter);
-//            game_prompt_text_view.setText(setName());
-//            game_prompt_text_view.setVisibility(View.VISIBLE);
             // loading finished: hide the progress bar
             progressBar.setVisibility(View.INVISIBLE);
             // show the photos
@@ -144,24 +145,19 @@ public class GameActivity extends AppCompatActivity {
                             // pass the list of people to the adapter
                             photoAdapter = new PhotoAdapter(shuffledList, GameActivity.this);
                             people.setAdapter(photoAdapter);
-                        }
 
-                        if (photoAdapter == null) {
-                            Log.d(TAG, "Failed to load photo adapter");
-                        } else {
-                            // set the text of the game prompt
-                            game_prompt_text_view.setText(setName());
-                            // show the game prompt
-                            game_prompt_text_view.setVisibility(View.VISIBLE);
-                            // loading finished: hide the progress bar
-                            progressBar.setVisibility(View.INVISIBLE);
-                            // show the photos
-                            people.setVisibility(View.VISIBLE);
+                            if (photoAdapter == null) {
+                                Log.d(TAG, "Failed to load photo adapter");
+                            } else {
+                                // set the text of the game prompt
+                                game_prompt_text_view.setText(setName());
+                                // show the game prompt
+                                game_prompt_text_view.setVisibility(View.VISIBLE);
+                                // show the photos
+                                people.setVisibility(View.VISIBLE);
+                            }
                         }
-                    }, throwable -> {
-                        game_prompt_text_view.setText(R.string.generic_error);
-                        progressBar.setVisibility(View.INVISIBLE);
-                    });
+                    }, throwable -> game_prompt_text_view.setText(R.string.generic_error));
 
             disposables.add(personListSubscription);
         } else {
@@ -174,22 +170,20 @@ public class GameActivity extends AppCompatActivity {
                 // pass the list of people to the adapter
                 photoAdapter = new PhotoAdapter(shuffledList, GameActivity.this);
                 people.setAdapter(photoAdapter);
-            }
 
-            if (photoAdapter == null) {
-                Log.d(TAG, "Failed to load photo adapter");
-            } else {
-                // set the text of the game prompt
-//                game_prompt_text_view = findViewById(R.id.game_prompt);
-                game_prompt_text_view.setText(setName());
-                // show the game prompt
-                game_prompt_text_view.setVisibility(View.VISIBLE);
-                // loading finished: hide the progress bar
-                progressBar.setVisibility(View.INVISIBLE);
-                // show the photos
-                people.setVisibility(View.VISIBLE);
+                if (photoAdapter == null) {
+                    Log.d(TAG, "Failed to load photo adapter");
+                } else {
+                    game_prompt_text_view.setText(setName());
+                    // show the game prompt
+                    game_prompt_text_view.setVisibility(View.VISIBLE);
+                    // show the photos
+                    people.setVisibility(View.VISIBLE);
+                }
             }
         }
+        // loading finished: hide the progress bar
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     private String setName() {

@@ -20,10 +20,9 @@ public class PersonConverter {
 
     private static final String TAG = PersonConverter.class.getSimpleName();
 
-    List<Person> mapResponse (List<PersonResponse> responseList) {
+    private List<Person> mapResponse (List<PersonResponse> responseList) {
 
         ArrayList<Person> personList = new ArrayList<>();
-        int totalResponses = personList.size();
 
         for (PersonResponse personResponse : responseList) {
             String name = formatName(personResponse.getFirstName(), personResponse.getLastName());
@@ -31,14 +30,14 @@ public class PersonConverter {
             String id = personResponse.getId();
 
             Person person = new Person(name, headShotUrl, id);
-            if(headShotUrl == null || headShotUrl.contains("featured-image-TEST1.png")) {
+            if(headShotUrl == null || headShotUrl.contains("featured-image-TEST1.png") || headShotUrl.contains("WT_Logo-Hye-tTeI0Z.png")) {
                 Log.d(TAG, "Removing " + name + ": head shot URL missing or invalid");
                 continue;
             }
             personList.add(person);
         }
 
-        Log.d(TAG, "Removed " + (totalResponses - personList.size()) + " people from list");
+        Log.d(TAG, "Removed " + (responseList.size() - personList.size()) + " people from list");
 
         // TODO: eliminate people whose picture does not have a face (Google Vision API?)
 
@@ -54,9 +53,7 @@ public class PersonConverter {
                 .create(NameGameApi.class);
 
         Single<List<PersonResponse>> apiCall = api.fetchPeopleList();
-        Single<List<Person>> personSingle = apiCall.map(this::mapResponse);
-
-        return personSingle;
+        return apiCall.map(this::mapResponse);
     }
 
     private String formatName(String firstName, String lastName) {
