@@ -1,5 +1,6 @@
 package android.example.nicksnamegame.game;
 
+import android.example.nicksnamegame.R;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -18,18 +19,18 @@ public class PeopleShuffler implements Parcelable {
     private static final String TAG = PeopleShuffler.class.getSimpleName();
     private static int NUM_COWORKERS_TO_SHOW;
     private List<Person> personList;
-    private int correctAnswerIndex;
 
     PeopleShuffler(List<Person> personList, int num_coworkers_to_show) {
 
         this.personList = personList;
         NUM_COWORKERS_TO_SHOW = num_coworkers_to_show;
+
     }
 
     private PeopleShuffler(Parcel in) {
         personList = in.createTypedArrayList(Person.CREATOR);
-        correctAnswerIndex = in.readInt();
     }
+
 
     public static final Creator<PeopleShuffler> CREATOR = new Creator<PeopleShuffler>() {
         @Override
