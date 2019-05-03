@@ -84,8 +84,6 @@ public class GameActivity extends AppCompatActivity {
             photoAdapter = savedInstanceState.getParcelable(PHOTO_ADAPTER_KEY);
             peopleShuffler = savedInstanceState.getParcelable(PEOPLE_SHUFFLER_KEY);
             people.setAdapter(photoAdapter);
-//            game_prompt_text_view.setText(setName());
-//            game_prompt_text_view.setVisibility(View.VISIBLE);
             // loading finished: hide the progress bar
             progressBar.setVisibility(View.INVISIBLE);
             // show the photos
@@ -127,7 +125,7 @@ public class GameActivity extends AppCompatActivity {
             Disposable personListSubscription = new PersonConverter().retrievePersonList()
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(personList -> {
-                        Log.d(TAG, "Retrieving new list from API");
+                        Log.d(TAG, "Retrieved new list from API");
 
                         // generate a new list of co-workers to play the game on
                         if (personList == null) {
