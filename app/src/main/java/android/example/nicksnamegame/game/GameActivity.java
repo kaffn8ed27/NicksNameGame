@@ -32,6 +32,7 @@ public class GameActivity extends AppCompatActivity {
     private static final String PHOTO_ADAPTER_KEY = "saved_photo_adapter";
     private static final String SHUFFLED_LIST_KEY = "saved_shuffled_list";
     private static final String PERSON_LIST_KEY = "saved_person_list";
+    private static final String NEXT_BUTTON_MANAGER_KEY = "saved_next_button_manager";
 
     /* TODO - tracking: if answered right on the first try, remove coworker from the pool.
      *  If there aren't enough people left in the pool to fill the grid, allow "wrong" answers
@@ -44,12 +45,14 @@ public class GameActivity extends AppCompatActivity {
     private RecyclerView people;
     private TextView game_prompt_text_view;
 
-    // TODO: turn PhotoAdapter, PeopleShuffler, ShuffledList into Dagger injections?
+    // TODO: turn PhotoAdapter into Dagger injection
 
-    private PhotoAdapter photoAdapter;
-    @Inject PeopleShuffler peopleShuffler;
     private ShuffledList shuffledList;
     private List<Person> personList;
+
+    @Inject PhotoAdapter photoAdapter;
+    @Inject PeopleShuffler peopleShuffler;
+    @Inject NextButtonManager nextButtonManager;
 
     private CompositeDisposable disposables = new CompositeDisposable();
 
@@ -67,6 +70,11 @@ public class GameActivity extends AppCompatActivity {
         setupSharedPreferences();
         setContentView(R.layout.activity_game);
 
+        // inject dependencies
+        ((GameApplication) getApplication())
+                .getGameComponent()
+                .inject(GameActivity.this);
+
         // initialize views
         people = findViewById(R.id.rv_photos);
         progressBar = findViewById(R.id.progress_bar);
@@ -74,16 +82,17 @@ public class GameActivity extends AppCompatActivity {
 
         // prepare the nextButton FAB
         nextButton = findViewById(R.id.next_button);
-        nextButton.hide();
-        nextButton.setOnClickListener(v -> generateGameGrid());
+        nextButtonManager.setFab(nextButton);
+        nextButtonManager.setEnabled(false);
+        nextButton.setOnClickListener(v -> {
+            generateGameGrid();
+            nextButtonManager.setEnabled(false);
+        });
 
         int numberOfColumns = this.getResources().getInteger(R.integer.number_game_columns);
         GridLayoutManager photoManager = new GridLayoutManager(this, numberOfColumns);
         people.setLayoutManager(photoManager);
         people.setHasFixedSize(true);
-        ((GameApplication) getApplication())
-                .getGameComponent()
-                .inject(GameActivity.this);
         if (savedInstanceState == null) {
             generateGameGrid();
         } else {
@@ -91,6 +100,7 @@ public class GameActivity extends AppCompatActivity {
             shuffledList = savedInstanceState.getParcelable(SHUFFLED_LIST_KEY);
             photoAdapter = savedInstanceState.getParcelable(PHOTO_ADAPTER_KEY);
             personList = savedInstanceState.getParcelableArrayList(PERSON_LIST_KEY);
+            nextButtonManager = savedInstanceState.getParcelable(NEXT_BUTTON_MANAGER_KEY);
             people.setAdapter(photoAdapter);
             // loading finished: hide the progress bar
             progressBar.setVisibility(View.INVISIBLE);
@@ -113,6 +123,7 @@ public class GameActivity extends AppCompatActivity {
         outState.putParcelable(PHOTO_ADAPTER_KEY, photoAdapter);
         outState.putParcelable(SHUFFLED_LIST_KEY, shuffledList);
         outState.putParcelableArrayList(PERSON_LIST_KEY, new ArrayList<>(personList));
+        outState.putParcelable(NEXT_BUTTON_MANAGER_KEY, nextButtonManager);
         Log.d(TAG, "SAVING...");
     }
 
@@ -126,8 +137,6 @@ public class GameActivity extends AppCompatActivity {
 
         // show the loading indicator
         progressBar.setVisibility(View.VISIBLE);
-
-        final int numberOfPhotos = this.getResources().getInteger(R.integer.number_game_photos);
 
         if (personList == null) {
             Disposable personListSubscription = new PersonConverter().retrievePersonList()
@@ -148,7 +157,7 @@ public class GameActivity extends AppCompatActivity {
                             Log.d(TAG, "Failed to load shuffled list");
                         } else {
                             // pass the list of people to the adapter
-                            photoAdapter = new PhotoAdapter(shuffledList, GameActivity.this);
+                            photoAdapter.setData(shuffledList);
                             people.setAdapter(photoAdapter);
 
                             if (photoAdapter == null) {
@@ -173,7 +182,7 @@ public class GameActivity extends AppCompatActivity {
                 Log.d(TAG, "Failed to load shuffled list");
             } else {
                 // pass the list of people to the adapter
-                photoAdapter = new PhotoAdapter(shuffledList, GameActivity.this);
+                photoAdapter.setData(shuffledList);
                 people.setAdapter(photoAdapter);
 
                 if (photoAdapter == null) {
@@ -205,8 +214,4 @@ public class GameActivity extends AppCompatActivity {
         return namePrompt;
     }
 
-    public static void onCorrectAnswerClicked() {
-        nextButton.show();
-        nextButton.setClickable(true);
-    }
 }
