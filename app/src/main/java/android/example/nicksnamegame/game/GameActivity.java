@@ -134,7 +134,7 @@ public class GameActivity extends AppCompatActivity {
             Disposable personListSubscription = new PersonConverter().retrievePersonList()
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(personList -> {
-                        Log.d(TAG, "Retrieving new list from API");
+                        Log.d(TAG, "Retrieved new list from API");
 
                         // generate a new list of co-workers to play the game on
                         if (personList == null) {
