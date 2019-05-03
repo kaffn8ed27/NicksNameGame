@@ -1,6 +1,5 @@
 package android.example.nicksnamegame.game;
 
-import android.example.nicksnamegame.R;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -11,10 +10,6 @@ import java.util.List;
 
 
 public class PeopleShuffler implements Parcelable {
-
-    /* TODO: use Rx Subject to filter API responses
-     *  and pass filtered & shuffled list to GameActivity
-     */
 
     private static final String TAG = PeopleShuffler.class.getSimpleName();
     private static int NUM_COWORKERS_TO_SHOW;
