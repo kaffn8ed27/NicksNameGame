@@ -1,45 +1,29 @@
 package android.example.nicksnamegame.game;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.content.Context;
+import android.example.nicksnamegame.R;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
 
-public class PeopleShuffler implements Parcelable {
+
+public class PeopleShuffler {
 
     private static final String TAG = PeopleShuffler.class.getSimpleName();
-    private static int NUM_COWORKERS_TO_SHOW;
-    private List<Person> personList;
+    private int NUM_COWORKERS_TO_SHOW;
 
-    PeopleShuffler(List<Person> personList, int num_coworkers_to_show) {
+    @Inject
+    PeopleShuffler(Context context) {
 
-        this.personList = personList;
-        NUM_COWORKERS_TO_SHOW = num_coworkers_to_show;
+        NUM_COWORKERS_TO_SHOW = context.getResources().getInteger(R.integer.number_game_photos);
 
     }
 
-    private PeopleShuffler(Parcel in) {
-        personList = in.createTypedArrayList(Person.CREATOR);
-    }
-
-
-    public static final Creator<PeopleShuffler> CREATOR = new Creator<PeopleShuffler>() {
-        @Override
-        public PeopleShuffler createFromParcel(Parcel in) {
-            return new PeopleShuffler(in);
-        }
-
-        @Override
-        public PeopleShuffler[] newArray(int size) {
-            return new PeopleShuffler[size];
-        }
-    };
-
-    ShuffledList chooseCoworkers() {
+    ShuffledList chooseCoworkers(List<Person> personList) {
         List<Person> listToQuery = new ArrayList<>();
         // shuffle the entire list of people
         Collections.shuffle(personList);
@@ -63,13 +47,4 @@ public class PeopleShuffler implements Parcelable {
         return new ShuffledList(listToQuery);
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeTypedList(personList);
-    }
 }

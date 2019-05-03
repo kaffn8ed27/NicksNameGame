@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -30,7 +31,7 @@ public class GameActivity extends AppCompatActivity {
     private static final String TAG = GameActivity.class.getSimpleName();
     private static final String PHOTO_ADAPTER_KEY = "saved_photo_adapter";
     private static final String SHUFFLED_LIST_KEY = "saved_shuffled_list";
-    private static final String PEOPLE_SHUFFLER_KEY = "saved_people_shuffler";
+    private static final String PERSON_LIST_KEY = "saved_person_list";
 
     /* TODO - tracking: if answered right on the first try, remove coworker from the pool.
      *  If there aren't enough people left in the pool to fill the grid, allow "wrong" answers
@@ -46,13 +47,11 @@ public class GameActivity extends AppCompatActivity {
     // TODO: turn PhotoAdapter, PeopleShuffler, ShuffledList into Dagger injections?
 
     private PhotoAdapter photoAdapter;
-    private PeopleShuffler peopleShuffler;
+    @Inject PeopleShuffler peopleShuffler;
     private ShuffledList shuffledList;
+    private List<Person> personList;
 
     private CompositeDisposable disposables = new CompositeDisposable();
-
-//    @Inject PeopleShufflerModule peopleShufflerModule;
-
 
     private void setupSharedPreferences() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -82,13 +81,16 @@ public class GameActivity extends AppCompatActivity {
         GridLayoutManager photoManager = new GridLayoutManager(this, numberOfColumns);
         people.setLayoutManager(photoManager);
         people.setHasFixedSize(true);
+        ((GameApplication) getApplication())
+                .getGameComponent()
+                .inject(GameActivity.this);
         if (savedInstanceState == null) {
             generateGameGrid();
         } else {
             Log.d(TAG, "Retrieving state: " + savedInstanceState);
             shuffledList = savedInstanceState.getParcelable(SHUFFLED_LIST_KEY);
             photoAdapter = savedInstanceState.getParcelable(PHOTO_ADAPTER_KEY);
-            peopleShuffler = savedInstanceState.getParcelable(PEOPLE_SHUFFLER_KEY);
+            personList = savedInstanceState.getParcelableArrayList(PERSON_LIST_KEY);
             people.setAdapter(photoAdapter);
             // loading finished: hide the progress bar
             progressBar.setVisibility(View.INVISIBLE);
@@ -110,7 +112,7 @@ public class GameActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putParcelable(PHOTO_ADAPTER_KEY, photoAdapter);
         outState.putParcelable(SHUFFLED_LIST_KEY, shuffledList);
-        outState.putParcelable(PEOPLE_SHUFFLER_KEY, peopleShuffler);
+        outState.putParcelableArrayList(PERSON_LIST_KEY, new ArrayList<>(personList));
         Log.d(TAG, "SAVING...");
     }
 
@@ -127,7 +129,7 @@ public class GameActivity extends AppCompatActivity {
 
         final int numberOfPhotos = this.getResources().getInteger(R.integer.number_game_photos);
 
-        if (peopleShuffler == null) {
+        if (personList == null) {
             Disposable personListSubscription = new PersonConverter().retrievePersonList()
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(personList -> {
@@ -137,9 +139,9 @@ public class GameActivity extends AppCompatActivity {
                         if (personList == null) {
                             Log.d(TAG, "List of co-workers not found");
                         } else {
+                            this.personList = personList;
                             // create a peopleShuffler to randomize the list
-                            peopleShuffler = new PeopleShuffler(personList, numberOfPhotos);
-                            shuffledList = peopleShuffler.chooseCoworkers();
+                            shuffledList = peopleShuffler.chooseCoworkers(personList);
                         }
 
                         if (shuffledList == null) {
@@ -165,7 +167,7 @@ public class GameActivity extends AppCompatActivity {
             disposables.add(personListSubscription);
         } else {
             Log.d(TAG, "Using saved list");
-            shuffledList = peopleShuffler.chooseCoworkers();
+            shuffledList = peopleShuffler.chooseCoworkers(personList);
 
             if (shuffledList == null) {
                 Log.d(TAG, "Failed to load shuffled list");
