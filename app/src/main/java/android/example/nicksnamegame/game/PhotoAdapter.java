@@ -36,7 +36,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
 
     PhotoAdapter(ShuffledList shuffledList, Context context) {
         this.coworkers = shuffledList.getPeople();
-        this.index = shuffledList.getIndex();
+        this.index = shuffledList.getCorrectAnswerIndex();
         this.context = context;
     }
 

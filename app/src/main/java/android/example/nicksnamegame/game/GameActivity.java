@@ -51,7 +51,7 @@ public class GameActivity extends AppCompatActivity {
 
     private CompositeDisposable disposables = new CompositeDisposable();
 
-    @Inject PeopleShufflerModule peopleShufflerModule;
+//    @Inject PeopleShufflerModule peopleShufflerModule;
 
 
     private void setupSharedPreferences() {
@@ -87,10 +87,7 @@ public class GameActivity extends AppCompatActivity {
         } else {
             Log.d(TAG, "Retrieving state: " + savedInstanceState);
             shuffledList = savedInstanceState.getParcelable(SHUFFLED_LIST_KEY);
-            ((GameApplication) getApplication())
-                    .getGameComponent()
-                    .inject(GameActivity.this);
-//            photoAdapter = savedInstanceState.getParcelable(PHOTO_ADAPTER_KEY);
+            photoAdapter = savedInstanceState.getParcelable(PHOTO_ADAPTER_KEY);
             peopleShuffler = savedInstanceState.getParcelable(PEOPLE_SHUFFLER_KEY);
             people.setAdapter(photoAdapter);
             // loading finished: hide the progress bar
@@ -196,7 +193,7 @@ public class GameActivity extends AppCompatActivity {
         // extract the correct name from the ShuffledList object and set the prompt text
         String namePrompt;
         if (shuffledList != null) {
-            int index = shuffledList.getIndex();
+            int index = shuffledList.getCorrectAnswerIndex();
             List<Person> peopleToChooseFrom = shuffledList.getPeople();
             String name = peopleToChooseFrom.get(index).getName();
             namePrompt = "Who is " + name + "?";

@@ -1,15 +1,13 @@
-package android.example.nicksnamegame.game;
-
-import android.example.nicksnamegame.launcher.MainActivity;
-
-import javax.inject.Singleton;
-
-import dagger.Component;
-
-@Singleton
-@Component(modules = PeopleShufflerModule.class)
-interface GameComponent {
-
-    void inject(GameActivity gameActivity);
-
-}
+//package android.example.nicksnamegame.game;
+//
+//import javax.inject.Singleton;
+//
+//import dagger.Component;
+//
+//@Singleton
+//@Component(modules = GameModule.class)
+//interface GameComponent {
+//
+//    void inject(GameActivity gameActivity);
+//
+//}

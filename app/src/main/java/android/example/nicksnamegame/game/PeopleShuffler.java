@@ -63,11 +63,8 @@ public class PeopleShuffler implements Parcelable {
                 listToQuery.add(candidate);
             }
         }
-        // generate the index of the correct answer for this round
-        correctAnswerIndex = (int) (Math.random() * listToQuery.size());
         // create and return a ShuffledList from the randomly generated list of people
-        Log.d(TAG, listToQuery.toString());
-        return new ShuffledList(listToQuery, correctAnswerIndex);
+        return new ShuffledList(listToQuery);
     }
 
     @Override
@@ -78,6 +75,5 @@ public class PeopleShuffler implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeTypedList(personList);
-        dest.writeInt(correctAnswerIndex);
     }
 }

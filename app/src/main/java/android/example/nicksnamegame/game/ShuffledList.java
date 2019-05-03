@@ -2,25 +2,32 @@ package android.example.nicksnamegame.game;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.List;
 
 public class ShuffledList implements Parcelable {
 
     private List<Person> people;
-    private int index;
+    private int correctAnswerIndex;
 
-    public ShuffledList(List<Person> people, int index) {
+    private static final String TAG = ShuffledList.class.getSimpleName();
+
+    public ShuffledList(List<Person> people) {
         this.people = people;
-        this.index = index;
+//        generate the index of the correct answer for this round
+        this.correctAnswerIndex = (int) (Math.random() * people.size());
+        for(Person person : people) {
+            Log.d(TAG, person.toString());
+        }
     }
 
     public List<Person> getPeople() {
         return this.people;
     }
 
-    public int getIndex() {
-        return this.index;
+    public int getCorrectAnswerIndex() {
+        return this.correctAnswerIndex;
     }
 
     @Override
@@ -31,7 +38,7 @@ public class ShuffledList implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeList(this.people);
-        dest.writeInt(this.index);
+        dest.writeInt(this.correctAnswerIndex);
     }
 
     public static final Creator<ShuffledList> CREATOR = new Creator<ShuffledList>() {
