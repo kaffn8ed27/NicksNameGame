@@ -6,7 +6,7 @@ import android.util.Log;
 
 import java.util.List;
 
-public class ShuffledList implements Parcelable, Shuffle {
+public class ShuffledList implements Parcelable {
 
     private List<Person> people;
     private int correctAnswerIndex;
@@ -22,12 +22,10 @@ public class ShuffledList implements Parcelable, Shuffle {
         }
     }
 
-    @Override
     public List<Person> getPeople() {
         return this.people;
     }
 
-    @Override
     public int getCorrectAnswerIndex() {
         return this.correctAnswerIndex;
     }
