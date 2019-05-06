@@ -6,12 +6,8 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.reactivex.Single;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -23,7 +19,6 @@ public class PersonConverter {
     List<Person> mapResponse(List<PersonResponse> responseList) {
 
         ArrayList<Person> personList = new ArrayList<>();
-        int totalResponses = personList.size();
 
         for (PersonResponse personResponse : responseList) {
             String name = formatName(personResponse.getFirstName(), personResponse.getLastName());
@@ -41,7 +36,7 @@ public class PersonConverter {
             personList.add(person);
         }
 
-        Log.d(TAG, "Removed " + (totalResponses - personList.size()) + " people from list");
+        Log.d(TAG, "Removed " + (responseList.size() - personList.size()) + " people from list");
 
         // TODO: eliminate people whose picture does not have a face (Google Vision API?)
 

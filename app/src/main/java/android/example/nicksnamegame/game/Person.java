@@ -3,6 +3,8 @@ package android.example.nicksnamegame.game;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 public class Person implements Parcelable {
     private String name;
     private String headShotUrl;
@@ -12,6 +14,12 @@ public class Person implements Parcelable {
         this.name = name;
         this.headShotUrl = headShotUrl;
         this.id = id;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return ("Name: " + this.getName() + ", Id: " + this.getId());
     }
 
     private Person(Parcel in) {

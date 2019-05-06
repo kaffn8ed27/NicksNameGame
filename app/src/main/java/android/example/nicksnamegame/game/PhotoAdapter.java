@@ -22,30 +22,39 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import javax.inject.Inject;
+
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHolder>
         implements Parcelable {
 
-    // TODO: is it possible to use Rx for clicked answers?
-
-    private ClickedPeople clickedPeople = new ClickedPeople();
+    private ClickedPeople clickedPeople;
 
     private static final String TAG = PhotoAdapter.class.getSimpleName();
 
     private List<Person> coworkers;
-    private int index;
+    private int correctAnswerIndex;
     private Context context;
-    private boolean correctAnswerClicked = false;
 
-    PhotoAdapter(ShuffledList shuffledList, Context context) {
-        this.coworkers = shuffledList.getPeople();
-        this.index = shuffledList.getIndex();
+    @Inject
+    NextButtonManager nextButtonManager;
+
+    @Inject
+    PhotoAdapter(Context context) {
+        clickedPeople = new ClickedPeople();
         this.context = context;
     }
 
     private PhotoAdapter(Parcel in) {
-        this.index = in.readInt();
+        this.correctAnswerIndex = in.readInt();
         this.coworkers = in.readParcelable(ShuffledList.class.getClassLoader());
         this.context = in.readParcelable(Context.class.getClassLoader());
+        this.nextButtonManager = in.readParcelable(Context.class.getClassLoader());
+        this.clickedPeople = in.readParcelable(Context.class.getClassLoader());
+    }
+
+    public void setData(ShuffledList shuffledList) {
+        this.coworkers = shuffledList.getPeople();
+        this.correctAnswerIndex = shuffledList.getCorrectAnswerIndex();
     }
 
     public static final Creator<PhotoAdapter> CREATOR = new Creator<PhotoAdapter>() {
@@ -63,6 +72,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
     @NonNull
     @Override
     public PersonViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        Log.d(TAG, "New view holder created");
         Context context = viewGroup.getContext();
         int layoutIdForPhotoGroup = R.layout.photo_group;
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -90,11 +100,17 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(index);
+        dest.writeInt(correctAnswerIndex);
+    }
+
+    public void clearClickedState () {
+        clickedPeople.clear();
     }
 
     class PersonViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
+
+        private final String TAG = PersonViewHolder.class.getSimpleName();
 
         TextView personNameView;
         ImageView personPhotoView;
@@ -108,7 +124,8 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
 
         @Override
         public void onClick(View v) {
-            if (!correctAnswerClicked) {
+            if (!nextButtonManager.getCorrectAnswerClicked()) {
+                Log.d(TAG, "Click registered");
                 // Add the person's ID to the list of clicked people
                 Person person = coworkers.get(getAdapterPosition());
                 String id;
@@ -138,13 +155,13 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
             if (person.getId() != null) {
                 if (clickedPeople.clickedIds.contains(person.getId())) {
                     int foregroundColor = R.color.chose_poorly;
-                    if (this.getAdapterPosition() == index) {
+                    if (this.getAdapterPosition() == correctAnswerIndex) {
                         foregroundColor = R.color.chose_wisely;
+
                         /* if the correct answer is clicked, flag the game as such
                          * this will affect several aspects of the game - no more clicking allowed,
                          * "next" button enabled, etc. */
-                        correctAnswerClicked = true;
-                        GameActivity.onCorrectAnswerClicked();
+                        nextButtonManager.setEnabled(true);
                     }
                     // create the drawable for the foreground color
                     Drawable foreground = new ColorDrawable(ContextCompat.getColor(PhotoAdapter.this.context, foregroundColor));
@@ -159,6 +176,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
                     personNameView.setVisibility(View.INVISIBLE);
                 }
             }
+            Log.d(TAG, "Correct: " + nextButtonManager.getCorrectAnswerClicked());
         }
     }
 
@@ -169,6 +187,10 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
             if (!clickedIds.contains(id)) {
                 clickedIds.add(id);
             }
+        }
+
+        void clear() {
+            clickedIds.clear();
         }
 
         @NonNull
