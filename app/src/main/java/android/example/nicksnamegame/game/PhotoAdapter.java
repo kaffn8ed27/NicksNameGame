@@ -72,7 +72,6 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
     @NonNull
     @Override
     public PersonViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        Log.d(TAG, "New view holder created");
         Context context = viewGroup.getContext();
         int layoutIdForPhotoGroup = R.layout.photo_group;
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -143,10 +142,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
             if (person.getHeadShotUrl() != null) {
                 headShotUrl = person.getHeadShotUrl();
                 Picasso.with(PhotoAdapter.this.context).load(headShotUrl).into(this.personPhotoView);
-            } else {
-                Log.d(TAG, person.getName() + " has no head shot");
             }
-
             if (person.getName() != null) {
                 personNameView.setText(person.getName());
             }
