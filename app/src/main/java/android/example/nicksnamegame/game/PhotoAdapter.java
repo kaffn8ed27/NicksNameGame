@@ -176,7 +176,6 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
                     personNameView.setVisibility(View.INVISIBLE);
                 }
             }
-            Log.d(TAG, "Correct: " + nextButtonManager.getCorrectAnswerClicked());
         }
     }
 
