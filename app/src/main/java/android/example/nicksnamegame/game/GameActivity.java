@@ -131,6 +131,7 @@ public class GameActivity extends AppCompatActivity {
 
         nextButton.setClickable(false);
         nextButton.hide();
+        photoAdapter.clearClickedState();
 
         // hide the recycler view while the game board loads
         people.setVisibility(View.INVISIBLE);

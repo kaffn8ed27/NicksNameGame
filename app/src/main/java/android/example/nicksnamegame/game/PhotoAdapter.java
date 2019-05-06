@@ -35,7 +35,8 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
     private int correctAnswerIndex;
     private Context context;
 
-    @Inject NextButtonManager nextButtonManager;
+    @Inject
+    NextButtonManager nextButtonManager;
 
     @Inject
     PhotoAdapter(Context context) {
@@ -102,6 +103,10 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
         dest.writeInt(correctAnswerIndex);
     }
 
+    public void clearClickedState () {
+        clickedPeople.clear();
+    }
+
     class PersonViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
 
@@ -119,8 +124,8 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
 
         @Override
         public void onClick(View v) {
-            Log.d(TAG, "clicky");
             if (!nextButtonManager.getCorrectAnswerClicked()) {
+                Log.d(TAG, "Click registered");
                 // Add the person's ID to the list of clicked people
                 Person person = coworkers.get(getAdapterPosition());
                 String id;
@@ -165,8 +170,6 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
                     // draw the color over the photo and show the name of the clicked person
                     itemView.setForeground(foreground);
                     personNameView.setVisibility(View.VISIBLE);
-                    // TODO: find the right place for this
-                    clickedPeople.clear();
 
                 } else {
                     itemView.setForeground(null);
