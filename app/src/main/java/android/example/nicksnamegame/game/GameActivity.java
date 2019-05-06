@@ -26,6 +26,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
+
 public class GameActivity extends AppCompatActivity {
 
     private static final String TAG = GameActivity.class.getSimpleName();
@@ -44,18 +45,19 @@ public class GameActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private RecyclerView people;
     private TextView game_prompt_text_view;
-
-    // TODO: turn PhotoAdapter into Dagger injection
-
     private ShuffledList shuffledList;
     private List<Person> personList;
+    private PhotoAdapter photoAdapter;
 
-    @Inject PhotoAdapter photoAdapter;
-    @Inject PeopleShuffler peopleShuffler;
-    @Inject NextButtonManager nextButtonManager;
-    @Inject GameBoardManager gameBoardManager;
+    private CompositeDisposable disposables;
 
-    private CompositeDisposable disposables = new CompositeDisposable();
+    @Inject
+    NextButtonManager nextButtonManager;
+    @Inject
+    GameBoardManager gameBoardManager;
+
+    public GameActivity() {
+    }
 
     private void setupSharedPreferences() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -66,7 +68,6 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
-
 
         super.onCreate(savedInstanceState);
         setupSharedPreferences();
@@ -86,7 +87,7 @@ public class GameActivity extends AppCompatActivity {
         nextButton = findViewById(R.id.next_button);
         nextButtonManager.setFab(nextButton);
 
-//        TODO: move nextButton's onClick listener to NextButtonManager?
+        // TODO: move nextButton's onClick listener to NextButtonManager?
         nextButton.setOnClickListener(v -> generateGameGrid());
 
         int numberOfColumns = this.getResources().getInteger(R.integer.number_game_columns);
@@ -94,7 +95,15 @@ public class GameActivity extends AppCompatActivity {
         people.setLayoutManager(photoManager);
         people.setHasFixedSize(true);
         if (savedInstanceState == null) {
+            // hide the recycler view while the game board loads
+            people.setVisibility(View.INVISIBLE);
+            // show the loading indicator
+            progressBar.setVisibility(View.VISIBLE);
             generateGameGrid();
+            // show the photos
+            people.setVisibility(View.VISIBLE);
+            // loading finished: hide the progress bar
+            progressBar.setVisibility(View.INVISIBLE);
         } else {
             Log.d(TAG, "Retrieving state: " + savedInstanceState);
             shuffledList = savedInstanceState.getParcelable(SHUFFLED_LIST_KEY);
@@ -106,15 +115,17 @@ public class GameActivity extends AppCompatActivity {
             progressBar.setVisibility(View.INVISIBLE);
             // show the photos
             people.setVisibility(View.VISIBLE);
+            game_prompt_text_view.setText(gameBoardManager.setName());
+            game_prompt_text_view.setVisibility(View.VISIBLE);
         }
-        game_prompt_text_view.setText(setName());
-        game_prompt_text_view.setVisibility(View.VISIBLE);
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+        // get rid of any Rx subscriptions
+//        gameBoardManager.dispose();
         disposables.dispose();
+        super.onDestroy();
     }
 
     @Override
@@ -129,89 +140,39 @@ public class GameActivity extends AppCompatActivity {
 
     protected void generateGameGrid() {
 
-        nextButtonManager.setEnabled(false);
-        photoAdapter.clearClickedState();
-
-        // hide the recycler view while the game board loads
-        people.setVisibility(View.INVISIBLE);
-
-        // show the loading indicator
-        progressBar.setVisibility(View.VISIBLE);
+        disposables = new CompositeDisposable();
 
         if (personList == null) {
             Disposable personListSubscription = new PersonConverter().retrievePersonList()
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(personList -> {
                         Log.d(TAG, "Retrieved new list from API");
+                        this.personList = personList;
 
-                        // generate a new list of co-workers to play the game on
-                        if (personList == null) {
-                            Log.d(TAG, "List of co-workers not found");
-                        } else {
-                            this.personList = personList;
-                            // create a peopleShuffler to randomize the list
-                            shuffledList = peopleShuffler.chooseCoworkers(personList);
-                        }
+                        photoAdapter = gameBoardManager.generateGameBoard(personList);
+                        // set the text of the game prompt
+                        game_prompt_text_view.setText(gameBoardManager.setName());
 
-                        if (shuffledList == null) {
-                            Log.d(TAG, "Failed to load shuffled list");
-                        } else {
-                            // pass the list of people to the adapter
-                            photoAdapter.setData(shuffledList);
-                            people.setAdapter(photoAdapter);
-
-                            if (photoAdapter == null) {
-                                Log.d(TAG, "Failed to load photo adapter");
-                            } else {
-                                // set the text of the game prompt
-                                game_prompt_text_view.setText(setName());
-                                // show the game prompt
-                                game_prompt_text_view.setVisibility(View.VISIBLE);
-                                // show the photos
-                                people.setVisibility(View.VISIBLE);
-                            }
-                        }
+                        people.setAdapter(photoAdapter);
+                        // show the game prompt
+                        game_prompt_text_view.setVisibility(View.VISIBLE);
                     }, throwable -> game_prompt_text_view.setText(R.string.generic_error));
 
+            // set up the personList subscription to be disposed of when the activity is destroyed
             disposables.add(personListSubscription);
+
         } else {
             Log.d(TAG, "Using saved list");
-            shuffledList = peopleShuffler.chooseCoworkers(personList);
-
-            if (shuffledList == null) {
-                Log.d(TAG, "Failed to load shuffled list");
-            } else {
-                // pass the list of people to the adapter
-                photoAdapter.setData(shuffledList);
-                people.setAdapter(photoAdapter);
-
-                if (photoAdapter == null) {
-                    Log.d(TAG, "Failed to load photo adapter");
-                } else {
-                    game_prompt_text_view.setText(setName());
-                    // show the game prompt
-                    game_prompt_text_view.setVisibility(View.VISIBLE);
-                    // show the photos
-                    people.setVisibility(View.VISIBLE);
-                }
-            }
+            photoAdapter = gameBoardManager.generateGameBoard(personList);
+            people.setAdapter(photoAdapter);
+            // set the text of the game prompt
+            game_prompt_text_view.setText(gameBoardManager.setName());
+            // show the game prompt
+            game_prompt_text_view.setVisibility(View.VISIBLE);
+            // show the photos
+            people.setVisibility(View.VISIBLE);
+            // loading finished: hide the progress bar
+            progressBar.setVisibility(View.INVISIBLE);
         }
-        // loading finished: hide the progress bar
-        progressBar.setVisibility(View.INVISIBLE);
     }
-
-    private String setName() {
-        // extract the correct name from the ShuffledList object and set the prompt text
-        String namePrompt;
-        if (shuffledList != null) {
-            int index = shuffledList.getCorrectAnswerIndex();
-            List<Person> peopleToChooseFrom = shuffledList.getPeople();
-            String name = peopleToChooseFrom.get(index).getName();
-            namePrompt = "Who is " + name + "?";
-        } else {
-            namePrompt = "";
-        }
-        return namePrompt;
-    }
-
 }
