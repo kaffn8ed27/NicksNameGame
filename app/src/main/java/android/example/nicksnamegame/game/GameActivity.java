@@ -45,7 +45,6 @@ public class GameActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private RecyclerView people;
     private TextView game_prompt_text_view;
-    private ShuffledList shuffledList;
     private List<Person> personList;
     private PhotoAdapter photoAdapter;
 
@@ -106,7 +105,7 @@ public class GameActivity extends AppCompatActivity {
             progressBar.setVisibility(View.INVISIBLE);
         } else {
             Log.d(TAG, "Retrieving state: " + savedInstanceState);
-            shuffledList = savedInstanceState.getParcelable(SHUFFLED_LIST_KEY);
+//            shuffledList = savedInstanceState.getParcelable(SHUFFLED_LIST_KEY);
             photoAdapter = savedInstanceState.getParcelable(PHOTO_ADAPTER_KEY);
             personList = savedInstanceState.getParcelableArrayList(PERSON_LIST_KEY);
             nextButtonManager = savedInstanceState.getParcelable(NEXT_BUTTON_MANAGER_KEY);
@@ -124,7 +123,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onDestroy() {
         // get rid of any Rx subscriptions
 //        gameBoardManager.dispose();
-        disposables.dispose();
+        if(disposables != null) disposables.dispose();
         super.onDestroy();
     }
 
@@ -132,7 +131,6 @@ public class GameActivity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(PHOTO_ADAPTER_KEY, photoAdapter);
-        outState.putParcelable(SHUFFLED_LIST_KEY, shuffledList);
         outState.putParcelableArrayList(PERSON_LIST_KEY, new ArrayList<>(personList));
         outState.putParcelable(NEXT_BUTTON_MANAGER_KEY, nextButtonManager);
         Log.d(TAG, "SAVING...");
