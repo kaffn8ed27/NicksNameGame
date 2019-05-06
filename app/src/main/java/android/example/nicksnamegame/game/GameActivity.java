@@ -53,6 +53,7 @@ public class GameActivity extends AppCompatActivity {
     @Inject PhotoAdapter photoAdapter;
     @Inject PeopleShuffler peopleShuffler;
     @Inject NextButtonManager nextButtonManager;
+    @Inject GameBoardManager gameBoardManager;
 
     private CompositeDisposable disposables = new CompositeDisposable();
 
@@ -65,6 +66,7 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+
 
         super.onCreate(savedInstanceState);
         setupSharedPreferences();
@@ -83,11 +85,9 @@ public class GameActivity extends AppCompatActivity {
         // prepare the nextButton FAB
         nextButton = findViewById(R.id.next_button);
         nextButtonManager.setFab(nextButton);
-        nextButtonManager.setEnabled(false);
-        nextButton.setOnClickListener(v -> {
-            generateGameGrid();
-            nextButtonManager.setEnabled(false);
-        });
+
+//        TODO: move nextButton's onClick listener to NextButtonManager?
+        nextButton.setOnClickListener(v -> generateGameGrid());
 
         int numberOfColumns = this.getResources().getInteger(R.integer.number_game_columns);
         GridLayoutManager photoManager = new GridLayoutManager(this, numberOfColumns);
@@ -129,8 +129,7 @@ public class GameActivity extends AppCompatActivity {
 
     protected void generateGameGrid() {
 
-        nextButton.setClickable(false);
-        nextButton.hide();
+        nextButtonManager.setEnabled(false);
         photoAdapter.clearClickedState();
 
         // hide the recycler view while the game board loads

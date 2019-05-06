@@ -159,8 +159,9 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
                         foregroundColor = R.color.chose_wisely;
 
                         /* if the correct answer is clicked, flag the game as such
-                         * this will affect several aspects of the game - no more clicking allowed,
-                         * "next" button enabled, etc. */
+                         * this will:
+                          * - disable clicking of any more photos
+                          * - enable the "next" button */
                         nextButtonManager.setEnabled(true);
                     }
                     // create the drawable for the foreground color

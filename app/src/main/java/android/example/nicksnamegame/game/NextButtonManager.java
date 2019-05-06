@@ -40,6 +40,7 @@ public class NextButtonManager implements Parcelable {
 
     public void setFab(FloatingActionButton fab) {
         this.fab = fab;
+        setEnabled(false);
     }
 
     public void setEnabled(boolean enabled) {
