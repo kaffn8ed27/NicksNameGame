@@ -17,9 +17,6 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -31,8 +28,6 @@ public class GameActivity extends AppCompatActivity {
 
     private static final String TAG = GameActivity.class.getSimpleName();
     private static final String PHOTO_ADAPTER_KEY = "saved_photo_adapter";
-    private static final String SHUFFLED_LIST_KEY = "saved_shuffled_list";
-    private static final String PERSON_LIST_KEY = "saved_person_list";
     private static final String NEXT_BUTTON_MANAGER_KEY = "saved_next_button_manager";
 
     /* TODO - tracking: if answered right on the first try, remove coworker from the pool.
@@ -45,7 +40,6 @@ public class GameActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private RecyclerView people;
     private TextView game_prompt_text_view;
-    private List<Person> personList;
     private PhotoAdapter photoAdapter;
 
     private CompositeDisposable disposables;
@@ -82,11 +76,10 @@ public class GameActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_bar);
         game_prompt_text_view = findViewById(R.id.game_prompt);
 
+        // TODO: move nextButton's onClick listener to NextButtonManager
         // prepare the nextButton FAB
         nextButton = findViewById(R.id.next_button);
         nextButtonManager.setFab(nextButton);
-
-        // TODO: move nextButton's onClick listener to NextButtonManager?
         nextButton.setOnClickListener(v -> generateGameGrid());
 
         int numberOfColumns = this.getResources().getInteger(R.integer.number_game_columns);
@@ -98,79 +91,67 @@ public class GameActivity extends AppCompatActivity {
             people.setVisibility(View.INVISIBLE);
             // show the loading indicator
             progressBar.setVisibility(View.VISIBLE);
-            generateGameGrid();
+
+            // make the network call to retrieve the list of people
+            Disposable personListSubscription = new PersonConverter().retrievePersonList()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(personList -> {
+                        Log.d(TAG, "Retrieved new list from API");
+                        gameBoardManager.setPersonList(personList);
+                        photoAdapter = gameBoardManager.generateGameBoard();
+                        people.setAdapter(photoAdapter);
+                        // set the text of the game prompt
+                        game_prompt_text_view.setText(gameBoardManager.createNamePrompt());
+
+                        // show the game prompt
+                        game_prompt_text_view.setVisibility(View.VISIBLE);
+
+                    }, throwable -> game_prompt_text_view.setText(R.string.generic_error));
+
+            // set up the personList subscription to be disposed of when the activity is destroyed
+            disposables = new CompositeDisposable();
+            disposables.add(personListSubscription);
+
             // show the photos
             people.setVisibility(View.VISIBLE);
             // loading finished: hide the progress bar
             progressBar.setVisibility(View.INVISIBLE);
         } else {
             Log.d(TAG, "Retrieving state: " + savedInstanceState);
-//            shuffledList = savedInstanceState.getParcelable(SHUFFLED_LIST_KEY);
             photoAdapter = savedInstanceState.getParcelable(PHOTO_ADAPTER_KEY);
-            personList = savedInstanceState.getParcelableArrayList(PERSON_LIST_KEY);
             nextButtonManager = savedInstanceState.getParcelable(NEXT_BUTTON_MANAGER_KEY);
             people.setAdapter(photoAdapter);
             // loading finished: hide the progress bar
             progressBar.setVisibility(View.INVISIBLE);
             // show the photos
             people.setVisibility(View.VISIBLE);
-            game_prompt_text_view.setText(gameBoardManager.setName());
+            game_prompt_text_view.setText(gameBoardManager.createNamePrompt());
             game_prompt_text_view.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     protected void onDestroy() {
-        // get rid of any Rx subscriptions
-//        gameBoardManager.dispose();
-        if(disposables != null) disposables.dispose();
+        if (disposables != null) disposables.dispose();
         super.onDestroy();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(PHOTO_ADAPTER_KEY, photoAdapter);
-        outState.putParcelableArrayList(PERSON_LIST_KEY, new ArrayList<>(personList));
-        outState.putParcelable(NEXT_BUTTON_MANAGER_KEY, nextButtonManager);
         Log.d(TAG, "SAVING...");
+        super.onSaveInstanceState(outState);
+        if (photoAdapter != null) {
+            outState.putParcelable(PHOTO_ADAPTER_KEY, photoAdapter);
+        }
+        if (nextButtonManager != null) {
+            outState.putParcelable(NEXT_BUTTON_MANAGER_KEY, nextButtonManager);
+        }
     }
 
     protected void generateGameGrid() {
-
-        disposables = new CompositeDisposable();
-
-        if (personList == null) {
-            Disposable personListSubscription = new PersonConverter().retrievePersonList()
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(personList -> {
-                        Log.d(TAG, "Retrieved new list from API");
-                        this.personList = personList;
-
-                        photoAdapter = gameBoardManager.generateGameBoard(personList);
-                        // set the text of the game prompt
-                        game_prompt_text_view.setText(gameBoardManager.setName());
-
-                        people.setAdapter(photoAdapter);
-                        // show the game prompt
-                        game_prompt_text_view.setVisibility(View.VISIBLE);
-                    }, throwable -> game_prompt_text_view.setText(R.string.generic_error));
-
-            // set up the personList subscription to be disposed of when the activity is destroyed
-            disposables.add(personListSubscription);
-
-        } else {
-            Log.d(TAG, "Using saved list");
-            photoAdapter = gameBoardManager.generateGameBoard(personList);
-            people.setAdapter(photoAdapter);
-            // set the text of the game prompt
-            game_prompt_text_view.setText(gameBoardManager.setName());
-            // show the game prompt
-            game_prompt_text_view.setVisibility(View.VISIBLE);
-            // show the photos
-            people.setVisibility(View.VISIBLE);
-            // loading finished: hide the progress bar
-            progressBar.setVisibility(View.INVISIBLE);
-        }
+        photoAdapter = gameBoardManager.generateGameBoard();
+        people.setAdapter(photoAdapter);
+        // set the text of the game prompt
+        game_prompt_text_view.setText(gameBoardManager.createNamePrompt());
     }
 }

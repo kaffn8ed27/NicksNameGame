@@ -1,25 +1,16 @@
 package android.example.nicksnamegame.game;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
-import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import io.reactivex.disposables.CompositeDisposable;
 
 @Singleton
-public class GameBoardManager implements Parcelable {
+public class GameBoardManager {
 
     private static final String TAG = GameBoardManager.class.getSimpleName();
 
-    private CompositeDisposable disposables;
     private ShuffledList shuffledList;
 
     @Inject
@@ -29,16 +20,13 @@ public class GameBoardManager implements Parcelable {
     @Inject
     PhotoAdapter photoAdapter;
 
+    private List<Person> personList;
 
     @Inject
     public GameBoardManager() {
     }
 
-
-    protected GameBoardManager(Parcel in) {
-    }
-
-    PhotoAdapter generateGameBoard(List<Person> personList) {
+    PhotoAdapter generateGameBoard() {
 
         nextButtonManager.setEnabled(false);
         if (photoAdapter != null) photoAdapter.clearClickedState();
@@ -49,11 +37,14 @@ public class GameBoardManager implements Parcelable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return photoAdapter;
     }
 
-    String setName() {
+    void setPersonList (List<Person> personList) {
+        this.personList = personList;
+    }
+
+    String createNamePrompt() {
         // extract the correct name from the ShuffledList object and set the prompt text
         String namePrompt;
         if (shuffledList != null) {
@@ -65,26 +56,5 @@ public class GameBoardManager implements Parcelable {
             namePrompt = "";
         }
         return namePrompt;
-    }
-
-    public static final Creator<GameBoardManager> CREATOR = new Creator<GameBoardManager>() {
-        @Override
-        public GameBoardManager createFromParcel(Parcel in) {
-            return new GameBoardManager(in);
-        }
-
-        @Override
-        public GameBoardManager[] newArray(int size) {
-            return new GameBoardManager[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
     }
 }
