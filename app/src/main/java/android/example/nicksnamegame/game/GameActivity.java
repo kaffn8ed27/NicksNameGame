@@ -27,8 +27,6 @@ import io.reactivex.disposables.Disposable;
 public class GameActivity extends AppCompatActivity {
 
     private static final String TAG = GameActivity.class.getSimpleName();
-    private static final String PHOTO_ADAPTER_KEY = "saved_photo_adapter";
-    private static final String NEXT_BUTTON_MANAGER_KEY = "saved_next_button_manager";
 
     /* TODO - tracking: if answered right on the first try, remove coworker from the pool.
      *  If there aren't enough people left in the pool to fill the grid, allow "wrong" answers
@@ -40,10 +38,11 @@ public class GameActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private RecyclerView people;
     private TextView gamePromptTextView;
-    private PhotoAdapter photoAdapter;
 
     private CompositeDisposable disposables;
 
+    @Inject
+    PhotoAdapter photoAdapter;
     @Inject
     NextButtonManager nextButtonManager;
     @Inject
@@ -69,7 +68,7 @@ public class GameActivity extends AppCompatActivity {
         // inject dependencies
         ((GameApplication) getApplication())
                 .getGameComponent()
-                .inject(GameActivity.this);
+                .injectInto(GameActivity.this);
 
         // initialize views
         people = findViewById(R.id.rv_photos);
@@ -86,6 +85,7 @@ public class GameActivity extends AppCompatActivity {
         GridLayoutManager photoManager = new GridLayoutManager(this, numberOfColumns);
         people.setLayoutManager(photoManager);
         people.setHasFixedSize(true);
+        people.setAdapter(photoAdapter);
         if (savedInstanceState == null) {
             // hide the game board while the photos load
             setGameVisibility(false);
@@ -97,7 +97,6 @@ public class GameActivity extends AppCompatActivity {
                         Log.d(TAG, "Retrieved new list from API");
                         gameBoardManager.setPersonList(personList);
                         generateGameGrid();
-                        people.setAdapter(photoAdapter);
                     }, throwable -> gamePromptTextView.setText(R.string.generic_error));
 
             // set up the personList subscription to be disposed of when the activity is destroyed
@@ -105,9 +104,6 @@ public class GameActivity extends AppCompatActivity {
             disposables.add(personListSubscription);
         } else {
             Log.d(TAG, "Retrieving state: " + savedInstanceState);
-            nextButtonManager = savedInstanceState.getParcelable(NEXT_BUTTON_MANAGER_KEY);
-            photoAdapter = savedInstanceState.getParcelable(PHOTO_ADAPTER_KEY);
-            people.setAdapter(photoAdapter);
             gamePromptTextView.setText(gameBoardManager.createNamePrompt());
         }
         // show the game board now that the photos have loaded
@@ -134,18 +130,6 @@ public class GameActivity extends AppCompatActivity {
     protected void onDestroy() {
         if (disposables != null) disposables.dispose();
         super.onDestroy();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        Log.d(TAG, "SAVING...");
-        super.onSaveInstanceState(outState);
-        if (photoAdapter != null) {
-            outState.putParcelable(PHOTO_ADAPTER_KEY, photoAdapter);
-        }
-        if (nextButtonManager != null) {
-            outState.putParcelable(NEXT_BUTTON_MANAGER_KEY, nextButtonManager);
-        }
     }
 
     protected void generateGameGrid() {

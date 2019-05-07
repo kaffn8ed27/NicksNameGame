@@ -13,26 +13,29 @@ public class GameBoardManager {
 
     private ShuffledList shuffledList;
 
-    @Inject
-    NextButtonManager nextButtonManager;
-    @Inject
-    PeopleShuffler peopleShuffler;
-    @Inject
-    PhotoAdapter photoAdapter;
+    final NextButtonManager nextButtonManager;
+    final PeopleShuffler peopleShuffler;
+    final PhotoAdapter photoAdapter;
+    final GameState gameState;
 
     private List<Person> personList;
 
     @Inject
-    GameBoardManager() {
+    GameBoardManager(NextButtonManager nextButtonManager, PeopleShuffler peopleShuffler, PhotoAdapter photoAdapter, GameState gameState) {
+        this.nextButtonManager = nextButtonManager;
+        this.peopleShuffler = peopleShuffler;
+        this.photoAdapter = photoAdapter;
+        this.gameState = gameState;
     }
 
     PhotoAdapter generateGameBoard() {
         // disable nextButton FAB
         nextButtonManager.setEnabled(false);
         // reset tracking of photos that have been clicked
-        photoAdapter.clearClickedState();
+        gameState.clear();
         // grab a new set of people to play on
         shuffledList = peopleShuffler.chooseCoworkers(personList);
+        gameState.setShuffledList(shuffledList);
         // set up the adapter with the new list
         photoAdapter.setData(shuffledList);
         // return the adapter to the GameActivity
