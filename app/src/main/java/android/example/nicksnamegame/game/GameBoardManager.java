@@ -23,24 +23,23 @@ public class GameBoardManager {
     private List<Person> personList;
 
     @Inject
-    public GameBoardManager() {
+    GameBoardManager() {
     }
 
     PhotoAdapter generateGameBoard() {
-
+        // disable nextButton FAB
         nextButtonManager.setEnabled(false);
-        if (photoAdapter != null) photoAdapter.clearClickedState();
-
-        try {
-            shuffledList = peopleShuffler.chooseCoworkers(personList);
-            photoAdapter.setData(shuffledList);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // reset tracking of photos that have been clicked
+        photoAdapter.clearClickedState();
+        // grab a new set of people to play on
+        shuffledList = peopleShuffler.chooseCoworkers(personList);
+        // set up the adapter with the new list
+        photoAdapter.setData(shuffledList);
+        // return the adapter to the GameActivity
         return photoAdapter;
     }
 
-    void setPersonList (List<Person> personList) {
+    void setPersonList(List<Person> personList) {
         this.personList = personList;
     }
 

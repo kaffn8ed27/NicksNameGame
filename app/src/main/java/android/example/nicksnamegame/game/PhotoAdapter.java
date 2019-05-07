@@ -23,7 +23,9 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHolder>
         implements Parcelable {
 
@@ -52,9 +54,10 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PersonViewHo
         this.clickedPeople = in.readParcelable(Context.class.getClassLoader());
     }
 
-    public void setData(ShuffledList shuffledList) {
+    void setData(ShuffledList shuffledList) {
         this.coworkers = shuffledList.getPeople();
         this.correctAnswerIndex = shuffledList.getCorrectAnswerIndex();
+        notifyDataSetChanged();
     }
 
     public static final Creator<PhotoAdapter> CREATOR = new Creator<PhotoAdapter>() {

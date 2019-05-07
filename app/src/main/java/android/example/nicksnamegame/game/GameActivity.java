@@ -39,7 +39,7 @@ public class GameActivity extends AppCompatActivity {
     private static FloatingActionButton nextButton;
     private ProgressBar progressBar;
     private RecyclerView people;
-    private TextView game_prompt_text_view;
+    private TextView gamePromptTextView;
     private PhotoAdapter photoAdapter;
 
     private CompositeDisposable disposables;
@@ -74,7 +74,7 @@ public class GameActivity extends AppCompatActivity {
         // initialize views
         people = findViewById(R.id.rv_photos);
         progressBar = findViewById(R.id.progress_bar);
-        game_prompt_text_view = findViewById(R.id.game_prompt);
+        gamePromptTextView = findViewById(R.id.game_prompt);
 
         // TODO: move nextButton's onClick listener to NextButtonManager
         // prepare the nextButton FAB
@@ -87,10 +87,8 @@ public class GameActivity extends AppCompatActivity {
         people.setLayoutManager(photoManager);
         people.setHasFixedSize(true);
         if (savedInstanceState == null) {
-            // hide the recycler view while the game board loads
-            people.setVisibility(View.INVISIBLE);
-            // show the loading indicator
-            progressBar.setVisibility(View.VISIBLE);
+            // hide the game board while the photos load
+            setGameVisibility(false);
 
             // make the network call to retrieve the list of people
             Disposable personListSubscription = new PersonConverter().retrievePersonList()
@@ -98,35 +96,37 @@ public class GameActivity extends AppCompatActivity {
                     .subscribe(personList -> {
                         Log.d(TAG, "Retrieved new list from API");
                         gameBoardManager.setPersonList(personList);
-                        photoAdapter = gameBoardManager.generateGameBoard();
+                        generateGameGrid();
                         people.setAdapter(photoAdapter);
-                        // set the text of the game prompt
-                        game_prompt_text_view.setText(gameBoardManager.createNamePrompt());
-
-                        // show the game prompt
-                        game_prompt_text_view.setVisibility(View.VISIBLE);
-
-                    }, throwable -> game_prompt_text_view.setText(R.string.generic_error));
+                    }, throwable -> gamePromptTextView.setText(R.string.generic_error));
 
             // set up the personList subscription to be disposed of when the activity is destroyed
             disposables = new CompositeDisposable();
             disposables.add(personListSubscription);
-
-            // show the photos
-            people.setVisibility(View.VISIBLE);
-            // loading finished: hide the progress bar
-            progressBar.setVisibility(View.INVISIBLE);
         } else {
             Log.d(TAG, "Retrieving state: " + savedInstanceState);
-            photoAdapter = savedInstanceState.getParcelable(PHOTO_ADAPTER_KEY);
             nextButtonManager = savedInstanceState.getParcelable(NEXT_BUTTON_MANAGER_KEY);
+            photoAdapter = savedInstanceState.getParcelable(PHOTO_ADAPTER_KEY);
             people.setAdapter(photoAdapter);
-            // loading finished: hide the progress bar
+            gamePromptTextView.setText(gameBoardManager.createNamePrompt());
+        }
+        // show the game board now that the photos have loaded
+        setGameVisibility(true);
+    }
+
+    void setGameVisibility(boolean visible) {
+        if (visible) {
+            // hide progress bar
             progressBar.setVisibility(View.INVISIBLE);
-            // show the photos
+            // show photos and prompt text
             people.setVisibility(View.VISIBLE);
-            game_prompt_text_view.setText(gameBoardManager.createNamePrompt());
-            game_prompt_text_view.setVisibility(View.VISIBLE);
+            gamePromptTextView.setVisibility(View.VISIBLE);
+        } else {
+            // hide photos and prompt text
+            people.setVisibility(View.INVISIBLE);
+            gamePromptTextView.setVisibility(View.INVISIBLE);
+            // show progress bar while board loads
+            progressBar.setVisibility(View.VISIBLE);
         }
     }
 
@@ -150,8 +150,7 @@ public class GameActivity extends AppCompatActivity {
 
     protected void generateGameGrid() {
         photoAdapter = gameBoardManager.generateGameBoard();
-        people.setAdapter(photoAdapter);
         // set the text of the game prompt
-        game_prompt_text_view.setText(gameBoardManager.createNamePrompt());
+        gamePromptTextView.setText(gameBoardManager.createNamePrompt());
     }
 }
