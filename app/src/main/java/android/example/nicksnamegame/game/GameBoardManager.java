@@ -28,18 +28,15 @@ public class GameBoardManager {
         this.gameState = gameState;
     }
 
-    PhotoAdapter generateGameBoard() {
+    void generateGameBoard() {
         // disable nextButton FAB
         nextButtonManager.setEnabled(false);
         // reset tracking of photos that have been clicked
-        gameState.clear();
+        gameState.clearClickedIds();
         // grab a new set of people to play on
-        shuffledList = peopleShuffler.chooseCoworkers(personList);
-        gameState.setShuffledList(shuffledList);
+        gameState.setShuffledList(peopleShuffler.chooseCoworkers(personList));
         // set up the adapter with the new list
-        photoAdapter.setData(shuffledList);
-        // return the adapter to the GameActivity
-        return photoAdapter;
+        photoAdapter.setData(gameState.getShuffledList());
     }
 
     void setPersonList(List<Person> personList) {
@@ -49,9 +46,9 @@ public class GameBoardManager {
     String createNamePrompt() {
         // extract the correct name from the ShuffledList object and set the prompt text
         String namePrompt;
-        if (shuffledList != null) {
-            int index = shuffledList.getCorrectAnswerIndex();
-            List<Person> peopleOnGameBoard = shuffledList.getPeople();
+        if (gameState.getShuffledList() != null) {
+            int index = gameState.getShuffledList().getCorrectAnswerIndex();
+            List<Person> peopleOnGameBoard = gameState.getShuffledList().getPeople();
             String name = peopleOnGameBoard.get(index).getName();
             namePrompt = "Who is " + name + "?";
         } else {

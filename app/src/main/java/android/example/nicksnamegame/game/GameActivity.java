@@ -133,8 +133,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     protected void generateGameGrid() {
-        photoAdapter = gameBoardManager.generateGameBoard();
-        // set the text of the game prompt
+        gameBoardManager.generateGameBoard();
         gamePromptTextView.setText(gameBoardManager.createNamePrompt());
     }
 }

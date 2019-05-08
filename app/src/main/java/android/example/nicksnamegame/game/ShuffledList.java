@@ -15,7 +15,7 @@ public class ShuffledList implements Parcelable {
 
     public ShuffledList(List<Person> people) {
         this.people = people;
-//        generate the index of the correct answer for this round
+        // generate the index of the correct answer for this round
         this.correctAnswerIndex = (int) (Math.random() * people.size());
         for(Person person : people) {
             Log.d(TAG, person.toString());

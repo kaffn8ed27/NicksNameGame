@@ -24,7 +24,7 @@ class GameState {
         }
     }
 
-    void clear() {
+    void clearClickedIds() {
         clickedIds.clear();
     }
 
