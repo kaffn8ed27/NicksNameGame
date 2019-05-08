@@ -30,11 +30,14 @@ public class GameBoardManager {
         // reset tracking of photos that have been clicked
         gameState.clearClickedIds();
         // grab a new set of people to play on
-        gameState.setShuffledList(peopleShuffler.chooseCoworkers(personList));
-        shuffledList = gameState.getShuffledList();
+        shuffledList = peopleShuffler.chooseCoworkers(personList);
         // set up the adapter with the new list
         for (ShuffledListListener listener : listeners)
             listener.onNewShuffledList(shuffledList);
+    }
+
+    ShuffledList getShuffledList() {
+        return this.shuffledList;
     }
 
     void setPersonList(List<Person> personList) {

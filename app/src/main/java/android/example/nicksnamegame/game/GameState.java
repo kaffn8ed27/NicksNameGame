@@ -28,16 +28,8 @@ class GameState {
         clickedIds.clear();
     }
 
-    public List<String> getClickedIds() {
+    List<String> getClickedIds() {
         return clickedIds;
-    }
-
-    public ShuffledList getShuffledList() {
-        return shuffledList;
-    }
-
-    public void setShuffledList(ShuffledList shuffledList) {
-        this.shuffledList = shuffledList;
     }
 
     @NonNull
