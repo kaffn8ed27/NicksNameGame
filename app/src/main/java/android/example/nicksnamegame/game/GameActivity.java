@@ -38,7 +38,7 @@ public class GameActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private RecyclerView people;
     private TextView gamePromptTextView;
-    private GameBoardManager.NameListener namePromptListener;
+    private ShuffledListListener namePromptListener;
 
     private CompositeDisposable disposables;
 
@@ -80,22 +80,23 @@ public class GameActivity extends AppCompatActivity {
         nextButton = findViewById(R.id.next_button);
         nextButtonManager.setFab(nextButton);
 
-        namePromptListener = (correctAnswerPrompt -> {
+        namePromptListener = (shuffledList -> {
             // disable nextButton FAB
             nextButtonManager.setEnabled(false);
-            if (correctAnswerPrompt != null) {
-                gamePromptTextView.setText(correctAnswerPrompt);
+            if (shuffledList != null) {
+                gamePromptTextView.setText(createNamePrompt(shuffledList));
             } else {
                 gamePromptTextView.setText(R.string.generic_error);
             }
         });
-        gameBoardManager.setNameListener(namePromptListener);
+        gameBoardManager.setShuffledListListener(namePromptListener);
 
         int numberOfColumns = this.getResources().getInteger(R.integer.number_game_columns);
         GridLayoutManager photoManager = new GridLayoutManager(this, numberOfColumns);
         people.setLayoutManager(photoManager);
         people.setHasFixedSize(true);
         people.setAdapter(photoAdapter);
+
         if (savedInstanceState == null) {
             // hide the game board while the photos load
             setGameVisibility(false);
@@ -106,15 +107,12 @@ public class GameActivity extends AppCompatActivity {
                     .subscribe(personList -> {
                         Log.d(TAG, "Retrieved new list from API");
                         gameBoardManager.setPersonList(personList);
-                        gameBoardManager.generateGameBoard();;
+                        gameBoardManager.generateGameBoard();
                     }, throwable -> gamePromptTextView.setText(R.string.generic_error));
 
             // set up the personList subscription to be disposed of when the activity is destroyed
             disposables = new CompositeDisposable();
             disposables.add(personListSubscription);
-        } else {
-            Log.d(TAG, "Retrieving state: " + savedInstanceState);
-            gamePromptTextView.setText(gameBoardManager.createNamePrompt());
         }
         // show the game board now that the photos have loaded
         setGameVisibility(true);
@@ -139,8 +137,17 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         if (disposables != null) disposables.dispose();
-        gameBoardManager.unsetNameListener(namePromptListener);
+        gameBoardManager.unsetShuffledListListener(namePromptListener);
         super.onDestroy();
+    }
+
+    String createNamePrompt(ShuffledList shuffledList) {
+        String namePrompt;
+        int index = shuffledList.getCorrectAnswerIndex();
+        String name = shuffledList.getPeople().get(index).getName();
+        namePrompt = "Who is " + name + "?";
+
+        return namePrompt;
     }
 
 }

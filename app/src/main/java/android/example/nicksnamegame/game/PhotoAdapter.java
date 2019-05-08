@@ -2,8 +2,7 @@ package android.example.nicksnamegame.game;
 
 import android.content.Context;
 import android.example.nicksnamegame.R;
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,40 +16,32 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class PhotoAdapter extends RecyclerView.Adapter<PersonViewHolder>
-        implements Parcelable {
+public class PhotoAdapter extends RecyclerView.Adapter<PersonViewHolder> {
 
     private static final String TAG = PhotoAdapter.class.getSimpleName();
 
     private List<Person> coworkers;
     private int correctAnswerIndex;
+//    private GameBoardManager gameBoardManager;
+    private ShuffledListListener listener;
 
     @Inject
-    PhotoAdapter() {
+    PhotoAdapter(GameBoardManager gameBoardManager) {
+//        this.gameBoardManager = gameBoardManager;
+        listener = (shuffledList -> {
+            setData(shuffledList);
+        });
+        gameBoardManager.setShuffledListListener(listener);
     }
 
-    private PhotoAdapter(Parcel in) {
-        this.correctAnswerIndex = in.readInt();
-        this.coworkers = in.readParcelable(ShuffledList.class.getClassLoader());
+    private void setData(ShuffledList shuffledList) {
+        if(shuffledList != null) {
+            this.coworkers = shuffledList.getPeople();
+            this.correctAnswerIndex = shuffledList.getCorrectAnswerIndex();
+            notifyDataSetChanged();
+        } else Log.d(TAG, "No new list found");
     }
 
-    void setData(ShuffledList shuffledList) {
-        this.coworkers = shuffledList.getPeople();
-        this.correctAnswerIndex = shuffledList.getCorrectAnswerIndex();
-        notifyDataSetChanged();
-    }
-
-    public static final Creator<PhotoAdapter> CREATOR = new Creator<PhotoAdapter>() {
-        @Override
-        public PhotoAdapter createFromParcel(Parcel in) {
-            return new PhotoAdapter(in);
-        }
-
-        @Override
-        public PhotoAdapter[] newArray(int size) {
-            return new PhotoAdapter[size];
-        }
-    };
 
     @NonNull
     @Override
@@ -76,13 +67,4 @@ public class PhotoAdapter extends RecyclerView.Adapter<PersonViewHolder>
         return coworkers.size();
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(correctAnswerIndex);
-    }
 }
