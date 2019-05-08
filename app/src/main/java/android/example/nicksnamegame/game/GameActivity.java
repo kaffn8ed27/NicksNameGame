@@ -63,6 +63,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
         setupSharedPreferences();
         setContentView(R.layout.activity_game);
 
@@ -76,6 +77,9 @@ public class GameActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_bar);
         gamePromptTextView = findViewById(R.id.game_prompt);
 
+        // hide the game board while everything else loads
+        setGameVisibility(false);
+
         // prepare the nextButton FAB
         nextButton = findViewById(R.id.next_button);
         nextButtonManager.setFab(nextButton);
@@ -83,11 +87,15 @@ public class GameActivity extends AppCompatActivity {
         namePromptListener = (shuffledList -> {
             // disable nextButton FAB
             nextButtonManager.setEnabled(false);
+            // hide the game board while everything else loads
+            setGameVisibility(false);
             if (shuffledList != null) {
                 gamePromptTextView.setText(createNamePrompt(shuffledList));
             } else {
                 gamePromptTextView.setText(R.string.generic_error);
             }
+            // show the game board
+            setGameVisibility(true);
         });
         gameBoardManager.setShuffledListListener(namePromptListener);
 
@@ -97,9 +105,8 @@ public class GameActivity extends AppCompatActivity {
         people.setHasFixedSize(true);
         people.setAdapter(photoAdapter);
 
+
         if (savedInstanceState == null) {
-            // hide the game board while the photos load
-            setGameVisibility(false);
 
             // make the network call to retrieve the list of people
             Disposable personListSubscription = new PersonConverter().retrievePersonList()
@@ -108,27 +115,27 @@ public class GameActivity extends AppCompatActivity {
                         Log.d(TAG, "Retrieved new list from API");
                         gameBoardManager.setPersonList(personList);
                         gameBoardManager.generateGameBoard();
+                        // show the game board now that everything has loaded
+                        setGameVisibility(true);
                     }, throwable -> gamePromptTextView.setText(R.string.generic_error));
 
             // set up the personList subscription to be disposed of when the activity is destroyed
             disposables = new CompositeDisposable();
             disposables.add(personListSubscription);
-        }
-        // show the game board now that the photos have loaded
-        setGameVisibility(true);
+        } else setGameVisibility(true); // if re-creating (i.e. rotating), just show the game board
     }
 
-    void setGameVisibility(boolean visible) {
-        if (visible) {
+    void setGameVisibility(boolean makeVisible) {
+        if (makeVisible) {
             // hide progress bar
-            progressBar.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.GONE);
             // show photos and prompt text
             people.setVisibility(View.VISIBLE);
             gamePromptTextView.setVisibility(View.VISIBLE);
         } else {
             // hide photos and prompt text
-            people.setVisibility(View.INVISIBLE);
-            gamePromptTextView.setVisibility(View.INVISIBLE);
+            people.setVisibility(View.GONE);
+            gamePromptTextView.setVisibility(View.GONE);
             // show progress bar while board loads
             progressBar.setVisibility(View.VISIBLE);
         }
