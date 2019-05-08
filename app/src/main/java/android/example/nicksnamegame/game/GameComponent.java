@@ -20,6 +20,8 @@ public interface GameComponent {
         Builder withContext(Context context);
     }
 
-    void inject(GameActivity gameActivity);
+    void injectInto(GameActivity gameActivity);
+
+    void injectInto(PersonViewHolder personViewHolder);
 
 }
