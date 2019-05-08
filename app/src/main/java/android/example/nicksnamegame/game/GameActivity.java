@@ -38,6 +38,7 @@ public class GameActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private RecyclerView people;
     private TextView gamePromptTextView;
+    private GameBoardManager.NameListener namePromptListener;
 
     private CompositeDisposable disposables;
 
@@ -75,11 +76,20 @@ public class GameActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_bar);
         gamePromptTextView = findViewById(R.id.game_prompt);
 
-        // TODO: move nextButton's onClick listener to NextButtonManager
         // prepare the nextButton FAB
         nextButton = findViewById(R.id.next_button);
         nextButtonManager.setFab(nextButton);
-        nextButton.setOnClickListener(v -> generateGameGrid());
+
+        namePromptListener = (correctAnswerPrompt -> {
+            // disable nextButton FAB
+            nextButtonManager.setEnabled(false);
+            if (correctAnswerPrompt != null) {
+                gamePromptTextView.setText(correctAnswerPrompt);
+            } else {
+                gamePromptTextView.setText(R.string.generic_error);
+            }
+        });
+        gameBoardManager.setNameListener(namePromptListener);
 
         int numberOfColumns = this.getResources().getInteger(R.integer.number_game_columns);
         GridLayoutManager photoManager = new GridLayoutManager(this, numberOfColumns);
@@ -96,7 +106,7 @@ public class GameActivity extends AppCompatActivity {
                     .subscribe(personList -> {
                         Log.d(TAG, "Retrieved new list from API");
                         gameBoardManager.setPersonList(personList);
-                        generateGameGrid();
+                        gameBoardManager.generateGameBoard();;
                     }, throwable -> gamePromptTextView.setText(R.string.generic_error));
 
             // set up the personList subscription to be disposed of when the activity is destroyed
@@ -129,11 +139,8 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         if (disposables != null) disposables.dispose();
+        gameBoardManager.unsetNameListener(namePromptListener);
         super.onDestroy();
     }
 
-    protected void generateGameGrid() {
-        gameBoardManager.generateGameBoard();
-        gamePromptTextView.setText(gameBoardManager.createNamePrompt());
-    }
 }
