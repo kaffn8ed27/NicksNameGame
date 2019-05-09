@@ -8,6 +8,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.SharedPreferences;
 import android.example.nicksnamegame.R;
 import android.example.nicksnamegame.data.model.PersonConverter;
+import android.example.nicksnamegame.game.dagger.GameApplication;
+import android.example.nicksnamegame.game.game_board.gameBoardManager.GameBoardManager;
+import android.example.nicksnamegame.game.game_board.NextButtonManager;
+import android.example.nicksnamegame.game.game_board.PhotoAdapter;
+import android.example.nicksnamegame.game.game_board.gameBoardManager.ShuffledList;
+import android.example.nicksnamegame.game.game_board.gameBoardManager.ShuffledListListener;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -34,7 +40,6 @@ public class GameActivity extends AppCompatActivity {
      *  until the pool is empty and the game is restarted
      */
 
-    private static FloatingActionButton nextButton;
     private ProgressBar progressBar;
     private RecyclerView people;
     private TextView gamePromptTextView;
@@ -81,7 +86,7 @@ public class GameActivity extends AppCompatActivity {
         setGameVisibility(false);
 
         // prepare the nextButton FAB
-        nextButton = findViewById(R.id.next_button);
+        FloatingActionButton nextButton = findViewById(R.id.next_button);
         nextButtonManager.setFab(nextButton);
 
         namePromptListener = (shuffledList -> {

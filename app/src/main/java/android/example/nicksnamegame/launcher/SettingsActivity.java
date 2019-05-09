@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
 
 import android.content.SharedPreferences;
-import android.drm.DrmStore;
 import android.example.nicksnamegame.R;
 import android.os.Bundle;
 import android.preference.PreferenceManager;

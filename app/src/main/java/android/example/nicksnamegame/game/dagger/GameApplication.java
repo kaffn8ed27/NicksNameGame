@@ -1,4 +1,4 @@
-package android.example.nicksnamegame.game;
+package android.example.nicksnamegame.game.dagger;
 
 import android.app.Application;
 
@@ -11,7 +11,7 @@ public class GameApplication extends Application {
         gameComponent = createGameComponent();
     }
 
-    GameComponent getGameComponent() {
+    public GameComponent getGameComponent() {
         return gameComponent;
     }
 

@@ -1,4 +1,4 @@
-package android.example.nicksnamegame.game;
+package android.example.nicksnamegame.game.game_board;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -1,4 +1,4 @@
-package android.example.nicksnamegame.game;
+package android.example.nicksnamegame.game.game_board.gameBoardManager;
 
 
 import androidx.annotation.NonNull;
@@ -15,7 +15,7 @@ class GameState {
     private boolean correctAnswerClicked = false;
 
     @Inject
-    public GameState() {
+    GameState() {
     }
 
     void registerNewClickedPerson(String id) {
@@ -24,11 +24,11 @@ class GameState {
         }
     }
 
-    public boolean getCorrectAnswerClicked() {
+    boolean getCorrectAnswerClicked() {
         return correctAnswerClicked;
     }
 
-    public void setCorrectAnswerClicked(boolean correctAnswerClicked) {
+    void setCorrectAnswerClicked(boolean correctAnswerClicked) {
         this.correctAnswerClicked = correctAnswerClicked;
     }
 

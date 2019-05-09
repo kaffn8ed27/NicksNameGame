@@ -1,6 +1,8 @@
-package android.example.nicksnamegame.game;
+package android.example.nicksnamegame.game.game_board;
 
 import android.example.nicksnamegame.R;
+import android.example.nicksnamegame.game.dagger.GameApplication;
+import android.example.nicksnamegame.game.game_board.gameBoardManager.GameBoardManager;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -15,14 +17,14 @@ import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
-class PersonViewHolder extends RecyclerView.ViewHolder
+public class PersonViewHolder extends RecyclerView.ViewHolder
         implements View.OnClickListener {
 
     private final String TAG = PersonViewHolder.class.getSimpleName();
 
-    TextView personNameView;
-    ImageView personPhotoView;
-    Person person;
+    private TextView personNameView;
+    private ImageView personPhotoView;
+    private Person person;
 
     @Inject
     NextButtonManager nextButtonManager;
@@ -49,7 +51,7 @@ class PersonViewHolder extends RecyclerView.ViewHolder
                 id = person.getId();
                 gameBoardManager.registerNewClickedPerson(id);
 
-                Log.d(TAG, "Clicked state: " + gameBoardManager.getGameState().toString());
+                Log.d(TAG, "Clicked state: " + gameBoardManager.getGameState());
             }
             bind(person);
         }

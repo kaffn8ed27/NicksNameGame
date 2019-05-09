@@ -1,5 +1,6 @@
-package android.example.nicksnamegame.game;
+package android.example.nicksnamegame.game.game_board.gameBoardManager;
 
+import android.example.nicksnamegame.game.game_board.Person;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -13,11 +14,11 @@ public class ShuffledList implements Parcelable {
 
     private static final String TAG = ShuffledList.class.getSimpleName();
 
-    public ShuffledList(List<Person> people) {
+    ShuffledList(List<Person> people) {
         this.people = people;
         // generate the index of the correct answer for this round
         this.correctAnswerIndex = (int) (Math.random() * people.size());
-        for(Person person : people) {
+        for (Person person : people) {
             Log.d(TAG, person.toString());
         }
     }

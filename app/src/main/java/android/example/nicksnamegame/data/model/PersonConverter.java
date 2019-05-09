@@ -1,6 +1,6 @@
 package android.example.nicksnamegame.data.model;
 
-import android.example.nicksnamegame.game.Person;
+import android.example.nicksnamegame.game.game_board.Person;
 import android.example.nicksnamegame.data.NameGameApi;
 import android.util.Log;
 
@@ -16,7 +16,7 @@ public class PersonConverter {
 
     private static final String TAG = PersonConverter.class.getSimpleName();
 
-    List<Person> mapResponse(List<PersonResponse> responseList) {
+    private List<Person> mapResponse(List<PersonResponse> responseList) {
 
         ArrayList<Person> personList = new ArrayList<>();
 
@@ -52,9 +52,8 @@ public class PersonConverter {
                 .create(NameGameApi.class);
 
         Single<List<PersonResponse>> apiCall = api.fetchPeopleList();
-        Single<List<Person>> personSingle = apiCall.map(this::mapResponse);
 
-        return personSingle;
+        return apiCall.map(this::mapResponse);
     }
 
     private String formatName(String firstName, String lastName) {
