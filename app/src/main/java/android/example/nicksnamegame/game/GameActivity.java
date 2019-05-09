@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.SharedPreferences;
 import android.example.nicksnamegame.R;
 import android.example.nicksnamegame.data.model.PersonConverter;
+import android.example.nicksnamegame.game.dagger.GameApplication;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;

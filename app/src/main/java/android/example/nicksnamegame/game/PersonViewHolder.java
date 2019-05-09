@@ -1,6 +1,7 @@
 package android.example.nicksnamegame.game;
 
 import android.example.nicksnamegame.R;
+import android.example.nicksnamegame.game.dagger.GameApplication;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -15,7 +16,7 @@ import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
-class PersonViewHolder extends RecyclerView.ViewHolder
+public class PersonViewHolder extends RecyclerView.ViewHolder
         implements View.OnClickListener {
 
     private final String TAG = PersonViewHolder.class.getSimpleName();
