@@ -26,31 +26,71 @@ public class GameBoardManager {
         this.listeners = new ArrayList<>();
     }
 
+    // receives the list returned from the API
+    void setPersonList(List<Person> personList) {
+        this.personList = personList;
+    }
+
+    // the actions to be taken when the game is opened, and when the "next" button is clicked
     void generateGameBoard() {
         // reset tracking of photos that have been clicked
-        gameState.clearClickedIds();
-        // grab a new set of people to play on
+        clearClickedIds();
+        // grab a new set of people for the game board
         shuffledList = peopleShuffler.chooseCoworkers(personList);
         // set up the adapter with the new list
         for (ShuffledListListener listener : listeners)
             listener.onNewShuffledList(shuffledList);
     }
 
+    /* Returns the current shuffled list of people so that it can be used by other classes
+     * e.g. to set the photos in the adapter, get the current correct answer so the ViewHolder knows
+     * what foreground color to set, etc.
+     */
+
     ShuffledList getShuffledList() {
         return this.shuffledList;
     }
 
-    void setPersonList(List<Person> personList) {
-        this.personList = personList;
-    }
-
+    // for other classes to register a listener for the creation of a new ShuffledList
     void setShuffledListListener(ShuffledListListener listener) {
         this.listeners.add(listener);
         if (shuffledList != null) listener.onNewShuffledList(shuffledList);
     }
 
+    // for other classes to unregister their listener - e.g. in GameActivity's onDestroy
     void unsetShuffledListListener(ShuffledListListener listener) {
         listeners.remove(listener);
+    }
+
+    /* GameState management functions
+     *
+     * Mostly just a pass-through to GameState functions, but gathering them all here eliminates the
+     * need to inject GameState and GameBoardManager into every class that needs access to the
+     * GameState. Instead, inject GameBoardManager and manipulate GameState via these functions.
+     */
+
+    public boolean getCorrectAnswerClicked() {
+        return gameState.getCorrectAnswerClicked();
+    }
+
+    public void setCorrectAnswerClicked(boolean correctAnswerClicked) {
+        gameState.setCorrectAnswerClicked(correctAnswerClicked);
+    }
+
+    void registerNewClickedPerson(String id) {
+        gameState.registerNewClickedPerson(id);
+    }
+
+    void clearClickedIds() {
+        gameState.clearClickedIds();
+    }
+
+    List<String> getClickedIds() {
+        return gameState.getClickedIds();
+    }
+
+    GameState getGameState() {
+        return this.gameState;
     }
 }
 

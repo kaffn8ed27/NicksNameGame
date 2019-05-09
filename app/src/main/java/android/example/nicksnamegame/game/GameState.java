@@ -12,7 +12,7 @@ import javax.inject.Singleton;
 @Singleton
 class GameState {
     private List<String> clickedIds = new ArrayList<>();
-    private ShuffledList shuffledList;
+    private boolean correctAnswerClicked = false;
 
     @Inject
     public GameState() {
@@ -22,6 +22,14 @@ class GameState {
         if (!clickedIds.contains(id)) {
             clickedIds.add(id);
         }
+    }
+
+    public boolean getCorrectAnswerClicked() {
+        return correctAnswerClicked;
+    }
+
+    public void setCorrectAnswerClicked(boolean correctAnswerClicked) {
+        this.correctAnswerClicked = correctAnswerClicked;
     }
 
     void clearClickedIds() {

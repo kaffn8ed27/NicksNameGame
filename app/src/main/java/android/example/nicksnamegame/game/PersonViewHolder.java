@@ -25,8 +25,6 @@ class PersonViewHolder extends RecyclerView.ViewHolder
     Person person;
 
     @Inject
-    GameState gameState;
-    @Inject
     NextButtonManager nextButtonManager;
     @Inject
     GameBoardManager gameBoardManager;
@@ -43,14 +41,15 @@ class PersonViewHolder extends RecyclerView.ViewHolder
 
     @Override
     public void onClick(View v) {
-        if (!nextButtonManager.getCorrectAnswerClicked()) {
+        if (!gameBoardManager.getCorrectAnswerClicked()) {
             Log.d(TAG, "Click registered");
             // Add the person's ID to the list of clicked people
             String id;
             if (person.getId() != null) {
                 id = person.getId();
-                gameState.registerNewClickedPerson(id);
-                Log.d(TAG, "Clicked state: " + gameState.toString());
+                gameBoardManager.registerNewClickedPerson(id);
+
+                Log.d(TAG, "Clicked state: " + gameBoardManager.getGameState().toString());
             }
             bind(person);
         }
@@ -69,7 +68,7 @@ class PersonViewHolder extends RecyclerView.ViewHolder
 
         // If the person has been clicked, color the photo foreground appropriately
         if (person.getId() != null) {
-            if (gameState.getClickedIds().contains(person.getId())) {
+            if (gameBoardManager.getClickedIds().contains(person.getId())) {
 
                 int foregroundColor;
                 // find out which person is correct
