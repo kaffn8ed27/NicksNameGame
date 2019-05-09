@@ -1,7 +1,8 @@
-package android.example.nicksnamegame.game;
+package android.example.nicksnamegame.game.game_board;
 
 import android.example.nicksnamegame.R;
 import android.example.nicksnamegame.game.dagger.GameApplication;
+import android.example.nicksnamegame.game.game_board.gameBoardManager.GameBoardManager;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -50,7 +51,7 @@ public class PersonViewHolder extends RecyclerView.ViewHolder
                 id = person.getId();
                 gameBoardManager.registerNewClickedPerson(id);
 
-                Log.d(TAG, "Clicked state: " + gameBoardManager.getGameState().toString());
+                Log.d(TAG, "Clicked state: " + gameBoardManager.getGameState());
             }
             bind(person);
         }

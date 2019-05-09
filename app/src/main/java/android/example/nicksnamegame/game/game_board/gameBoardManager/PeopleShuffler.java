@@ -1,7 +1,8 @@
-package android.example.nicksnamegame.game;
+package android.example.nicksnamegame.game.game_board.gameBoardManager;
 
 import android.content.Context;
 import android.example.nicksnamegame.R;
+import android.example.nicksnamegame.game.game_board.Person;
 import android.util.Log;
 
 import java.util.ArrayList;

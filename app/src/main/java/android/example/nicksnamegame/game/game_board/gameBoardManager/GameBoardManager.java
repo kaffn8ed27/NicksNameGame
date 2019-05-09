@@ -1,4 +1,6 @@
-package android.example.nicksnamegame.game;
+package android.example.nicksnamegame.game.game_board.gameBoardManager;
+
+import android.example.nicksnamegame.game.game_board.Person;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +29,12 @@ public class GameBoardManager {
     }
 
     // receives the list returned from the API
-    void setPersonList(List<Person> personList) {
+    public void setPersonList(List<Person> personList) {
         this.personList = personList;
     }
 
     // the actions to be taken when the game is opened, and when the "next" button is clicked
-    void generateGameBoard() {
+    public void generateGameBoard() {
         // reset tracking of photos that have been clicked
         clearClickedIds();
         // grab a new set of people for the game board
@@ -47,18 +49,18 @@ public class GameBoardManager {
      * what foreground color to set, etc.
      */
 
-    ShuffledList getShuffledList() {
+    public ShuffledList getShuffledList() {
         return this.shuffledList;
     }
 
     // for other classes to register a listener for the creation of a new ShuffledList
-    void setShuffledListListener(ShuffledListListener listener) {
+    public void setShuffledListListener(ShuffledListListener listener) {
         this.listeners.add(listener);
         if (shuffledList != null) listener.onNewShuffledList(shuffledList);
     }
 
     // for other classes to unregister their listener - e.g. in GameActivity's onDestroy
-    void unsetShuffledListListener(ShuffledListListener listener) {
+    public void unsetShuffledListListener(ShuffledListListener listener) {
         listeners.remove(listener);
     }
 
@@ -77,19 +79,19 @@ public class GameBoardManager {
         gameState.setCorrectAnswerClicked(correctAnswerClicked);
     }
 
-    void registerNewClickedPerson(String id) {
+    public void registerNewClickedPerson(String id) {
         gameState.registerNewClickedPerson(id);
     }
 
-    void clearClickedIds() {
+    public void clearClickedIds() {
         gameState.clearClickedIds();
     }
 
-    List<String> getClickedIds() {
+    public List<String> getClickedIds() {
         return gameState.getClickedIds();
     }
 
-    GameState getGameState() {
+    public GameState getGameState() {
         return this.gameState;
     }
 }

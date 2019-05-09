@@ -1,6 +1,6 @@
 package android.example.nicksnamegame.data.model;
 
-import android.example.nicksnamegame.game.Person;
+import android.example.nicksnamegame.game.game_board.Person;
 import android.example.nicksnamegame.data.NameGameApi;
 import android.util.Log;
 

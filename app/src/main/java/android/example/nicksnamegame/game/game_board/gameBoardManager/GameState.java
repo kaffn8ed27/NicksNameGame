@@ -1,4 +1,4 @@
-package android.example.nicksnamegame.game;
+package android.example.nicksnamegame.game.game_board.gameBoardManager;
 
 
 import androidx.annotation.NonNull;
