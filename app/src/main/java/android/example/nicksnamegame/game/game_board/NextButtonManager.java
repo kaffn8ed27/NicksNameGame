@@ -10,11 +10,12 @@ import javax.inject.Singleton;
 @Singleton
 public class NextButtonManager {
 
-    final GameBoardManager gameBoardManager;
+    private final GameBoardManager gameBoardManager;
 
     private FloatingActionButton fab;
+
     @Inject
-    public NextButtonManager(GameBoardManager gameBoardManager) {
+    NextButtonManager(GameBoardManager gameBoardManager) {
         this.gameBoardManager = gameBoardManager;
     }
 

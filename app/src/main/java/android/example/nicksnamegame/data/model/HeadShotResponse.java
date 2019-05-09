@@ -1,11 +1,8 @@
 package android.example.nicksnamegame.data.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import androidx.annotation.Nullable;
 
-public class HeadShotResponse implements Parcelable {
+public class HeadShotResponse {
 
     private String url;
     private String type;
@@ -20,13 +17,6 @@ public class HeadShotResponse implements Parcelable {
         this.type = type;
         this.height = height;
         this.width = width;
-    }
-
-    private HeadShotResponse(Parcel in) {
-        this.url = in.readString();
-        this.type = in.readString();
-        this.height = in.readInt();
-        this.width = in.readInt();
     }
 
     String getHeadShotUrl() {
@@ -53,28 +43,4 @@ public class HeadShotResponse implements Parcelable {
         return this.width;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.url);
-        dest.writeString(this.type);
-        dest.writeInt(this.height);
-        dest.writeInt(this.width);
-    }
-
-    public static final Creator<HeadShotResponse> CREATOR = new Creator<HeadShotResponse>() {
-        @Override
-        public HeadShotResponse createFromParcel(Parcel source) {
-            return new HeadShotResponse(source);
-        }
-
-        @Override
-        public HeadShotResponse[] newArray(int size) {
-            return new HeadShotResponse[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 }

@@ -8,6 +8,6 @@ import io.reactivex.Single;
 import retrofit2.http.GET;
 
 public interface NameGameApi {
-    @GET ("/api/v1.0/profiles")
+    @GET("/api/v1.0/profiles")
     Single<List<PersonResponse>> fetchPeopleList();
 }

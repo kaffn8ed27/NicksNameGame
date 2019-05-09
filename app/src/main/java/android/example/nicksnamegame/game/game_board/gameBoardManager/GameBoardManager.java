@@ -1,6 +1,7 @@
 package android.example.nicksnamegame.game.game_board.gameBoardManager;
 
 import android.example.nicksnamegame.game.game_board.Person;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +15,8 @@ public class GameBoardManager {
 
     private static final String TAG = GameBoardManager.class.getSimpleName();
 
-    final PeopleShuffler peopleShuffler;
-    final GameState gameState;
+    private final PeopleShuffler peopleShuffler;
+    private final GameState gameState;
 
     private ShuffledList shuffledList;
     private List<Person> personList;
@@ -31,10 +32,12 @@ public class GameBoardManager {
     // receives the list returned from the API
     public void setPersonList(List<Person> personList) {
         this.personList = personList;
+        Log.d(TAG, "personList received");
     }
 
     // the actions to be taken when the game is opened, and when the "next" button is clicked
     public void generateGameBoard() {
+        Log.d(TAG, "Generating new game board");
         // reset tracking of photos that have been clicked
         clearClickedIds();
         // grab a new set of people for the game board
@@ -64,11 +67,11 @@ public class GameBoardManager {
         listeners.remove(listener);
     }
 
-    /* GameState management functions
+    /* GameState management
      *
-     * Mostly just a pass-through to GameState functions, but gathering them all here eliminates the
+     * Mostly just a pass-through to GameState methods, but gathering them all here eliminates the
      * need to inject GameState and GameBoardManager into every class that needs access to the
-     * GameState. Instead, inject GameBoardManager and manipulate GameState via these functions.
+     * GameState. Instead, inject GameBoardManager and access GameState via these methods.
      */
 
     public boolean getCorrectAnswerClicked() {
@@ -83,7 +86,7 @@ public class GameBoardManager {
         gameState.registerNewClickedPerson(id);
     }
 
-    public void clearClickedIds() {
+    private void clearClickedIds() {
         gameState.clearClickedIds();
     }
 

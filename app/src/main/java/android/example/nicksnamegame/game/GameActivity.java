@@ -40,7 +40,6 @@ public class GameActivity extends AppCompatActivity {
      *  until the pool is empty and the game is restarted
      */
 
-    private static FloatingActionButton nextButton;
     private ProgressBar progressBar;
     private RecyclerView people;
     private TextView gamePromptTextView;
@@ -87,7 +86,7 @@ public class GameActivity extends AppCompatActivity {
         setGameVisibility(false);
 
         // prepare the nextButton FAB
-        nextButton = findViewById(R.id.next_button);
+        FloatingActionButton nextButton = findViewById(R.id.next_button);
         nextButtonManager.setFab(nextButton);
 
         namePromptListener = (shuffledList -> {

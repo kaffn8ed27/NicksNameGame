@@ -22,9 +22,9 @@ public class PersonViewHolder extends RecyclerView.ViewHolder
 
     private final String TAG = PersonViewHolder.class.getSimpleName();
 
-    TextView personNameView;
-    ImageView personPhotoView;
-    Person person;
+    private TextView personNameView;
+    private ImageView personPhotoView;
+    private Person person;
 
     @Inject
     NextButtonManager nextButtonManager;

@@ -23,15 +23,16 @@ public class PhotoAdapter extends RecyclerView.Adapter<PersonViewHolder> {
     private static final String TAG = PhotoAdapter.class.getSimpleName();
 
     private List<Person> coworkers;
-    private ShuffledListListener listener;
+
 
     @Inject
     PhotoAdapter(GameBoardManager gameBoardManager) {
-        listener = (shuffledList -> {
-            if(shuffledList != null) {
+        ShuffledListListener listener = (shuffledList -> {
+            if (shuffledList != null) {
                 this.coworkers = shuffledList.getPeople();
                 notifyDataSetChanged();
-            } else Log.d(TAG, "No new list found");});
+            } else Log.d(TAG, "No new list found");
+        });
         gameBoardManager.setShuffledListListener(listener);
     }
 
