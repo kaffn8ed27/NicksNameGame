@@ -25,9 +25,9 @@ class PersonViewHolder extends RecyclerView.ViewHolder
     Person person;
 
     @Inject
-    GameState gameState;
-    @Inject
     NextButtonManager nextButtonManager;
+    @Inject
+    GameBoardManager gameBoardManager;
 
     PersonViewHolder(View v) {
         super(v);
@@ -41,14 +41,15 @@ class PersonViewHolder extends RecyclerView.ViewHolder
 
     @Override
     public void onClick(View v) {
-        if (!nextButtonManager.getCorrectAnswerClicked()) {
+        if (!gameBoardManager.getCorrectAnswerClicked()) {
             Log.d(TAG, "Click registered");
             // Add the person's ID to the list of clicked people
             String id;
             if (person.getId() != null) {
                 id = person.getId();
-                gameState.registerNewClickedPerson(id);
-                Log.d(TAG, "Clicked state: " + gameState.toString());
+                gameBoardManager.registerNewClickedPerson(id);
+
+                Log.d(TAG, "Clicked state: " + gameBoardManager.getGameState().toString());
             }
             bind(person);
         }
@@ -67,9 +68,13 @@ class PersonViewHolder extends RecyclerView.ViewHolder
 
         // If the person has been clicked, color the photo foreground appropriately
         if (person.getId() != null) {
-            if (gameState.getClickedIds().contains(person.getId())) {
-                int foregroundColor = R.color.chose_poorly;
-                if (this.getAdapterPosition() == gameState.getShuffledList().getCorrectAnswerIndex()) {
+            if (gameBoardManager.getClickedIds().contains(person.getId())) {
+
+                int foregroundColor;
+                // find out which person is correct
+                int correctAnswerIndex = gameBoardManager.getShuffledList().getCorrectAnswerIndex();
+                if (this.getAdapterPosition() == correctAnswerIndex) {
+                    // correct person chosen: change foreground to "correct choice" color
                     foregroundColor = R.color.chose_wisely;
 
                     /* if the correct answer is clicked, flag the game as such
@@ -77,6 +82,9 @@ class PersonViewHolder extends RecyclerView.ViewHolder
                      * - disable clicking of any more photos
                      * - enable the "next" button */
                     nextButtonManager.setEnabled(true);
+                } else {
+                    // change foreground to "wrong choice" color
+                    foregroundColor = R.color.chose_poorly;
                 }
                 // create the drawable for the foreground color
                 Drawable foreground = new ColorDrawable(ContextCompat.getColor(this.itemView.getContext(), foregroundColor));

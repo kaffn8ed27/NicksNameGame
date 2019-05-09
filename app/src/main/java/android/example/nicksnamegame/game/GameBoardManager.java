@@ -13,53 +13,84 @@ public class GameBoardManager {
     private static final String TAG = GameBoardManager.class.getSimpleName();
 
     final PeopleShuffler peopleShuffler;
-    final PhotoAdapter photoAdapter;
     final GameState gameState;
 
+    private ShuffledList shuffledList;
     private List<Person> personList;
-    private List<NameListener> listeners;
+    private List<ShuffledListListener> listeners;
 
     @Inject
-    GameBoardManager(PeopleShuffler peopleShuffler, PhotoAdapter photoAdapter, GameState gameState) {
+    GameBoardManager(PeopleShuffler peopleShuffler, GameState gameState) {
         this.peopleShuffler = peopleShuffler;
-        this.photoAdapter = photoAdapter;
         this.gameState = gameState;
         this.listeners = new ArrayList<>();
     }
 
-    void generateGameBoard() {
-        // reset tracking of photos that have been clicked
-        gameState.clearClickedIds();
-        // grab a new set of people to play on
-        gameState.setShuffledList(peopleShuffler.chooseCoworkers(personList));
-        // set up the adapter with the new list
-        photoAdapter.setData(gameState.getShuffledList());
-        for (NameListener listener : listeners)
-        listener.onListLoaded(createNamePrompt());
-    }
-
+    // receives the list returned from the API
     void setPersonList(List<Person> personList) {
         this.personList = personList;
     }
 
-    void setNameListener(NameListener listener) {
-        this.listeners.add(listener);
+    // the actions to be taken when the game is opened, and when the "next" button is clicked
+    void generateGameBoard() {
+        // reset tracking of photos that have been clicked
+        clearClickedIds();
+        // grab a new set of people for the game board
+        shuffledList = peopleShuffler.chooseCoworkers(personList);
+        // set up the adapter with the new list
+        for (ShuffledListListener listener : listeners)
+            listener.onNewShuffledList(shuffledList);
     }
 
-    void unsetNameListener (NameListener listener) {
+    /* Returns the current shuffled list of people so that it can be used by other classes
+     * e.g. to set the photos in the adapter, get the current correct answer so the ViewHolder knows
+     * what foreground color to set, etc.
+     */
+
+    ShuffledList getShuffledList() {
+        return this.shuffledList;
+    }
+
+    // for other classes to register a listener for the creation of a new ShuffledList
+    void setShuffledListListener(ShuffledListListener listener) {
+        this.listeners.add(listener);
+        if (shuffledList != null) listener.onNewShuffledList(shuffledList);
+    }
+
+    // for other classes to unregister their listener - e.g. in GameActivity's onDestroy
+    void unsetShuffledListListener(ShuffledListListener listener) {
         listeners.remove(listener);
     }
 
-    String createNamePrompt() {
-        // extract the correct name from the ShuffledList object and set the prompt text
-        if (gameState.getShuffledList() != null) {
-            int index = gameState.getShuffledList().getCorrectAnswerIndex();
-            List<Person> peopleOnGameBoard = gameState.getShuffledList().getPeople();
-            return ("Who is " + peopleOnGameBoard.get(index).getName() + "?");
-        } else return null;
+    /* GameState management functions
+     *
+     * Mostly just a pass-through to GameState functions, but gathering them all here eliminates the
+     * need to inject GameState and GameBoardManager into every class that needs access to the
+     * GameState. Instead, inject GameBoardManager and manipulate GameState via these functions.
+     */
+
+    public boolean getCorrectAnswerClicked() {
+        return gameState.getCorrectAnswerClicked();
     }
 
-    public interface NameListener {
-        void onListLoaded(String correctAnswerPrompt);
+    public void setCorrectAnswerClicked(boolean correctAnswerClicked) {
+        gameState.setCorrectAnswerClicked(correctAnswerClicked);
+    }
+
+    void registerNewClickedPerson(String id) {
+        gameState.registerNewClickedPerson(id);
+    }
+
+    void clearClickedIds() {
+        gameState.clearClickedIds();
+    }
+
+    List<String> getClickedIds() {
+        return gameState.getClickedIds();
+    }
+
+    GameState getGameState() {
+        return this.gameState;
     }
 }
+

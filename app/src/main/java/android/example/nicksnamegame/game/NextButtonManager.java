@@ -11,16 +11,11 @@ public class NextButtonManager {
     final GameBoardManager gameBoardManager;
 
     private FloatingActionButton fab;
-    private boolean correctAnswerClicked = false;
-
     @Inject
     public NextButtonManager(GameBoardManager gameBoardManager) {
         this.gameBoardManager = gameBoardManager;
     }
 
-    public boolean getCorrectAnswerClicked() {
-        return correctAnswerClicked;
-    }
 
     public void setFab(FloatingActionButton fab) {
         this.fab = fab;
@@ -29,8 +24,7 @@ public class NextButtonManager {
     }
 
     public void setEnabled(boolean enabled) {
-
-        correctAnswerClicked = enabled;
+        gameBoardManager.setCorrectAnswerClicked(enabled);
         fab.setClickable(enabled);
 
         if (enabled) fab.show();

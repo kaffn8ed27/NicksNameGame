@@ -24,4 +24,6 @@ public interface GameComponent {
 
     void injectInto(PersonViewHolder personViewHolder);
 
+
+
 }

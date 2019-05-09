@@ -12,7 +12,7 @@ import javax.inject.Singleton;
 @Singleton
 class GameState {
     private List<String> clickedIds = new ArrayList<>();
-    private ShuffledList shuffledList;
+    private boolean correctAnswerClicked = false;
 
     @Inject
     public GameState() {
@@ -24,20 +24,20 @@ class GameState {
         }
     }
 
+    public boolean getCorrectAnswerClicked() {
+        return correctAnswerClicked;
+    }
+
+    public void setCorrectAnswerClicked(boolean correctAnswerClicked) {
+        this.correctAnswerClicked = correctAnswerClicked;
+    }
+
     void clearClickedIds() {
         clickedIds.clear();
     }
 
-    public List<String> getClickedIds() {
+    List<String> getClickedIds() {
         return clickedIds;
-    }
-
-    public ShuffledList getShuffledList() {
-        return shuffledList;
-    }
-
-    public void setShuffledList(ShuffledList shuffledList) {
-        this.shuffledList = shuffledList;
     }
 
     @NonNull
