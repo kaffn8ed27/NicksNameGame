@@ -1,6 +1,7 @@
 package android.example.nicksnamegame.game.game_board;
 
 import android.example.nicksnamegame.R;
+import android.example.nicksnamegame.data.db.Person;
 import android.example.nicksnamegame.game.dagger.GameApplication;
 import android.example.nicksnamegame.game.game_board.gameBoardManager.GameBoardManager;
 import android.graphics.drawable.ColorDrawable;
@@ -62,7 +63,9 @@ public class PersonViewHolder extends RecyclerView.ViewHolder
         String headShotUrl;
         if (person.getHeadShotUrl() != null) {
             headShotUrl = person.getHeadShotUrl();
-            Picasso.with(this.itemView.getContext()).load(headShotUrl).into(this.personPhotoView);
+            Picasso.with(this.itemView.getContext()).load(headShotUrl)
+                    .placeholder(R.drawable.wt_logo)
+                    .into(this.personPhotoView);
         }
         if (person.getName() != null) {
             personNameView.setText(person.getName());

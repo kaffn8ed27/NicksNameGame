@@ -1,6 +1,6 @@
 package android.example.nicksnamegame.game.game_board.gameBoardManager;
 
-import android.example.nicksnamegame.game.game_board.Person;
+import android.example.nicksnamegame.data.db.Person;
 import android.util.Log;
 
 import java.util.ArrayList;
