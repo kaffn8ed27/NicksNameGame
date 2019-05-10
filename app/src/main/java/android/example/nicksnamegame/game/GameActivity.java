@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.SharedPreferences;
 import android.example.nicksnamegame.R;
+import android.example.nicksnamegame.data.PersonRepo;
 import android.example.nicksnamegame.data.model.PersonConverter;
 import android.example.nicksnamegame.game.dagger.GameApplication;
 import android.example.nicksnamegame.game.game_board.gameBoardManager.GameBoardManager;
@@ -53,6 +54,8 @@ public class GameActivity extends AppCompatActivity {
     NextButtonManager nextButtonManager;
     @Inject
     GameBoardManager gameBoardManager;
+    @Inject
+    PersonRepo personRepo;
 
     public GameActivity() {
     }
@@ -114,15 +117,18 @@ public class GameActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
 
             // make the network call to retrieve the list of people
-            Disposable personListSubscription = new PersonConverter().retrievePersonList()
+            Disposable personListSubscription = personRepo.retrievePersonList()
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(personList -> {
-                        Log.d(TAG, "Retrieved new list from API");
+                        Log.d(TAG, "Retrieved new list from repository: " + personList);
                         gameBoardManager.setPersonList(personList);
                         gameBoardManager.generateGameBoard();
                         // show the game board now that everything has loaded
                         setGameVisibility(true);
-                    }, throwable -> gamePromptTextView.setText(R.string.generic_error));
+                    }, throwable -> {
+                        gamePromptTextView.setText(R.string.generic_error);
+                        setGameVisibility(true);
+                    });
 
             // set up the personList subscription to be disposed of when the activity is destroyed
             disposables = new CompositeDisposable();

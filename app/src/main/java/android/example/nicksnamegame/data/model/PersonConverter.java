@@ -7,12 +7,18 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Single;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PersonConverter {
+
+    @Inject
+    public PersonConverter() {
+    }
 
     private static final String TAG = PersonConverter.class.getSimpleName();
 
@@ -44,6 +50,7 @@ public class PersonConverter {
     }
 
     public Single<List<Person>> retrievePersonList() {
+        Log.d(TAG, "Retrieving new list from API");
         NameGameApi api = new Retrofit.Builder()
                 .baseUrl("https://www.willowtreeapps.com")
                 .addConverterFactory(GsonConverterFactory.create())
