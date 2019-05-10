@@ -1,13 +1,11 @@
 package android.example.nicksnamegame.game.game_board.gameBoardManager;
 
 import android.example.nicksnamegame.game.game_board.Person;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.util.Log;
 
 import java.util.List;
 
-public class ShuffledList implements Parcelable {
+public class ShuffledList {
 
     private List<Person> people;
     private int correctAnswerIndex;
@@ -31,27 +29,4 @@ public class ShuffledList implements Parcelable {
         return this.correctAnswerIndex;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeList(this.people);
-        dest.writeInt(this.correctAnswerIndex);
-    }
-
-    public static final Creator<ShuffledList> CREATOR = new Creator<ShuffledList>() {
-
-        @Override
-        public ShuffledList createFromParcel(Parcel source) {
-            return null;
-        }
-
-        @Override
-        public ShuffledList[] newArray(int size) {
-            return new ShuffledList[0];
-        }
-    };
 }
