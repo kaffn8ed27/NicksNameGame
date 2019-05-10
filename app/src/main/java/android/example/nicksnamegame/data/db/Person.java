@@ -1,11 +1,16 @@
-package android.example.nicksnamegame.game.game_board;
+package android.example.nicksnamegame.data.db;
 
 import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+@Entity
 public class Person {
+    @PrimaryKey
+    @NonNull
+    private String id;
     private String name;
     private String headShotUrl;
-    private String id;
 
     public Person(String name, String headShotUrl, String id) {
         this.name = name;
@@ -19,6 +24,8 @@ public class Person {
         return ("Name: " + this.getName() + ", Id: " + this.getId());
     }
 
+    public String getId() { return this.id; }
+
     public String getName() {
         return this.name;
     }
@@ -27,8 +34,5 @@ public class Person {
         return this.headShotUrl;
     }
 
-    public String getId() {
-        return this.id;
-    }
-
 }
+

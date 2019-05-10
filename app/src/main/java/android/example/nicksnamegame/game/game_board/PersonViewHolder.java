@@ -1,6 +1,7 @@
 package android.example.nicksnamegame.game.game_board;
 
 import android.example.nicksnamegame.R;
+import android.example.nicksnamegame.data.db.Person;
 import android.example.nicksnamegame.game.dagger.GameApplication;
 import android.example.nicksnamegame.game.game_board.gameBoardManager.GameBoardManager;
 import android.graphics.drawable.ColorDrawable;
