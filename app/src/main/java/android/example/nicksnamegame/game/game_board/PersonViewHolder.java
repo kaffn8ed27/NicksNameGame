@@ -64,7 +64,7 @@ public class PersonViewHolder extends RecyclerView.ViewHolder
         if (person.getHeadShotUrl() != null) {
             headShotUrl = person.getHeadShotUrl();
             Picasso.with(this.itemView.getContext()).load(headShotUrl)
-                    .placeholder(R.drawable.wt_logo)
+                    .placeholder(R.drawable.wt_loading)
                     .into(this.personPhotoView);
         }
         if (person.getName() != null) {
