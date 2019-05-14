@@ -7,10 +7,10 @@ import static org.junit.Assert.*;
 
 public class PersonTest {
 
-    Person validPerson;
-    String name = "Valid Person";
-    String headShotUrl = "www.google.com";
-    String id = "Test1";
+    private Person validPerson;
+    private String name = "Valid Person";
+    private String headShotUrl = "www.google.com";
+    private String id = "Test1";
 
     @Before
     public void setUp() {
