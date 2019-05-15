@@ -21,24 +21,24 @@ class GameState {
     GameState() {
     }
 
-    void clearClickedIds() {
-        clickedIds.clear();
-    }
-
-    List<String> getClickedIds() {
-        return clickedIds;
-    }
-
     @NonNull
     @Override
     public String toString() {
         return clickedIds.toString();
     }
 
+    List<String> getClickedIds() {
+        return clickedIds;
+    }
+
     void registerNewClickedPerson(String id) {
         if (!clickedIds.contains(id)) {
             clickedIds.add(id);
         }
+    }
+
+    void clearClickedIds() {
+        clickedIds.clear();
     }
 
     boolean getCorrectAnswerClicked() {
