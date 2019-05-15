@@ -77,7 +77,7 @@ public class PersonViewHolder extends RecyclerView.ViewHolder
 
                 int foregroundColor;
                 // find out which person is correct
-                int correctAnswerIndex = gameBoardManager.getShuffledList().getCorrectAnswerIndex();
+                int correctAnswerIndex = gameBoardManager.getCorrectAnswerIndex();
                 if (this.getAdapterPosition() == correctAnswerIndex) {
                     // correct person chosen: change foreground to "correct choice" color
                     foregroundColor = R.color.chose_wisely;

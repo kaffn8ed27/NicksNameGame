@@ -24,7 +24,7 @@ public class PeopleShuffler {
 
     }
 
-    ShuffledList chooseCoworkers(List<Person> personList) {
+    List<Person>  chooseCoworkers(List<Person> personList) {
         List<Person> listToQuery = new ArrayList<>();
         // shuffle the entire list of people
         Collections.shuffle(personList);
@@ -45,7 +45,7 @@ public class PeopleShuffler {
             }
         }
         // create and return a ShuffledList from the randomly generated list of people
-        return new ShuffledList(listToQuery);
+        return listToQuery;
     }
 
 }
