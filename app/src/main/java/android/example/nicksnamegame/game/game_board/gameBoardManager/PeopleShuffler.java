@@ -19,15 +19,16 @@ public class PeopleShuffler {
 
     @Inject
     PeopleShuffler(Context context) {
+        this(context.getResources().getInteger(R.integer.number_game_photos));
+    }
 
-        NUM_COWORKERS_TO_SHOW = context.getResources().getInteger(R.integer.number_game_photos);
-
+    PeopleShuffler(int numberOfCoworkers) {
+        NUM_COWORKERS_TO_SHOW = numberOfCoworkers;
+        Log.d(TAG, "# people to display: " + NUM_COWORKERS_TO_SHOW);
     }
 
     ShuffledList chooseCoworkers(List<Person> personList) {
         List<Person> listToQuery = new ArrayList<>();
-        // shuffle the entire list of people
-        Collections.shuffle(personList);
         // select n people at random and put them in a new list
         while (listToQuery.size() < NUM_COWORKERS_TO_SHOW) {
             boolean duplicate = false;
@@ -45,7 +46,7 @@ public class PeopleShuffler {
             }
         }
         // create and return a ShuffledList from the randomly generated list of people
+        Log.d(TAG, "# people chosen: " + listToQuery.size());
         return new ShuffledList(listToQuery);
     }
-
 }
