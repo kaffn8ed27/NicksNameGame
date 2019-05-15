@@ -14,6 +14,16 @@ class GameState {
     private List<String> clickedIds = new ArrayList<>();
     private boolean correctAnswerClicked = false;
 
+    int getCorrectAnswerIndex() {
+        return correctAnswerIndex;
+    }
+
+    void setCorrectAnswerIndex(int correctAnswerIndex) {
+        this.correctAnswerIndex = correctAnswerIndex;
+    }
+
+    private int correctAnswerIndex;
+
     @Inject
     GameState() {
     }
