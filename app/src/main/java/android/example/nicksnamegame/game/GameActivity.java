@@ -8,12 +8,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.SharedPreferences;
 import android.example.nicksnamegame.R;
 import android.example.nicksnamegame.data.PersonRepo;
-import android.example.nicksnamegame.data.model.PersonConverter;
+import android.example.nicksnamegame.data.db.Person;
 import android.example.nicksnamegame.game.dagger.GameApplication;
 import android.example.nicksnamegame.game.game_board.gameBoardManager.GameBoardManager;
 import android.example.nicksnamegame.game.game_board.NextButtonManager;
 import android.example.nicksnamegame.game.game_board.PhotoAdapter;
-import android.example.nicksnamegame.game.game_board.gameBoardManager.ShuffledList;
 import android.example.nicksnamegame.game.game_board.gameBoardManager.ShuffledListListener;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -23,6 +22,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -98,7 +99,7 @@ public class GameActivity extends AppCompatActivity {
             // hide the game board while everything else loads
             setGameVisibility(false);
             if (shuffledList != null) {
-                gamePromptTextView.setText(createNamePrompt(shuffledList));
+                gamePromptTextView.setText(createNamePrompt(shuffledList, gameBoardManager.getCorrectAnswerIndex()));
             } else {
                 gamePromptTextView.setText(R.string.generic_error);
             }
@@ -159,10 +160,9 @@ public class GameActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    String createNamePrompt(ShuffledList shuffledList) {
+    String createNamePrompt(List<Person> shuffledList, int index) {
         String namePrompt;
-        int index = shuffledList.getCorrectAnswerIndex();
-        String name = shuffledList.getPeople().get(index).getName();
+        String name = shuffledList.get(index).getName();
         namePrompt = "Who is " + name + "?";
 
         return namePrompt;

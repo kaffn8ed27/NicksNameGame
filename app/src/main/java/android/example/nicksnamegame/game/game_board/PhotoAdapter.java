@@ -30,7 +30,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PersonViewHolder> {
     PhotoAdapter(GameBoardManager gameBoardManager) {
         ShuffledListListener listener = (shuffledList -> {
             if (shuffledList != null) {
-                this.coworkers = shuffledList.getPeople();
+                this.coworkers = shuffledList;
                 notifyDataSetChanged();
             } else Log.d(TAG, "No new list found");
         });

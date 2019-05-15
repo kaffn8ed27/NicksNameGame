@@ -27,7 +27,7 @@ public class PeopleShuffler {
         Log.d(TAG, "# people to display: " + NUM_COWORKERS_TO_SHOW);
     }
 
-    ShuffledList chooseCoworkers(List<Person> personList) {
+    List<Person>  chooseCoworkers(List<Person> personList) {
         List<Person> listToQuery = new ArrayList<>();
         // select n people at random and put them in a new list
         while (listToQuery.size() < NUM_COWORKERS_TO_SHOW) {
@@ -47,6 +47,6 @@ public class PeopleShuffler {
         }
         // create and return a ShuffledList from the randomly generated list of people
         Log.d(TAG, "# people chosen: " + listToQuery.size());
-        return new ShuffledList(listToQuery);
+        return listToQuery;
     }
 }

@@ -18,7 +18,7 @@ public class GameBoardManager {
     private final PeopleShuffler peopleShuffler;
     private final GameState gameState;
 
-    private ShuffledList shuffledList;
+    private List<Person> shuffledList;
     private List<Person> personList;
     private List<ShuffledListListener> listeners;
 
@@ -42,6 +42,9 @@ public class GameBoardManager {
         clearClickedIds();
         // grab a new set of people for the game board
         shuffledList = peopleShuffler.chooseCoworkers(personList);
+        // Choose a person to be the correct answer
+        int correctAnswerIndex = (int) (Math.random() * shuffledList.size());
+        gameState.setCorrectAnswerIndex(correctAnswerIndex);
         // set up the adapter with the new list
         for (ShuffledListListener listener : listeners)
             listener.onNewShuffledList(shuffledList);
@@ -52,7 +55,7 @@ public class GameBoardManager {
      * what foreground color to set, etc.
      */
 
-    public ShuffledList getShuffledList() {
+    public List<Person> getShuffledList() {
         return this.shuffledList;
     }
 
@@ -96,6 +99,14 @@ public class GameBoardManager {
 
     public GameState getGameState() {
         return this.gameState;
+    }
+
+    public int getCorrectAnswerIndex() {
+        return gameState.getCorrectAnswerIndex();
+    }
+
+    public void setCorrectAnswerIndex(int correctAnswerIndex) {
+        gameState.setCorrectAnswerIndex(correctAnswerIndex);
     }
 }
 

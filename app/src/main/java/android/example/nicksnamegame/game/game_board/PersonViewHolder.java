@@ -47,13 +47,10 @@ public class PersonViewHolder extends RecyclerView.ViewHolder
         if (!gameBoardManager.getCorrectAnswerClicked()) {
             Log.d(TAG, "Click registered");
             // Add the person's ID to the list of clicked people
-            String id;
-            if (person.getId() != null) {
-                id = person.getId();
-                gameBoardManager.registerNewClickedPerson(id);
+            String id = person.getId();
+            gameBoardManager.registerNewClickedPerson(id);
 
-                Log.d(TAG, "Clicked state: " + gameBoardManager.getGameState());
-            }
+            Log.d(TAG, "Clicked state: " + gameBoardManager.getGameState());
             bind(person);
         }
     }
@@ -72,37 +69,35 @@ public class PersonViewHolder extends RecyclerView.ViewHolder
         }
 
         // If the person has been clicked, color the photo foreground appropriately
-        if (person.getId() != null) {
-            if (gameBoardManager.getClickedIds().contains(person.getId())) {
+        if (gameBoardManager.getClickedIds().contains(person.getId())) {
 
-                int foregroundColor;
-                // find out which person is correct
-                int correctAnswerIndex = gameBoardManager.getShuffledList().getCorrectAnswerIndex();
-                if (this.getAdapterPosition() == correctAnswerIndex) {
-                    // correct person chosen: change foreground to "correct choice" color
-                    foregroundColor = R.color.chose_wisely;
+            int foregroundColor;
+            // find out which person is correct
+            int correctAnswerIndex = gameBoardManager.getCorrectAnswerIndex();
+            if (this.getAdapterPosition() == correctAnswerIndex) {
+                // correct person chosen: change foreground to "correct choice" color
+                foregroundColor = R.color.chose_wisely;
 
-                    /* if the correct answer is clicked, flag the game as such
-                     * this will:
-                     * - disable clicking of any more photos
-                     * - enable the "next" button */
-                    nextButtonManager.setEnabled(true);
-                } else {
-                    // change foreground to "wrong choice" color
-                    foregroundColor = R.color.chose_poorly;
-                }
-                // create the drawable for the foreground color
-                Drawable foreground = new ColorDrawable(ContextCompat.getColor(this.itemView.getContext(), foregroundColor));
-                // make it partially transparent
-                foreground.setAlpha(127);
-                // draw the color over the photo and show the name of the clicked person
-                itemView.setForeground(foreground);
-                personNameView.setVisibility(View.VISIBLE);
-
+                /* if the correct answer is clicked, flag the game as such
+                 * this will:
+                 * - disable clicking of any more photos
+                 * - enable the "next" button */
+                nextButtonManager.setEnabled(true);
             } else {
-                itemView.setForeground(null);
-                personNameView.setVisibility(View.INVISIBLE);
+                // change foreground to "wrong choice" color
+                foregroundColor = R.color.chose_poorly;
             }
+            // create the drawable for the foreground color
+            Drawable foreground = new ColorDrawable(ContextCompat.getColor(this.itemView.getContext(), foregroundColor));
+            // make it partially transparent
+            foreground.setAlpha(127);
+            // draw the color over the photo and show the name of the clicked person
+            itemView.setForeground(foreground);
+            personNameView.setVisibility(View.VISIBLE);
+
+        } else {
+            itemView.setForeground(null);
+            personNameView.setVisibility(View.INVISIBLE);
         }
     }
 }
