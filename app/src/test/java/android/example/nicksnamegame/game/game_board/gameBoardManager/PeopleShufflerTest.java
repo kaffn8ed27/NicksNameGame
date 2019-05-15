@@ -19,6 +19,19 @@ public class PeopleShufflerTest {
 
     private static final String TAG = PeopleShufflerTest.class.getSimpleName();
 
+    @Test
+    public void chooseCoworkers() {
+
+        Log.d(TAG, personList.toString());
+
+        List<Person> testShuffledList = peopleShuffler.chooseCoworkers(personList);
+
+        assertTrue("New shuffled list should contain first person", testShuffledList.contains(person1));
+        assertTrue("New shuffled list should contain second person", testShuffledList.contains(person2));
+        assertTrue("New shuffled list should contain third person", testShuffledList.contains(person3));
+
+    }
+
     @Before
     public void setUp() {
 
@@ -31,19 +44,6 @@ public class PeopleShufflerTest {
         personList.add(person1);
         personList.add(person2);
         personList.add(person3);
-
-    }
-
-    @Test
-    public void chooseCoworkers() {
-
-        Log.d(TAG, personList.toString());
-
-        ShuffledList testShuffledList = peopleShuffler.chooseCoworkers(personList);
-
-        assertTrue("New shuffled list contains first person", testShuffledList.getPeople().contains(person1));
-        assertTrue("New shuffled list contains second person", testShuffledList.getPeople().contains(person2));
-        assertTrue("New shuffled list contains third person", testShuffledList.getPeople().contains(person3));
 
     }
 }

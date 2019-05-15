@@ -25,9 +25,9 @@ public class PersonTest {
         String testPersonHeadShotUrl = validPerson.getHeadShotUrl();
         String testPersonId = validPerson.getId();
 
-        assertEquals("Name correctly assigned", name, testPersonName);
-        assertEquals("Head shot URL correctly assigned", headShotUrl, testPersonHeadShotUrl);
-        assertEquals("ID correctly assigned", id, testPersonId);
+        assertEquals("Name should match " + name, name, testPersonName);
+        assertEquals("Head shot URL should match " + headShotUrl, headShotUrl, testPersonHeadShotUrl);
+        assertEquals("ID should match " + id, id, testPersonId);
 
     }
 
