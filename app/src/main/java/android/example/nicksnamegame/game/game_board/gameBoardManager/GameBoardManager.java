@@ -50,16 +50,10 @@ public class GameBoardManager {
             listener.onNewShuffledList(shuffledList);
     }
 
-    /* Returns the current shuffled list of people so that it can be used by other classes
-     * e.g. to set the photos in the adapter, get the current correct answer so the ViewHolder knows
-     * what foreground color to set, etc.
+    /* For other classes to register a listener for the creation of a new shuffled list
+     * Those classes can then dictate their own behavior when the new list is generated
      */
 
-    public List<Person> getShuffledList() {
-        return this.shuffledList;
-    }
-
-    // for other classes to register a listener for the creation of a new ShuffledList
     public void setShuffledListListener(ShuffledListListener listener) {
         this.listeners.add(listener);
         if (shuffledList != null) listener.onNewShuffledList(shuffledList);
@@ -103,10 +97,6 @@ public class GameBoardManager {
 
     public int getCorrectAnswerIndex() {
         return gameState.getCorrectAnswerIndex();
-    }
-
-    public void setCorrectAnswerIndex(int correctAnswerIndex) {
-        gameState.setCorrectAnswerIndex(correctAnswerIndex);
     }
 }
 
