@@ -35,16 +35,16 @@ public class GameBoardManager {
         Log.d(TAG, "personList received");
     }
 
+    // TODO: use Mockito to make tests possible w/ mock dependencies
     // the actions to be taken when the game is opened, and when the "next" button is clicked
     public void generateGameBoard() {
         Log.d(TAG, "Generating new game board");
         // reset tracking of photos that have been clicked
-        clearClickedIds();
+        gameState.clearClickedIds();
         // grab a new set of people for the game board
         shuffledList = peopleShuffler.chooseCoworkers(personList);
         // Choose a person to be the correct answer
-        int correctAnswerIndex = (int) (Math.random() * shuffledList.size());
-        gameState.setCorrectAnswerIndex(correctAnswerIndex);
+        gameState.setCorrectAnswerIndex((int) (Math.random() * shuffledList.size()));
         // set up the adapter with the new list
         for (ShuffledListListener listener : listeners)
             listener.onNewShuffledList(shuffledList);
@@ -83,9 +83,6 @@ public class GameBoardManager {
         gameState.registerNewClickedPerson(id);
     }
 
-    private void clearClickedIds() {
-        gameState.clearClickedIds();
-    }
 
     public List<String> getClickedIds() {
         return gameState.getClickedIds();

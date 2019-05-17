@@ -17,18 +17,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class PersonConverter {
 
     @Inject
-    public PersonConverter() {
+    PersonConverter() {
     }
 
     private static final String TAG = PersonConverter.class.getSimpleName();
 
-    private List<Person> mapResponse(List<PersonResponse> responseList) {
+
+    List<Person> mapResponse(List<PersonResponse> responseList) {
 
         ArrayList<Person> personList = new ArrayList<>();
 
         for (PersonResponse personResponse : responseList) {
             String name = formatName(personResponse.getFirstName(), personResponse.getLastName());
-            String headShotUrl = personResponse.getHeadShot().getHeadShotUrl();
+            String headShotUrl = personResponse.getHeadShotUrl();
             String id = personResponse.getId();
 
             Person person = new Person(name, headShotUrl, id);
@@ -44,9 +45,8 @@ public class PersonConverter {
 
         Log.d(TAG, "Removed " + (responseList.size() - personList.size()) + " people from list");
 
-        // TODO: eliminate people whose picture does not have a face (Google Vision API?)
-
         return personList;
+
     }
 
     public Single<List<Person>> retrievePersonList() {

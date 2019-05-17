@@ -11,7 +11,7 @@ public class PersonResponse {
      */
     private final HeadShotResponse headshot;
 
-    public PersonResponse(String id,
+    PersonResponse(String id,
                           String firstName,
                           String lastName,
                           HeadShotResponse headshot) {
@@ -33,8 +33,8 @@ public class PersonResponse {
         return this.lastName;
     }
 
-    HeadShotResponse getHeadShot() {
-        return this.headshot;
+    String getHeadShotUrl() {
+        return this.headshot.getHeadShotUrl();
     }
 
 }
