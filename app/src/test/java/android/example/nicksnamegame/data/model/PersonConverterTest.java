@@ -5,7 +5,9 @@ import android.util.Log;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import static org.mockito.Mockito.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +67,7 @@ public class PersonConverterTest {
          * should not be added to list
          */
         HeadShotResponse mockInvalidHeadShotResponse1 = mock(HeadShotResponse.class);
-        String invalidHeadShotUrl1 = "www.willowtreeapps.com/featured-image-TEST1.png";
+        String invalidHeadShotUrl1 = "www.WillowTreeApps.com/featured-image-TEST1.png";
         when(mockInvalidHeadShotResponse1.getHeadShotUrl()).thenReturn(invalidHeadShotUrl1);
         PersonResponse testBadUrlPersonResponse1 = new PersonResponse(
                 "TestPerson2",
@@ -75,7 +77,7 @@ public class PersonConverterTest {
         testPersonResponseList.add(testBadUrlPersonResponse1);
 
         HeadShotResponse mockInvalidHeadShotResponse2 = mock(HeadShotResponse.class);
-        String invalidHeadShotUrl2 = "www.willowtreeapps.com/WT_Logo-Hye-tTeI0Z.png";
+        String invalidHeadShotUrl2 = "www.WillowTreeApps.com/WT_Logo-Hye-tTeI0Z.png";
         when(mockInvalidHeadShotResponse2.getHeadShotUrl()).thenReturn(invalidHeadShotUrl2);
         PersonResponse testBadUrlPersonResponse2 = new PersonResponse(
                 "TestPerson3",

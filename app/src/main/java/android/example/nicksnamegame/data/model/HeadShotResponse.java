@@ -2,14 +2,14 @@ package android.example.nicksnamegame.data.model;
 
 import androidx.annotation.Nullable;
 
-public class HeadShotResponse {
+class HeadShotResponse {
 
     private String url;
     private String type;
     private int height;
     private int width;
 
-    public HeadShotResponse(@Nullable String headShotUrl,
+    HeadShotResponse(@Nullable String headShotUrl,
                             @Nullable String type,
                             int height,
                             int width) {
@@ -31,15 +31,15 @@ public class HeadShotResponse {
         } else return null;
     }
 
-    public String getType() {
+    String getType() {
         return this.type;
     }
 
-    public int getHeight() {
+    int getHeight() {
         return this.height;
     }
 
-    public int getWidth() {
+    int getWidth() {
         return this.width;
     }
 
