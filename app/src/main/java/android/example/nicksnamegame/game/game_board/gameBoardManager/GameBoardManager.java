@@ -24,6 +24,7 @@ public class GameBoardManager {
 
     @Inject
     GameBoardManager(PeopleShuffler peopleShuffler, GameState gameState) {
+
         this.peopleShuffler = peopleShuffler;
         this.gameState = gameState;
         this.listeners = new ArrayList<>();
@@ -48,6 +49,7 @@ public class GameBoardManager {
         // set up the adapter with the new list
         for (ShuffledListListener listener : listeners)
             listener.onNewShuffledList(shuffledList);
+
     }
 
     /* For other classes to register a listener for the creation of a new shuffled list
@@ -83,7 +85,6 @@ public class GameBoardManager {
         gameState.registerNewClickedPerson(id);
     }
 
-
     public List<String> getClickedIds() {
         return gameState.getClickedIds();
     }
@@ -95,5 +96,6 @@ public class GameBoardManager {
     public int getCorrectAnswerIndex() {
         return gameState.getCorrectAnswerIndex();
     }
+
 }
 
