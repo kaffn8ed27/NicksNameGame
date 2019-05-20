@@ -1,5 +1,7 @@
 package android.example.nicksnamegame.data.db;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -21,10 +23,13 @@ public class Person {
     @NonNull
     @Override
     public String toString() {
-        return ("Name: " + this.getName() + ", Id: " + this.getId());
+        return ("{Name: " + this.getName() + ", Id: " + this.getId() + "}");
     }
 
-    public String getId() { return this.id; }
+    @NonNull
+    public String getId() {
+        return this.id;
+    }
 
     public String getName() {
         return this.name;

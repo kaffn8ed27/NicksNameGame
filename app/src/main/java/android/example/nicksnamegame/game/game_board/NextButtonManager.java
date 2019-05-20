@@ -21,17 +21,21 @@ public class NextButtonManager {
 
 
     public void setFab(FloatingActionButton fab) {
+
         this.fab = fab;
         setEnabled(false);
         fab.setOnClickListener(v -> gameBoardManager.generateGameBoard());
+
     }
 
     public void setEnabled(boolean enabled) {
+
         gameBoardManager.setCorrectAnswerClicked(enabled);
         fab.setClickable(enabled);
 
         if (enabled) fab.show();
         else fab.hide();
+
     }
 
 }

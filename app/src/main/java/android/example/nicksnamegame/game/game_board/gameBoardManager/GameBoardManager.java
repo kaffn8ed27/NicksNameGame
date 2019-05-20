@@ -24,45 +24,46 @@ public class GameBoardManager {
 
     @Inject
     GameBoardManager(PeopleShuffler peopleShuffler, GameState gameState) {
+
         this.peopleShuffler = peopleShuffler;
         this.gameState = gameState;
         this.listeners = new ArrayList<>();
+
     }
 
     // receives the list returned from the API
     public void setPersonList(List<Person> personList) {
+
         this.personList = personList;
         Log.d(TAG, "personList received");
+
     }
 
     // the actions to be taken when the game is opened, and when the "next" button is clicked
     public void generateGameBoard() {
+
         Log.d(TAG, "Generating new game board");
         // reset tracking of photos that have been clicked
-        clearClickedIds();
+        gameState.clearClickedIds();
         // grab a new set of people for the game board
         shuffledList = peopleShuffler.chooseCoworkers(personList);
         // Choose a person to be the correct answer
-        int correctAnswerIndex = (int) (Math.random() * shuffledList.size());
-        gameState.setCorrectAnswerIndex(correctAnswerIndex);
+        gameState.setCorrectAnswerIndex((int) (Math.random() * shuffledList.size()));
         // set up the adapter with the new list
         for (ShuffledListListener listener : listeners)
             listener.onNewShuffledList(shuffledList);
+
     }
 
-    /* Returns the current shuffled list of people so that it can be used by other classes
-     * e.g. to set the photos in the adapter, get the current correct answer so the ViewHolder knows
-     * what foreground color to set, etc.
+    /* For other classes to register a listener for the creation of a new shuffled list
+     * Those classes can then dictate their own behavior when the new list is generated
      */
 
-    public List<Person> getShuffledList() {
-        return this.shuffledList;
-    }
-
-    // for other classes to register a listener for the creation of a new ShuffledList
     public void setShuffledListListener(ShuffledListListener listener) {
+
         this.listeners.add(listener);
         if (shuffledList != null) listener.onNewShuffledList(shuffledList);
+
     }
 
     // for other classes to unregister their listener - e.g. in GameActivity's onDestroy
@@ -89,10 +90,6 @@ public class GameBoardManager {
         gameState.registerNewClickedPerson(id);
     }
 
-    private void clearClickedIds() {
-        gameState.clearClickedIds();
-    }
-
     public List<String> getClickedIds() {
         return gameState.getClickedIds();
     }
@@ -105,8 +102,5 @@ public class GameBoardManager {
         return gameState.getCorrectAnswerIndex();
     }
 
-    public void setCorrectAnswerIndex(int correctAnswerIndex) {
-        gameState.setCorrectAnswerIndex(correctAnswerIndex);
-    }
 }
 

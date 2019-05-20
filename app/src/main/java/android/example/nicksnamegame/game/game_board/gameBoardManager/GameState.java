@@ -11,21 +11,28 @@ import javax.inject.Singleton;
 
 @Singleton
 class GameState {
+
     private List<String> clickedIds = new ArrayList<>();
     private boolean correctAnswerClicked = false;
-
-    int getCorrectAnswerIndex() {
-        return correctAnswerIndex;
-    }
-
-    void setCorrectAnswerIndex(int correctAnswerIndex) {
-        this.correctAnswerIndex = correctAnswerIndex;
-    }
-
     private int correctAnswerIndex;
+
 
     @Inject
     GameState() {
+    }
+
+    void clearClickedIds() {
+        clickedIds.clear();
+    }
+
+    List<String> getClickedIds() {
+        return clickedIds;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return clickedIds.toString();
     }
 
     void registerNewClickedPerson(String id) {
@@ -42,17 +49,11 @@ class GameState {
         this.correctAnswerClicked = correctAnswerClicked;
     }
 
-    void clearClickedIds() {
-        clickedIds.clear();
+    int getCorrectAnswerIndex() {
+        return correctAnswerIndex;
     }
 
-    List<String> getClickedIds() {
-        return clickedIds;
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return clickedIds.toString();
+    void setCorrectAnswerIndex(int correctAnswerIndex) {
+        this.correctAnswerIndex = correctAnswerIndex;
     }
 }
