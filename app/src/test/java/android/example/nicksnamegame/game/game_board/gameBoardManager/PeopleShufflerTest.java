@@ -9,41 +9,50 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class PeopleShufflerTest {
 
-    private PeopleShuffler peopleShuffler;
-    private List<Person> personList;
-    private Person person1, person2, person3;
-
     private static final String TAG = PeopleShufflerTest.class.getSimpleName();
+    private PeopleShuffler testPeopleShuffler;
+    private List<Person> testPersonList;
+    private List<Person> testShuffledList;
+    private Person testPerson1;
+    private Person testPerson2;
+    private Person testPerson3;
 
     @Before
     public void setUp() {
 
-        peopleShuffler = new PeopleShuffler(3);
-        personList = new ArrayList<>();
-        person1 = new Person("Person One", "head.shot1", "Person1");
-        person2 = new Person("Person Two", "head.shot2", "Person2");
-        person3 = new Person("Person Three", "head.shot3", "Person3");
+        testPersonList = new ArrayList<>();
 
-        personList.add(person1);
-        personList.add(person2);
-        personList.add(person3);
+        testPerson1 = new Person("Person One", "head.shot1", "Person1");
+        testPerson2 = new Person("Person Two", "head.shot2", "Person2");
+        testPerson3 = new Person("Person Three", "head.shot3", "Person3");
 
     }
 
     @Test
-    public void testChooseCoworkers() {
+    public void testChooseCoworkersAllValid() {
 
-        Log.d(TAG, personList.toString());
+        testPeopleShuffler = new PeopleShuffler(3);
 
-        List<Person> testShuffledList = peopleShuffler.chooseCoworkers(personList);
+        testPersonList.add(testPerson1);
+        testPersonList.add(testPerson2);
+        testPersonList.add(testPerson3);
 
-        assertTrue("New shuffled list should contain first person", testShuffledList.contains(person1));
-        assertTrue("New shuffled list should contain second person", testShuffledList.contains(person2));
-        assertTrue("New shuffled list should contain third person", testShuffledList.contains(person3));
+        Log.d(TAG, testPersonList.toString());
+
+
+        testShuffledList = testPeopleShuffler.chooseCoworkers(testPersonList);
+
+        assertTrue("New shuffled list should contain first person", testShuffledList.contains(testPerson1));
+        assertTrue("New shuffled list should contain second person", testShuffledList.contains(testPerson2));
+        assertTrue("New shuffled list should contain third person", testShuffledList.contains(testPerson3));
 
     }
+
+    // TODO: is it possible to "guarantee" that an attempt is made to add a duplicate person?
+
 }
