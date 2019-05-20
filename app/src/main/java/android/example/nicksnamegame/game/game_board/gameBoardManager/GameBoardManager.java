@@ -32,13 +32,15 @@ public class GameBoardManager {
 
     // receives the list returned from the API
     public void setPersonList(List<Person> personList) {
+
         this.personList = personList;
         Log.d(TAG, "personList received");
+
     }
 
-    // TODO: use Mockito to make tests possible w/ mock dependencies
     // the actions to be taken when the game is opened, and when the "next" button is clicked
     public void generateGameBoard() {
+
         Log.d(TAG, "Generating new game board");
         // reset tracking of photos that have been clicked
         gameState.clearClickedIds();
@@ -57,8 +59,10 @@ public class GameBoardManager {
      */
 
     public void setShuffledListListener(ShuffledListListener listener) {
+
         this.listeners.add(listener);
         if (shuffledList != null) listener.onNewShuffledList(shuffledList);
+
     }
 
     // for other classes to unregister their listener - e.g. in GameActivity's onDestroy

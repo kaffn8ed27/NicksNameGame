@@ -6,7 +6,6 @@ import android.example.nicksnamegame.data.db.Person;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
