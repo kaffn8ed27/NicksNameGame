@@ -19,6 +19,7 @@ public class GameBoardManagerTest {
     private GameBoardManager testGameBoardManager;
     private GameState mockGameState;
     private List<Person> mockPersonList;
+    private PeopleShuffler mockPeopleShuffler;
     private ShuffledListListener mockListener;
 
     @Before
@@ -29,7 +30,7 @@ public class GameBoardManagerTest {
         Person mockPerson = mock(Person.class);
         mockPersonList = new ArrayList<>();
         mockPersonList.add(mockPerson);
-        PeopleShuffler mockPeopleShuffler = mock(PeopleShuffler.class);
+        mockPeopleShuffler = mock(PeopleShuffler.class);
         when(mockPeopleShuffler.chooseCoworkers(mockPersonList)).thenReturn(mockPersonList);
         mockListener = mock(ShuffledListListener.class);
 
@@ -37,14 +38,6 @@ public class GameBoardManagerTest {
         testGameBoardManager = new GameBoardManager(mockPeopleShuffler, mockGameState);
         testGameBoardManager.setPersonList(mockPersonList);
         testGameBoardManager.setShuffledListListener(mockListener);
-
-    }
-
-    @Test
-    public void testShuffledListListenerCall() {
-
-        testGameBoardManager.generateGameBoard();
-        verify(mockListener).onNewShuffledList(mockPersonList);
 
     }
 
@@ -65,7 +58,25 @@ public class GameBoardManagerTest {
         mockPersonList.add(mockPerson2);
         testGameBoardManager.generateGameBoard();
         verify(mockGameState).setCorrectAnswerIndex(intThat(index ->
-                index >= 0 && index < mockPersonList.size()));
+                (0 <= index) && (index < mockPersonList.size())
+        ));
 
     }
+
+    @Test
+    public void testNewShuffledListRequested() {
+
+        testGameBoardManager.generateGameBoard();
+        verify(mockPeopleShuffler).chooseCoworkers(mockPersonList);
+
+    }
+
+    @Test
+    public void testShuffledListListenerCall() {
+
+        testGameBoardManager.generateGameBoard();
+        verify(mockListener).onNewShuffledList(mockPersonList);
+
+    }
+
 }

@@ -28,6 +28,7 @@ public class GameBoardManager {
         this.peopleShuffler = peopleShuffler;
         this.gameState = gameState;
         this.listeners = new ArrayList<>();
+
     }
 
     // receives the list returned from the API
