@@ -58,9 +58,6 @@ public class GameActivity extends AppCompatActivity {
     @Inject
     PersonRepo personRepo;
 
-    public GameActivity() {
-    }
-
     private void setupSharedPreferences() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean useDarkTheme = sharedPreferences.getBoolean(getString(R.string.pref_dark_theme_key), getResources().getBoolean(R.bool.pref_dark_theme_default));
