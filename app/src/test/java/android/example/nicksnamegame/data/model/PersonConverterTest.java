@@ -61,9 +61,9 @@ public class PersonConverterTest {
     }
 
     @Test
-    public void testMapResponseEliminations() {
+    public void testMapResponseEliminateKnownBadUrl1() {
 
-        /* failure 1 & 2 scenario: known head shot URLs that point to generic pictures
+        /* failure 1 scenario: known head shot URL that points to generic picture
          * should not be added to list
          */
         HeadShotResponse mockInvalidHeadShotResponse1 = mock(HeadShotResponse.class);
@@ -76,6 +76,22 @@ public class PersonConverterTest {
                 mockInvalidHeadShotResponse1);
         testPersonResponseList.add(testBadUrlPersonResponse1);
 
+        Log.d(TAG, testPersonResponseList.toString());
+        // PersonConverter should reject the above response and return an empty list
+        testPersonList = testPersonConverter.mapResponse(testPersonResponseList);
+
+        assertTrue(
+                "PersonConverter should not allow invalid head shot URL "
+                        + invalidHeadShotUrl1,
+                testPersonList.isEmpty());
+    }
+
+    @Test
+    public void testMapResponseEliminateKnownBadUrl2() {
+
+        /* failure 2 scenario: known head shot URL that points to another generic picture
+         * should not be added to list
+         */
         HeadShotResponse mockInvalidHeadShotResponse2 = mock(HeadShotResponse.class);
         String invalidHeadShotUrl2 = "www.WillowTreeApps.com/WT_Logo-Hye-tTeI0Z.png";
         when(mockInvalidHeadShotResponse2.getHeadShotUrl()).thenReturn(invalidHeadShotUrl2);
@@ -85,6 +101,20 @@ public class PersonConverterTest {
                 "Head Shot",
                 mockInvalidHeadShotResponse2);
         testPersonResponseList.add(testBadUrlPersonResponse2);
+
+        Log.d(TAG, testPersonResponseList.toString());
+        // PersonConverter should reject the above response and return an empty list
+        testPersonList = testPersonConverter.mapResponse(testPersonResponseList);
+
+        assertTrue(
+                "PersonConverter should not allow invalid head shot URL "
+                        + invalidHeadShotUrl2,
+                testPersonList.isEmpty());
+
+    }
+
+    @Test
+    public void testMapResponseEliminateMissingUrl() {
 
         /* failure 3 scenario: no head shot URL
          * should not be added to list
@@ -99,7 +129,7 @@ public class PersonConverterTest {
         testPersonResponseList.add(testMissingUrlPersonResponse);
 
         Log.d(TAG, testPersonResponseList.toString());
-        // PersonConverter should reject all of the above responses and return an empty list
+        // PersonConverter should reject the above response and return an empty list
         testPersonList = testPersonConverter.mapResponse(testPersonResponseList);
 
         assertTrue(

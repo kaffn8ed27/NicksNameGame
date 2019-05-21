@@ -43,7 +43,9 @@ public class PersonConverter {
             personList.add(person);
         }
 
-        Log.d(TAG, "Removed " + (responseList.size() - personList.size()) + " people from list");
+        int count = responseList.size() - personList.size();
+
+        Log.d(TAG, "Removed " + count + (count == 1 ? " person " : " people ") + "from list");
 
         return personList;
 

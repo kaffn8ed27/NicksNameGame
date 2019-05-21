@@ -6,12 +6,10 @@ import static org.junit.Assert.assertEquals;
 
 public class HeadShotResponseTest {
 
-    private HeadShotResponse testHeadShotResponseNoPrefix, testHeadShotResponseWithPrefix;
-
     @Test
     public void testGetHeadShotUrlWithPrefix() {
 
-        testHeadShotResponseWithPrefix = new HeadShotResponse(
+        HeadShotResponse testHeadShotResponseWithPrefix = new HeadShotResponse(
                 "http://head.shot",
                 "jpg",
                 50,
@@ -22,12 +20,13 @@ public class HeadShotResponseTest {
                 "Properly formatted head shot URL should not have been altered",
                 "http://head.shot",
                 testUntouchedUrl);
+
     }
 
     @Test
     public void testGetHeadShotUrlNoPrefix() {
 
-        testHeadShotResponseNoPrefix = new HeadShotResponse(
+        HeadShotResponse testHeadShotResponseNoPrefix = new HeadShotResponse(
                 "//head.shot",
                 "jpg",
                 50,
@@ -38,8 +37,6 @@ public class HeadShotResponseTest {
                 "Head shot URL should be in proper URL format",
                 "https://head.shot",
                 testFormattedUrl);
-
-
 
     }
 }
