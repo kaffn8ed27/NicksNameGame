@@ -58,14 +58,20 @@ public class PeopleShufflerTest {
     @Test
     public void testEliminatesDuplicatePerson () {
 
-        // seed the random with a constant so that we can predict the "random" numbers
+        // seed the Random with a constant so that we can predict the "random" numbers
         testPeopleShuffler = new PeopleShuffler(2, new Random(2));
 
         testPersonList.add(testPerson1);
         testPersonList.add(testPerson2);
 
 
-        // in case the implementation of Random changes and we need to find a new seed
+        /* In case the implementation of Random changes and we need to find a new seed
+         * This test relies on specific values so that the order in which the candidates are
+         * selected is predictable - i.e., pick index 1, then index 1, then index 0.
+         *
+         * If the implementation of Random changes, these values may not be what we expect them to
+         * be, and the Random instance will need to be instantiated with a different seed.
+         */
         Random random = new Random(2);
         assertEquals("First double: 0.7311469360199058",
                 0.7311469360199058,
