@@ -16,6 +16,7 @@ import static org.mockito.Mockito.when;
 public class GameBoardManagerTest {
 
     private static final String TAG = GameBoardManagerTest.class.getSimpleName();
+
     private GameBoardManager testGameBoardManager;
     private GameState mockGameState;
     private List<Person> mockPersonList;
@@ -52,10 +53,10 @@ public class GameBoardManagerTest {
     @Test
     public void testGameStateReceivedValidIndex() {
 
-        Person mockPerson1 = mock(Person.class);
-        Person mockPerson2 = mock(Person.class);
-        mockPersonList.add(mockPerson1);
-        mockPersonList.add(mockPerson2);
+        // verify the index passed to the game state is an integer within the size of personList
+        mockPersonList.add(mock(Person.class));
+        mockPersonList.add(mock(Person.class));
+        mockPersonList.add(mock(Person.class));
         testGameBoardManager.generateGameBoard();
         verify(mockGameState).setCorrectAnswerIndex(intThat(index ->
                 (0 <= index) && (index < mockPersonList.size())
