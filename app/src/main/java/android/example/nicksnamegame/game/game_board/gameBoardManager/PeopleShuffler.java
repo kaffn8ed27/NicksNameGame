@@ -7,6 +7,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -14,17 +15,19 @@ import javax.inject.Inject;
 public class PeopleShuffler {
 
     private static final String TAG = PeopleShuffler.class.getSimpleName();
-    private int NUM_COWORKERS_TO_SHOW;
+    private final int NUM_COWORKERS_TO_SHOW;
+    private final Random random;
 
     @Inject
-    PeopleShuffler(Context context) {
-        this(context.getResources().getInteger(R.integer.number_game_photos));
+    PeopleShuffler(Context context, Random random) {
+        this(context.getResources().getInteger(R.integer.number_game_photos), random);
     }
 
-    PeopleShuffler(int numberOfCoworkers) {
+    PeopleShuffler(int numberOfCoworkers, Random random) {
 
         NUM_COWORKERS_TO_SHOW = numberOfCoworkers;
         Log.d(TAG, "# people to display: " + NUM_COWORKERS_TO_SHOW);
+        this.random = random;
 
     }
 
@@ -37,7 +40,7 @@ public class PeopleShuffler {
             // assume next person is unique
             boolean duplicate = false;
             // choose pseudo-random person from the list
-            int index = (int) (Math.random() * personList.size());
+            int index = (int) (random.nextDouble() * personList.size());
             Person candidate = personList.get(index);
             // check against existing list of people
             for (Person person : listToQuery) {

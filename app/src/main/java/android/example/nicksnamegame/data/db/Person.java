@@ -1,7 +1,5 @@
 package android.example.nicksnamegame.data.db;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -14,7 +12,7 @@ public class Person {
     private String name;
     private String headShotUrl;
 
-    public Person(String name, String headShotUrl, String id) {
+    public Person(String name, String headShotUrl, @NonNull String id) {
         this.name = name;
         this.headShotUrl = headShotUrl;
         this.id = id;

@@ -7,7 +7,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -36,7 +38,7 @@ public class PeopleShufflerTest {
     @Test
     public void testChooseCoworkersAllValid() {
 
-        testPeopleShuffler = new PeopleShuffler(3);
+        testPeopleShuffler = new PeopleShuffler(3, new Random());
 
         testPersonList.add(testPerson1);
         testPersonList.add(testPerson2);
@@ -53,6 +55,37 @@ public class PeopleShufflerTest {
 
     }
 
-    // TODO: is it possible to "guarantee" that an attempt is made to add a duplicate person?
+    @Test
+    public void testEliminatesDuplicatePerson () {
+
+        // seed the random with a constant so that we can predict the "random" numbers
+        testPeopleShuffler = new PeopleShuffler(2, new Random(2));
+
+        testPersonList.add(testPerson1);
+        testPersonList.add(testPerson2);
+
+
+        // in case the implementation of Random changes and we need to find a new seed
+        Random random = new Random(2);
+        assertEquals("First double: 0.7311469360199058",
+                0.7311469360199058,
+                random.nextDouble(),
+                0.001);
+        assertEquals("Second double: 0.9014476240300544",
+                0.9014476240300544,
+                random.nextDouble(),
+                0.001);
+        assertEquals("Third double: 0.49682259343089075",
+                0.49682259343089075,
+                random.nextDouble(),
+                0.001);
+
+        // will select "person2" as a candidate twice, but only add it to the new list once
+        testShuffledList = testPeopleShuffler.chooseCoworkers(testPersonList);
+        assertEquals("Shuffled list should contain no duplicates",
+                Arrays.asList(testPerson2, testPerson1),
+                testShuffledList);
+
+    }
 
 }

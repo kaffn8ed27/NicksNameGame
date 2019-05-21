@@ -6,6 +6,8 @@ import android.example.nicksnamegame.data.db.PersonDao;
 
 import androidx.room.Room;
 
+import java.util.Random;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -17,14 +19,14 @@ abstract class GameModule {
     @Singleton
     @Provides
     static NameGameDatabase provideDb(Context context) {
-        NameGameDatabase db = Room.databaseBuilder(
+
+        return Room.databaseBuilder(
                 context,
                 NameGameDatabase.class,
                 "people_database"
         )
                 .build();
 
-        return db;
     }
 
     @Singleton
@@ -32,5 +34,12 @@ abstract class GameModule {
     static PersonDao providePersonDao(NameGameDatabase db) {
         return db.personDao();
     }
+
+    @Singleton
+    @Provides
+    static Random provideRandom() {
+        return new Random();
+    }
+
 }
 
