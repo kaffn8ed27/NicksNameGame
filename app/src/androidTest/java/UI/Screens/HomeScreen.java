@@ -12,7 +12,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 public class HomeScreen {
 
-    ViewInteraction launchGameButton = onView(withId(R.id.default_game_button));
+    private ViewInteraction launchGameButton = onView(withId(R.id.default_game_button));
 
     public GameScreen launchGame () {
         launchGameButton.perform(click());
