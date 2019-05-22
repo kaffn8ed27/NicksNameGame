@@ -15,7 +15,9 @@ public class HomeScreen {
     private ViewInteraction launchGameButton = onView(withId(R.id.default_game_button));
 
     public GameScreen launchGame () {
+
         launchGameButton.perform(click());
         return new GameScreen();
     }
+
 }
