@@ -51,6 +51,14 @@ public class GameBoardManagerTest {
     }
 
     @Test
+    public void testNewShuffledListRequested() {
+
+        testGameBoardManager.generateGameBoard();
+        verify(mockPeopleShuffler).chooseCoworkers(mockPersonList);
+
+    }
+
+    @Test
     public void testGameStateReceivedValidIndex() {
 
         // verify the index passed to the game state is an integer within the size of personList
@@ -61,14 +69,6 @@ public class GameBoardManagerTest {
         verify(mockGameState).setCorrectAnswerIndex(intThat(index ->
                 (0 <= index) && (index < mockPersonList.size())
         ));
-
-    }
-
-    @Test
-    public void testNewShuffledListRequested() {
-
-        testGameBoardManager.generateGameBoard();
-        verify(mockPeopleShuffler).chooseCoworkers(mockPersonList);
 
     }
 
