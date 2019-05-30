@@ -1,4 +1,4 @@
-package android.example.nicksnamegame.game.game_board.GameActivity;
+package android.example.nicksnamegame.game.game_board.game_controller;
 
 import android.content.SharedPreferences;
 import android.example.nicksnamegame.R;

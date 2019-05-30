@@ -1,7 +1,7 @@
 package android.example.nicksnamegame.game.dagger;
 
 import android.content.Context;
-import android.example.nicksnamegame.game.game_board.GameActivity.GameActivity;
+import android.example.nicksnamegame.game.game_board.game_controller.GameActivity;
 import android.example.nicksnamegame.game.game_board.PersonViewHolder;
 
 import javax.inject.Singleton;

@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.example.nicksnamegame.R;
-import android.example.nicksnamegame.game.game_board.GameActivity.GameActivity;
+import android.example.nicksnamegame.game.game_board.game_controller.GameActivity;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
