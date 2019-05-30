@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".game$game_board.GameActivity.GameActivity"
+            android:name=".game$game_board$GameActivity.GameActivity"
             android:label="@string/game_activity_name"
             android:screenOrientation="behind"
             android:theme="@style/AppTheme.GameTheme">

@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,15 +42,15 @@ public class GameActivity extends AppCompatActivity {
      *  until the pool is empty and the game is restarted
      */
 
-    private ProgressBar progressBar;
-    private RecyclerView people;
-    private TextView gamePromptTextView;
-    private ShuffledListListener namePromptListener;
+    private ProgressBar progressBar; // move to Fragment
+    private RecyclerView people; // move to Fragment
+    private TextView gamePromptTextView; // move to Fragment
+    private ShuffledListListener namePromptListener; // maybe move to Fragment
 
     private CompositeDisposable disposables;
 
     @Inject
-    PhotoAdapter photoAdapter;
+    PhotoAdapter photoAdapter; // move to Fragment
     @Inject
     NextButtonManager nextButtonManager;
     @Inject
@@ -69,8 +70,14 @@ public class GameActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
-        setupSharedPreferences();
         setContentView(R.layout.activity_game);
+
+        setupSharedPreferences();
+
+        // Replace game board fragment placeholder with actual fragment
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.game_board_placeholder, new GameBoardFragment());
+        ft.commit();
 
         // inject dependencies
         ((GameApplication) getApplication())
