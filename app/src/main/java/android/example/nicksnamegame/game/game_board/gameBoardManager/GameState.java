@@ -56,4 +56,5 @@ class GameState {
     void setCorrectAnswerIndex(int correctAnswerIndex) {
         this.correctAnswerIndex = correctAnswerIndex;
     }
+
 }

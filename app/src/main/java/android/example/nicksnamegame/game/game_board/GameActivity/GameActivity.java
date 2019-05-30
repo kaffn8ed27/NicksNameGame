@@ -1,18 +1,13 @@
-package android.example.nicksnamegame.game;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+package android.example.nicksnamegame.game.game_board.GameActivity;
 
 import android.content.SharedPreferences;
 import android.example.nicksnamegame.R;
 import android.example.nicksnamegame.data.PersonRepo;
 import android.example.nicksnamegame.data.db.Person;
 import android.example.nicksnamegame.game.dagger.GameApplication;
-import android.example.nicksnamegame.game.game_board.gameBoardManager.GameBoardManager;
 import android.example.nicksnamegame.game.game_board.NextButtonManager;
 import android.example.nicksnamegame.game.game_board.PhotoAdapter;
+import android.example.nicksnamegame.game.game_board.gameBoardManager.GameBoardManager;
 import android.example.nicksnamegame.game.game_board.gameBoardManager.ShuffledListListener;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -20,6 +15,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
