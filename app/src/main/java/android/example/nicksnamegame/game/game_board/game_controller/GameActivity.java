@@ -28,7 +28,7 @@ public class GameActivity extends AppCompatActivity {
      *  until the pool is empty and the game is restarted
      */
 
-    private ShuffledListListener namePromptListener;
+    private ShuffledListListener nextButtonListener;
 
     @Inject
     NextButtonManager nextButtonManager;
@@ -71,17 +71,17 @@ public class GameActivity extends AppCompatActivity {
         FloatingActionButton nextButton = findViewById(R.id.next_button);
         nextButtonManager.setFab(nextButton);
 
-        namePromptListener = (shuffledList -> {
+        nextButtonListener = (shuffledList -> {
             // disable nextButton FAB
             nextButtonManager.setEnabled(false);
         });
 
-        gameBoardManager.setShuffledListListener(namePromptListener);
+        gameBoardManager.setShuffledListListener(nextButtonListener);
     }
 
     @Override
     public void onDestroy() {
-        gameBoardManager.unsetShuffledListListener(namePromptListener);
+        gameBoardManager.unsetShuffledListListener(nextButtonListener);
         super.onDestroy();
     }
 }

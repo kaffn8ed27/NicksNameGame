@@ -5,4 +5,6 @@
     <color name="colorAccent">#00ffe5</color>
     <color name="chose_wisely">#39E600</color>
     <color name="chose_poorly">#C00000</color>
+    <color name="light_background">#EEEEEE</color>
+    <color name="dark_background">#252525</color>
 </resources>
