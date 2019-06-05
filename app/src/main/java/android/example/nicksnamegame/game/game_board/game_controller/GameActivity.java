@@ -2,34 +2,20 @@ package android.example.nicksnamegame.game.game_board.game_controller;
 
 import android.content.SharedPreferences;
 import android.example.nicksnamegame.R;
-import android.example.nicksnamegame.data.PersonRepo;
-import android.example.nicksnamegame.data.db.Person;
 import android.example.nicksnamegame.game.dagger.GameApplication;
 import android.example.nicksnamegame.game.game_board.NextButtonManager;
-import android.example.nicksnamegame.game.game_board.PhotoAdapter;
 import android.example.nicksnamegame.game.game_board.gameBoardManager.GameBoardManager;
 import android.example.nicksnamegame.game.game_board.gameBoardManager.ShuffledListListener;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.List;
-
 import javax.inject.Inject;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 
 
 public class GameActivity extends AppCompatActivity {
@@ -42,21 +28,12 @@ public class GameActivity extends AppCompatActivity {
      *  until the pool is empty and the game is restarted
      */
 
-    private ProgressBar progressBar; // move to Fragment
-    private RecyclerView people; // move to Fragment
-    private TextView gamePromptTextView; // move to Fragment
-    private ShuffledListListener namePromptListener; // maybe move to Fragment
+    private ShuffledListListener namePromptListener;
 
-    private CompositeDisposable disposables;
-
-    @Inject
-    PhotoAdapter photoAdapter; // move to Fragment
     @Inject
     NextButtonManager nextButtonManager;
     @Inject
     GameBoardManager gameBoardManager;
-    @Inject
-    PersonRepo personRepo;
 
     private void setupSharedPreferences() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -74,23 +51,21 @@ public class GameActivity extends AppCompatActivity {
 
         setupSharedPreferences();
 
-        // Replace game board fragment placeholder with actual fragment
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.game_board_placeholder, new GameBoardFragment());
-        ft.commit();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        // check FragmentManager and only create a new one if there isn't a GameBoardFragment
+        // i.e., upon rotation
+        if (fragmentManager.findFragmentByTag(getString(R.string.game_board_tag)) == null) {
+            // Replace game board fragment placeholder with actual fragment
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+            ft.replace(R.id.game_board_placeholder, new GameBoardFragment(), getString(R.string.game_board_tag));
+            ft.commit();
+        }
 
         // inject dependencies
         ((GameApplication) getApplication())
                 .getGameComponent()
                 .injectInto(GameActivity.this);
-
-        // initialize views
-        people = findViewById(R.id.rv_photos);
-        progressBar = findViewById(R.id.progress_bar);
-        gamePromptTextView = findViewById(R.id.game_prompt);
-
-        // hide the game board while everything else loads
-        setGameVisibility(false);
 
         // prepare the nextButton FAB
         FloatingActionButton nextButton = findViewById(R.id.next_button);
@@ -99,76 +74,14 @@ public class GameActivity extends AppCompatActivity {
         namePromptListener = (shuffledList -> {
             // disable nextButton FAB
             nextButtonManager.setEnabled(false);
-            // hide the game board while everything else loads
-            setGameVisibility(false);
-            if (shuffledList != null) {
-                gamePromptTextView.setText(createNamePrompt(shuffledList, gameBoardManager.getCorrectAnswerIndex()));
-            } else {
-                gamePromptTextView.setText(R.string.generic_error);
-            }
-            // show the game board
-            setGameVisibility(true);
         });
+
         gameBoardManager.setShuffledListListener(namePromptListener);
-
-        int numberOfColumns = this.getResources().getInteger(R.integer.number_game_columns);
-        GridLayoutManager photoManager = new GridLayoutManager(this, numberOfColumns);
-        people.setLayoutManager(photoManager);
-        people.setHasFixedSize(true);
-        people.setAdapter(photoAdapter);
-
-
-        if (savedInstanceState == null) {
-
-            // make the network call to retrieve the list of people
-            Disposable personListSubscription = personRepo.retrievePersonList()
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(personList -> {
-                        Log.d(TAG, "Retrieved new list from repository: " + personList);
-                        gameBoardManager.setPersonList(personList);
-                        gameBoardManager.generateGameBoard();
-                        // show the game board now that everything has loaded
-                        setGameVisibility(true);
-                    }, throwable -> {
-                        gamePromptTextView.setText(R.string.generic_error);
-                        setGameVisibility(true);
-                    });
-
-            // set up the personList subscription to be disposed of when the activity is destroyed
-            disposables = new CompositeDisposable();
-            disposables.add(personListSubscription);
-        } else setGameVisibility(true); // if re-creating (i.e. rotating), just show the game board
-    }
-
-    void setGameVisibility(boolean makeVisible) {
-        if (makeVisible) {
-            // hide progress bar
-            progressBar.setVisibility(View.GONE);
-            // show photos and prompt text
-            people.setVisibility(View.VISIBLE);
-            gamePromptTextView.setVisibility(View.VISIBLE);
-        } else {
-            // hide photos and prompt text
-            people.setVisibility(View.GONE);
-            gamePromptTextView.setVisibility(View.GONE);
-            // show progress bar while board loads
-            progressBar.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override
-    protected void onDestroy() {
-        if (disposables != null) disposables.dispose();
+    public void onDestroy() {
         gameBoardManager.unsetShuffledListListener(namePromptListener);
         super.onDestroy();
     }
-
-    String createNamePrompt(List<Person> shuffledList, int index) {
-        String namePrompt;
-        String name = shuffledList.get(index).getName();
-        namePrompt = "Who is " + name + "?";
-
-        return namePrompt;
-    }
-
 }

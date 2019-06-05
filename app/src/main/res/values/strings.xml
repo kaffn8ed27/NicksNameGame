@@ -17,6 +17,8 @@
     <string name="game_activity_name">Name That Co-Worker!</string>
     <!--settings menu title-->
     <string name="action_settings">Settings</string>
+    <!--game board fragment tag-->
+    <string name="game_board_tag" translatable="false">game_board_fragment</string>
     <!--placeholders for the labels that will identify the recyclerView in the pictures-->
     <string name="John" translatable="false">John</string>
     <string name="Paul" translatable="false">Paul</string>

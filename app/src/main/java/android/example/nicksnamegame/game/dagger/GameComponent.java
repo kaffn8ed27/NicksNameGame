@@ -1,8 +1,9 @@
 package android.example.nicksnamegame.game.dagger;
 
 import android.content.Context;
-import android.example.nicksnamegame.game.game_board.game_controller.GameActivity;
 import android.example.nicksnamegame.game.game_board.PersonViewHolder;
+import android.example.nicksnamegame.game.game_board.game_controller.GameActivity;
+import android.example.nicksnamegame.game.game_board.game_controller.GameBoardFragment;
 
 import javax.inject.Singleton;
 
@@ -23,6 +24,8 @@ public interface GameComponent {
     }
 
     void injectInto(GameActivity gameActivity);
+
+    void injectInto(GameBoardFragment gameBoardFragment);
 
     void injectInto(PersonViewHolder personViewHolder);
 

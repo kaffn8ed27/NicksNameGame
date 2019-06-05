@@ -10,7 +10,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 public class GameScreen {
 
-    private ViewInteraction photoRecyclerView = onView(withId(R.id.rv_photos));
+    private ViewInteraction photoRecyclerView = onView(withId(R.id.rv_people));
     private ViewInteraction gamePromptTextView = onView(withId(R.id.game_prompt));
     private ViewInteraction nextButton = onView(withId(R.id.next_button));
 
