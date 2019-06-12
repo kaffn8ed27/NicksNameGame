@@ -14,7 +14,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-abstract class GameModule {
+abstract class AppModule {
 
     @Singleton
     @Provides

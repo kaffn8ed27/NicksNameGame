@@ -22,31 +22,26 @@ public class PersonViewHolder extends RecyclerView.ViewHolder
         implements View.OnClickListener {
 
     private final String TAG = PersonViewHolder.class.getSimpleName();
-
-    private TextView personNameView;
-    private ImageView personPhotoView;
-    private Person person;
-
     @Inject
     NextButtonManager nextButtonManager;
     @Inject
     GameBoardManager gameBoardManager;
+    private TextView personNameView;
+    private ImageView personPhotoView;
+    private Person person;
 
     PersonViewHolder(View v) {
-
         super(v);
         ((GameApplication) v.getContext().getApplicationContext())
-                .getGameComponent()
+                .getAppComponent()
                 .injectInto(PersonViewHolder.this);
         personNameView = v.findViewById(R.id.coworker_name);
         personPhotoView = v.findViewById(R.id.coworker_photo);
         v.setOnClickListener(this);
-
     }
 
     @Override
     public void onClick(View v) {
-
         if (!gameBoardManager.getCorrectAnswerClicked()) {
             Log.d(TAG, "Click registered");
             // Add the person's ID to the list of clicked people
@@ -59,7 +54,6 @@ public class PersonViewHolder extends RecyclerView.ViewHolder
     }
 
     void bind(Person person) {
-
         this.person = person;
         String headShotUrl;
         if (person.getHeadShotUrl() != null) {
@@ -91,7 +85,6 @@ public class PersonViewHolder extends RecyclerView.ViewHolder
     }
 
     private int setForegroundColor() {
-
         int foregroundColor;
         // find out which person is correct
         int correctAnswerIndex = gameBoardManager.getCorrectAnswerIndex();
@@ -109,6 +102,5 @@ public class PersonViewHolder extends RecyclerView.ViewHolder
             foregroundColor = R.color.chose_poorly;
         }
         return foregroundColor;
-
     }
 }

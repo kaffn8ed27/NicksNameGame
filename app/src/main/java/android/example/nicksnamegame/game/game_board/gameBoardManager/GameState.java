@@ -1,15 +1,16 @@
 package android.example.nicksnamegame.game.game_board.gameBoardManager;
 
 
+import android.example.nicksnamegame.game.dagger.GameBoardScope;
+
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
+@GameBoardScope
 class GameState {
 
     private List<String> clickedIds = new ArrayList<>();

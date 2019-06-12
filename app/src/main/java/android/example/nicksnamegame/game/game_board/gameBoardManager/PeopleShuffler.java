@@ -23,7 +23,7 @@ public class PeopleShuffler {
         this(context.getResources().getInteger(R.integer.number_game_photos), random);
     }
 
-    PeopleShuffler(int numberOfCoworkers, Random random) {
+    public PeopleShuffler(int numberOfCoworkers, Random random) {
 
         NUM_COWORKERS_TO_SHOW = numberOfCoworkers;
         Log.d(TAG, "# people to display: " + NUM_COWORKERS_TO_SHOW);

@@ -2,4 +2,5 @@
 <resources>
     <integer name="number_game_columns">2</integer>
     <integer name="number_game_photos">6</integer>
+    <integer name="number_limit_game_questions">5</integer>
 </resources>

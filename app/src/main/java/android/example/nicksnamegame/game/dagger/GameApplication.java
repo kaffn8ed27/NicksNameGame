@@ -3,20 +3,20 @@ package android.example.nicksnamegame.game.dagger;
 import android.app.Application;
 
 public class GameApplication extends Application {
-    private GameComponent gameComponent;
+    private AppComponent appComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        gameComponent = createGameComponent();
+        appComponent = createAppComponent();
     }
 
-    public GameComponent getGameComponent() {
-        return gameComponent;
+    public AppComponent getAppComponent() {
+        return appComponent;
     }
 
-    private GameComponent createGameComponent() {
-        return DaggerGameComponent
+    private AppComponent createAppComponent() {
+        return DaggerAppComponent
                 .builder()
                 .withContext(this)
                 .build();

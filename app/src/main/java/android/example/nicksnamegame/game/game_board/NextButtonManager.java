@@ -10,15 +10,17 @@ import javax.inject.Singleton;
 @Singleton
 public class NextButtonManager {
 
-    private final GameBoardManager gameBoardManager;
+    private GameBoardManager gameBoardManager;
 
     private FloatingActionButton fab;
 
     @Inject
-    NextButtonManager(GameBoardManager gameBoardManager) {
-        this.gameBoardManager = gameBoardManager;
+    NextButtonManager() {
     }
 
+    public void setGameBoardManager(GameBoardManager gameBoardManager) {
+        this.gameBoardManager = gameBoardManager;
+    }
 
     public void setFab(FloatingActionButton fab) {
 
@@ -28,13 +30,15 @@ public class NextButtonManager {
 
     }
 
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(boolean isEnabled) {
 
-        gameBoardManager.setCorrectAnswerClicked(enabled);
-        fab.setClickable(enabled);
+        gameBoardManager.setCorrectAnswerClicked(isEnabled);
+        if (fab != null) {
+            fab.setClickable(isEnabled);
 
-        if (enabled) fab.show();
-        else fab.hide();
+            if (isEnabled) fab.show();
+            else fab.hide();
+        }
 
     }
 

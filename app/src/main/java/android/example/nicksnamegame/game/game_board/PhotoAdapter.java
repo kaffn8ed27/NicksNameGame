@@ -3,22 +3,22 @@ package android.example.nicksnamegame.game.game_board;
 import android.content.Context;
 import android.example.nicksnamegame.R;
 import android.example.nicksnamegame.data.db.Person;
-import android.example.nicksnamegame.game.game_board.gameBoardManager.ShuffledListListener;
+import android.example.nicksnamegame.game.dagger.GameBoardScope;
 import android.example.nicksnamegame.game.game_board.gameBoardManager.GameBoardManager;
+import android.example.nicksnamegame.game.game_board.gameBoardManager.ShuffledListListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import java.util.List;
 
-@Singleton
+import javax.inject.Inject;
+
+@GameBoardScope
 public class PhotoAdapter extends RecyclerView.Adapter<PersonViewHolder> {
 
     private static final String TAG = PhotoAdapter.class.getSimpleName();

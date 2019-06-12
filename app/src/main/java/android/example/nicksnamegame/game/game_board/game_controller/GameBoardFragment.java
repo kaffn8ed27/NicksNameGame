@@ -3,7 +3,9 @@ package android.example.nicksnamegame.game.game_board.game_controller;
 import android.example.nicksnamegame.R;
 import android.example.nicksnamegame.data.PersonRepo;
 import android.example.nicksnamegame.data.db.Person;
+import android.example.nicksnamegame.game.dagger.DaggerGameBoardComponent;
 import android.example.nicksnamegame.game.dagger.GameApplication;
+import android.example.nicksnamegame.game.dagger.GameBoardComponent;
 import android.example.nicksnamegame.game.game_board.PhotoAdapter;
 import android.example.nicksnamegame.game.game_board.gameBoardManager.GameBoardManager;
 import android.example.nicksnamegame.game.game_board.gameBoardManager.ShuffledListListener;
@@ -32,19 +34,20 @@ import io.reactivex.disposables.Disposable;
 public class GameBoardFragment extends Fragment {
 
     private static final String TAG = GameBoardFragment.class.getSimpleName();
-
+    private static String fragment_value_key;
     @Inject
     PhotoAdapter photoAdapter;
     @Inject
     GameBoardManager gameBoardManager;
     @Inject
     PersonRepo personRepo;
-
+    private int fragmentValue;
     private RecyclerView peopleRecyclerView;
     private TextView gamePromptTextView;
     private ProgressBar progressBar;
     private ShuffledListListener namePromptListener;
     private CompositeDisposable disposables;
+    private GameBoardComponent gameBoardComponent;
 
     /* TODO - tracking: if answered right on the first try, remove coworker from the pool.
      *  If there aren't enough people left in the pool to fill the grid, allow "wrong" answers
@@ -52,15 +55,30 @@ public class GameBoardFragment extends Fragment {
      *  until the pool is empty and the game is restarted
      */
 
+    public GameBoardFragment() {
+        fragment_value_key = getString(R.string.fragment_value_key);
+    }
+
+    public static GameBoardFragment newInstance(int fragmentValue) {
+        GameBoardFragment newGameBoardFragment = new GameBoardFragment();
+        Bundle args = new Bundle();
+        args.putInt(fragment_value_key, fragmentValue);
+        newGameBoardFragment.setArguments(args);
+        return newGameBoardFragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         // dependencies, DB & network transactions - any setup that does not require views
         super.onCreate(savedInstanceState);
-
+        // create a GameBoardComponent to inject dependencies
+        gameBoardComponent = DaggerGameBoardComponent.builder()
+                .appComponent(
+                        ((GameApplication) requireActivity().getApplication()).getAppComponent())
+                .build();
         // inject dependencies
-        ((GameApplication) getActivity().getApplication())
-                .getGameComponent()
-                .injectInto(GameBoardFragment.this);
+        gameBoardComponent.injectInto(GameBoardFragment.this);
+        this.fragmentValue = getArguments() != null ? getArguments().getInt(fragment_value_key) : -1;
     }
 
     @Nullable
@@ -74,9 +92,9 @@ public class GameBoardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         // manipulating views i.e. findViewById & data insertion
-        peopleRecyclerView = getActivity().findViewById(R.id.rv_people);
-        gamePromptTextView = getActivity().findViewById(R.id.game_prompt);
-        progressBar = getActivity().findViewById(R.id.progress_bar);
+        peopleRecyclerView = view.findViewById(R.id.rv_people);
+        gamePromptTextView = view.findViewById(R.id.game_prompt);
+        progressBar = view.findViewById(R.id.progress_bar);
 
         // hide the game board while everything else loads
         setGameVisibility(false);
@@ -156,5 +174,9 @@ public class GameBoardFragment extends Fragment {
         namePrompt = "Who is " + name + "?";
 
         return namePrompt;
+    }
+
+    public int getFragmentValue() {
+        return fragmentValue;
     }
 }

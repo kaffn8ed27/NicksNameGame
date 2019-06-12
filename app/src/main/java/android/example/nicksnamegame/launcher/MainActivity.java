@@ -1,11 +1,10 @@
 package android.example.nicksnamegame.launcher;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.example.nicksnamegame.R;
 import android.example.nicksnamegame.game.game_board.game_controller.GameActivity;
+import android.example.nicksnamegame.limit_game.game_board.LimitGameActivity;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -13,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity
 implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -47,6 +48,11 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
         defaultGameButton.setOnClickListener(v -> {
             Intent startGameIntent = new Intent(MainActivity.this, GameActivity.class);
             startActivity(startGameIntent);
+        });
+        Button limitGameButton = findViewById(R.id.limit_game_button);
+        limitGameButton.setOnClickListener(v -> {
+            Intent startLimitGameIntent = new Intent(MainActivity.this, LimitGameActivity.class);
+            startActivity(startLimitGameIntent);
         });
     }
 

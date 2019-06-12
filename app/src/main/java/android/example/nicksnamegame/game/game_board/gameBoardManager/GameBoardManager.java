@@ -1,16 +1,16 @@
 package android.example.nicksnamegame.game.game_board.gameBoardManager;
 
 import android.example.nicksnamegame.data.db.Person;
+import android.example.nicksnamegame.game.dagger.GameBoardScope;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 
-@Singleton
+@GameBoardScope
 public class GameBoardManager {
 
     private static final String TAG = GameBoardManager.class.getSimpleName();
@@ -23,12 +23,14 @@ public class GameBoardManager {
     private List<ShuffledListListener> listeners;
 
     @Inject
-    GameBoardManager(PeopleShuffler peopleShuffler, GameState gameState) {
-
+    public GameBoardManager(PeopleShuffler peopleShuffler, GameState gameState) {
         this.peopleShuffler = peopleShuffler;
         this.gameState = gameState;
         this.listeners = new ArrayList<>();
+    }
 
+    public static GameState newGameState() {
+        return new GameState();
     }
 
     // receives the list returned from the API

@@ -22,6 +22,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".limit_game.game_board.LimitGameActivity"
+            android:label="@string/game_activity_name"
+            android:screenOrientation="behind"
+            android:theme="@style/AppTheme.GameTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".launcher.MainActivity"
             android:label="@string/launcher_label"
             android:launchMode="singleTop"
@@ -35,6 +44,7 @@
             android:name=".launcher.SettingsActivity"
             android:label="@string/action_settings"
             android:parentActivityName=".launcher.MainActivity" />
+
     </application>
 
 </manifest>

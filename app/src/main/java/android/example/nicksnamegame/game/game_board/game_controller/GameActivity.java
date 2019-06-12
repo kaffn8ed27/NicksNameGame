@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.example.nicksnamegame.R;
 import android.example.nicksnamegame.game.dagger.GameApplication;
 import android.example.nicksnamegame.game.game_board.NextButtonManager;
-import android.example.nicksnamegame.game.game_board.gameBoardManager.GameBoardManager;
 import android.example.nicksnamegame.game.game_board.gameBoardManager.ShuffledListListener;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -32,8 +31,6 @@ public class GameActivity extends AppCompatActivity {
 
     @Inject
     NextButtonManager nextButtonManager;
-    @Inject
-    GameBoardManager gameBoardManager;
 
     private void setupSharedPreferences() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -64,7 +61,7 @@ public class GameActivity extends AppCompatActivity {
 
         // inject dependencies
         ((GameApplication) getApplication())
-                .getGameComponent()
+                .getAppComponent()
                 .injectInto(GameActivity.this);
 
         // prepare the nextButton FAB
@@ -76,12 +73,12 @@ public class GameActivity extends AppCompatActivity {
             nextButtonManager.setEnabled(false);
         });
 
-        gameBoardManager.setShuffledListListener(nextButtonListener);
+//        gameBoardManager.setShuffledListListener(nextButtonListener);
     }
 
     @Override
     public void onDestroy() {
-        gameBoardManager.unsetShuffledListListener(nextButtonListener);
+//        gameBoardManager.unsetShuffledListListener(nextButtonListener);
         super.onDestroy();
     }
 }
