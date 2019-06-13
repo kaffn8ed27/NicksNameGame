@@ -23,7 +23,7 @@ public class PeopleShuffler {
         this(context.getResources().getInteger(R.integer.number_game_photos), random);
     }
 
-    public PeopleShuffler(int numberOfCoworkers, Random random) {
+    PeopleShuffler(int numberOfCoworkers, Random random) {
 
         NUM_COWORKERS_TO_SHOW = numberOfCoworkers;
         Log.d(TAG, "# people to display: " + NUM_COWORKERS_TO_SHOW);
@@ -54,7 +54,6 @@ public class PeopleShuffler {
                     break; // don't process the rest of the list once a duplicate is found
                 }
             }
-
             /* This will not eliminate 100% of duplicates (e.g. "John Doe" and "Johnathan Doe"
              * with 2 different head shots), but so far it seems to have eliminated all the ones
              * returned by the current version of the API */

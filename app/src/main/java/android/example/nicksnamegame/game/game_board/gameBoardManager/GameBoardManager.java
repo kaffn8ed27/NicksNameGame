@@ -2,6 +2,7 @@ package android.example.nicksnamegame.game.game_board.gameBoardManager;
 
 import android.example.nicksnamegame.data.db.Person;
 import android.example.nicksnamegame.game.dagger.GameBoardScope;
+import android.example.nicksnamegame.game.game_board.game_controller.CorrectAnswerListener;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -20,17 +21,15 @@ public class GameBoardManager {
 
     private List<Person> shuffledList;
     private List<Person> personList;
-    private List<ShuffledListListener> listeners;
+    private List<ShuffledListListener> shuffledListListeners;
+    private List<CorrectAnswerListener> correctAnswerListeners;
 
     @Inject
     public GameBoardManager(PeopleShuffler peopleShuffler, GameState gameState) {
         this.peopleShuffler = peopleShuffler;
         this.gameState = gameState;
-        this.listeners = new ArrayList<>();
-    }
-
-    public static GameState newGameState() {
-        return new GameState();
+        this.shuffledListListeners = new ArrayList<>();
+        this.correctAnswerListeners = new ArrayList<>();
     }
 
     // receives the list returned from the API
@@ -43,7 +42,6 @@ public class GameBoardManager {
 
     // the actions to be taken when the game is opened, and when the "next" button is clicked
     public void generateGameBoard() {
-
         Log.d(TAG, "Generating new game board");
         // reset tracking of photos that have been clicked
         gameState.clearClickedIds();
@@ -52,9 +50,8 @@ public class GameBoardManager {
         // Choose a person to be the correct answer
         gameState.setCorrectAnswerIndex((int) (Math.random() * shuffledList.size()));
         // set up the adapter with the new list
-        for (ShuffledListListener listener : listeners)
+        for (ShuffledListListener listener : shuffledListListeners)
             listener.onNewShuffledList(shuffledList);
-
     }
 
     /* For other classes to register a listener for the creation of a new shuffled list
@@ -62,15 +59,18 @@ public class GameBoardManager {
      */
 
     public void setShuffledListListener(ShuffledListListener listener) {
-
-        this.listeners.add(listener);
+        this.shuffledListListeners.add(listener);
         if (shuffledList != null) listener.onNewShuffledList(shuffledList);
+    }
 
+    public void setCorrectAnswerListener(CorrectAnswerListener listener) {
+        this.correctAnswerListeners.add(listener);
+        if(this.getCorrectAnswerClicked()) listener.onCorrectAnswerClicked();
     }
 
     // for other classes to unregister their listener - e.g. in GameActivity's onDestroy
     public void unsetShuffledListListener(ShuffledListListener listener) {
-        listeners.remove(listener);
+        shuffledListListeners.remove(listener);
     }
 
     /* GameState management
@@ -86,6 +86,12 @@ public class GameBoardManager {
 
     public void setCorrectAnswerClicked(boolean correctAnswerClicked) {
         gameState.setCorrectAnswerClicked(correctAnswerClicked);
+        if(correctAnswerClicked) {
+            // fire callback to listeners
+            for(CorrectAnswerListener listener: correctAnswerListeners) {
+                listener.onCorrectAnswerClicked();
+            }
+        }
     }
 
     public void registerNewClickedPerson(String id) {

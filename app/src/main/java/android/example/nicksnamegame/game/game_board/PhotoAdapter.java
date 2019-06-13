@@ -4,6 +4,7 @@ import android.content.Context;
 import android.example.nicksnamegame.R;
 import android.example.nicksnamegame.data.db.Person;
 import android.example.nicksnamegame.game.dagger.GameBoardScope;
+import android.example.nicksnamegame.game.dagger.PersonViewComponent;
 import android.example.nicksnamegame.game.game_board.gameBoardManager.GameBoardManager;
 import android.example.nicksnamegame.game.game_board.gameBoardManager.ShuffledListListener;
 import android.util.Log;
@@ -24,10 +25,11 @@ public class PhotoAdapter extends RecyclerView.Adapter<PersonViewHolder> {
     private static final String TAG = PhotoAdapter.class.getSimpleName();
 
     private List<Person> coworkers;
-
+    private PersonViewComponent.Builder personViewBuilder;
 
     @Inject
-    PhotoAdapter(GameBoardManager gameBoardManager) {
+    PhotoAdapter(GameBoardManager gameBoardManager, PersonViewComponent.Builder personViewBuilder) {
+        this.personViewBuilder = personViewBuilder;
         ShuffledListListener listener = (shuffledList -> {
             if (shuffledList != null) {
                 this.coworkers = shuffledList;
@@ -44,9 +46,8 @@ public class PhotoAdapter extends RecyclerView.Adapter<PersonViewHolder> {
         int layoutIdForPhotoGroup = R.layout.photo_group;
         LayoutInflater inflater = LayoutInflater.from(context);
         boolean shouldAttachToParentImmediately = false;
-
         View view = inflater.inflate(layoutIdForPhotoGroup, viewGroup, shouldAttachToParentImmediately);
-        return new PersonViewHolder(view);
+        return personViewBuilder.withView(view).build().getPersonViewHolder();
     }
 
     @Override

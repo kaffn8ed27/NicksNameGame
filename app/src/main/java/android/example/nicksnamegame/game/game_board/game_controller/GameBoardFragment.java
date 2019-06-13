@@ -55,10 +55,6 @@ public class GameBoardFragment extends Fragment {
      *  until the pool is empty and the game is restarted
      */
 
-    public GameBoardFragment() {
-        fragment_value_key = getString(R.string.fragment_value_key);
-    }
-
     public static GameBoardFragment newInstance(int fragmentValue) {
         GameBoardFragment newGameBoardFragment = new GameBoardFragment();
         Bundle args = new Bundle();
@@ -71,6 +67,7 @@ public class GameBoardFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         // dependencies, DB & network transactions - any setup that does not require views
         super.onCreate(savedInstanceState);
+        fragment_value_key = getString(R.string.fragment_value_key);
         // create a GameBoardComponent to inject dependencies
         gameBoardComponent = DaggerGameBoardComponent.builder()
                 .appComponent(
@@ -86,7 +83,6 @@ public class GameBoardFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // inflate the layout & return empty view
         return inflater.inflate(R.layout.fragment_game_board, container, false);
-//        return super.onCreateView(inflater, container, savedInstanceState); // replace this with the layout's root view
     }
 
     @Override
@@ -140,12 +136,6 @@ public class GameBoardFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        // adding Fragment to the back stack
-    }
-
-    @Override
     public void onDestroy() {
         if (disposables != null) disposables.dispose();
         gameBoardManager.unsetShuffledListListener(namePromptListener);
@@ -174,6 +164,10 @@ public class GameBoardFragment extends Fragment {
         namePrompt = "Who is " + name + "?";
 
         return namePrompt;
+    }
+
+    public GameBoardManager getGameBoardManager() {
+        return this.gameBoardManager;
     }
 
     public int getFragmentValue() {

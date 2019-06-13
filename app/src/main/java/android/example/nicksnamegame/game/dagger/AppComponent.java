@@ -17,13 +17,6 @@ import dagger.Component;
 @Component(modules = AppModule.class)
 
 public interface AppComponent {
-    @Component.Builder
-    interface Builder {
-        AppComponent build();
-
-        @BindsInstance
-        Builder withContext(Context context);
-    }
 
     // getters for child component(s)
     Context getContext();
@@ -34,4 +27,12 @@ public interface AppComponent {
     void injectInto(GameActivity gameActivity);
 
     void injectInto(LimitGameActivity limitGameActivity);
+
+    @Component.Builder
+    interface Builder {
+        AppComponent build();
+
+        @BindsInstance
+        Builder withContext(Context context);
+    }
 }
