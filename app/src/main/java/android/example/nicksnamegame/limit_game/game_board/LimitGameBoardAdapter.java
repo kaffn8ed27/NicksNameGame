@@ -2,6 +2,7 @@ package android.example.nicksnamegame.limit_game.game_board;
 
 import android.example.nicksnamegame.game.game_board.game_controller.GameBoardFragment;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -22,5 +23,11 @@ public class LimitGameBoardAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return NUM_QUESTIONS;
+    }
+
+    @Nullable
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return "QUESTION " + (position + 1);
     }
 }

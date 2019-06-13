@@ -23,10 +23,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import javax.inject.Inject;
 
 
-public class GameActivity extends AppCompatActivity  implements View.OnClickListener {
+public class GameActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = GameActivity.class.getSimpleName();
-
     /* TODO - tracking: if answered right on the first try, remove coworker from the pool.
      *  If there aren't enough people left in the pool to fill the grid, allow "wrong" answers
      *  to come from the list of known people, but make sure they're never the "right" answer again
@@ -34,6 +33,7 @@ public class GameActivity extends AppCompatActivity  implements View.OnClickList
      */
     @Inject
     NextButtonManager nextButtonManager;
+    private String FRAGMENT_KEY_TAG;
     private ShuffledListListener shuffledListListener;
     private CorrectAnswerListener correctAnswerListener;
 
@@ -46,43 +46,19 @@ public class GameActivity extends AppCompatActivity  implements View.OnClickList
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_game);
-
-        setupSharedPreferences();
+        FRAGMENT_KEY_TAG = getString(R.string.game_board_tag);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-
         // inject dependencies
         ((GameApplication) getApplication())
                 .getAppComponent()
                 .injectInto(GameActivity.this);
-
-        // check FragmentManager and only create a new one if there isn't a GameBoardFragment
-        // i.e., upon rotation
-        if (fragmentManager.findFragmentByTag(getString(R.string.game_board_tag)) == null) {
-            Log.d(TAG, "No fragment found. Creating new one.");
-            // Replace game board fragment placeholder with actual fragment
-            FragmentTransaction ft = fragmentManager.beginTransaction();
-            ft.replace(R.id.game_board_placeholder, new GameBoardFragment(), getString(R.string.game_board_tag));
-            ft.commit();
-        } else {
-            Log.d(TAG, "Using existing fragment");
-        }
-
-        // prepare the nextButton FAB
-        FloatingActionButton nextButton = findViewById(R.id.next_button);
-        nextButtonManager.setFab(nextButton);
-        nextButtonManager.setOnClickListener(this);
+        // listener to enable Next button
+        correctAnswerListener = (() -> nextButtonManager.setEnabled(true));
         shuffledListListener = (shuffledList -> {
             // disable nextButton FAB
             nextButtonManager.setEnabled(false);
         });
-
-        // listener to enable Next button
-        correctAnswerListener = (() -> nextButtonManager.setEnabled(true));
 
         // when a GameBoardFragment is created, get its GameBoardManager and pass it to the NextButtonManager
         fragmentManager.registerFragmentLifecycleCallbacks(new FragmentManager.FragmentLifecycleCallbacks() {
@@ -93,27 +69,50 @@ public class GameActivity extends AppCompatActivity  implements View.OnClickList
                     GameBoardFragment gameBoardFragment = (GameBoardFragment) (f);
                     // retrieve the GBM from the fragment
                     GameBoardManager gameBoardManager = gameBoardFragment.getGameBoardManager();
-                    // register the GBM with the Next button manager
-                    nextButtonManager.setGameBoardManager(gameBoardManager);
                     // pass listeners into GBM
                     gameBoardManager.setCorrectAnswerListener(correctAnswerListener);
                     gameBoardManager.setShuffledListListener(shuffledListListener);
                 }
             }
         }, false);
+
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_game);
+
+        setupSharedPreferences();
+
+
+        /* check FragmentManager and only create a new one if there isn't a GameBoardFragment
+         *  i.e., upon rotation
+         */
+        GameBoardFragment gameBoardFragment;
+        if (fragmentManager.findFragmentByTag(FRAGMENT_KEY_TAG) == null) {
+            Log.d(TAG, "No fragment found. Creating new one.");
+            gameBoardFragment = new GameBoardFragment();
+            // Replace game board fragment placeholder with actual fragment (new or existing)
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+            ft.replace(R.id.game_board_placeholder, gameBoardFragment, FRAGMENT_KEY_TAG);
+            ft.commit();
+        }
+        Fragment f = fragmentManager.findFragmentById(R.id.game_board_placeholder);
+
+        // prepare the nextButton FAB
+        FloatingActionButton nextButton = findViewById(R.id.next_button);
+        nextButtonManager.setFab(nextButton);
+        nextButtonManager.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction newFragment = fragmentManager.beginTransaction();
-        Fragment completedGameBoardFragment = fragmentManager
-                .findFragmentByTag(getString(R.string.game_board_tag));
+        Fragment completedGameBoardFragment = fragmentManager.findFragmentByTag(FRAGMENT_KEY_TAG);
         if (completedGameBoardFragment != null) {
             newFragment.remove(completedGameBoardFragment);
         }
         GameBoardFragment newGameBoardFragment = new GameBoardFragment();
-        newFragment.replace(R.id.game_board_placeholder, newGameBoardFragment, getString(R.string.game_board_tag));
+        newFragment.replace(R.id.game_board_placeholder, newGameBoardFragment, FRAGMENT_KEY_TAG);
         newFragment.commit();
     }
 

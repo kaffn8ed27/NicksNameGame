@@ -114,14 +114,12 @@ public class GameBoardFragment extends Fragment {
 
 
         if (savedInstanceState == null) {
-
             // make the network call to retrieve the list of people
             Disposable personListSubscription = personRepo.retrievePersonList()
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(personList -> {
                         Log.d(TAG, "Retrieved new list from repository: " + personList);
-                        gameBoardManager.setPersonList(personList);
-                        gameBoardManager.generateGameBoard();
+                        gameBoardManager.generateGameBoard(personList);
                         // show the game board now that everything has loaded
                         setGameVisibility(true);
                     }, throwable -> {
@@ -132,7 +130,16 @@ public class GameBoardFragment extends Fragment {
             // set up the personList subscription to be disposed of when the activity is destroyed
             disposables = new CompositeDisposable();
             disposables.add(personListSubscription);
-        } else setGameVisibility(true); // if re-creating (i.e. rotating), just show the game board
+        } else {
+            gameBoardManager.restoreState(savedInstanceState);
+            setGameVisibility(true); // if re-creating (i.e. rotating), just show the game board
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        gameBoardManager.saveState(outState);
     }
 
     @Override

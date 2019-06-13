@@ -24,11 +24,8 @@ public class PeopleShuffler {
     }
 
     PeopleShuffler(int numberOfCoworkers, Random random) {
-
         NUM_COWORKERS_TO_SHOW = numberOfCoworkers;
-        Log.d(TAG, "# people to display: " + NUM_COWORKERS_TO_SHOW);
         this.random = random;
-
     }
 
     List<Person> chooseCoworkers(List<Person> personList) {

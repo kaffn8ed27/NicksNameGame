@@ -2,7 +2,6 @@ package android.example.nicksnamegame.game.dagger;
 
 import android.content.Context;
 import android.example.nicksnamegame.data.PersonRepo;
-import android.example.nicksnamegame.game.game_board.NextButtonManager;
 import android.example.nicksnamegame.game.game_board.game_controller.GameActivity;
 import android.example.nicksnamegame.limit_game.game_board.LimitGameActivity;
 
@@ -22,7 +21,6 @@ public interface AppComponent {
     Context getContext();
     PersonRepo getPersonRepo();
     Random getRandom();
-    NextButtonManager getNextButtonManager();
 
     void injectInto(GameActivity gameActivity);
 

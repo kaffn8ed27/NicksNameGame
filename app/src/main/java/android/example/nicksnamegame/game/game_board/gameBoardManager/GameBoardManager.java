@@ -3,6 +3,7 @@ package android.example.nicksnamegame.game.game_board.gameBoardManager;
 import android.example.nicksnamegame.data.db.Person;
 import android.example.nicksnamegame.game.dagger.GameBoardScope;
 import android.example.nicksnamegame.game.game_board.game_controller.CorrectAnswerListener;
+import android.os.Bundle;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -19,8 +20,6 @@ public class GameBoardManager {
     private final PeopleShuffler peopleShuffler;
     private final GameState gameState;
 
-    private List<Person> shuffledList;
-    private List<Person> personList;
     private List<ShuffledListListener> shuffledListListeners;
     private List<CorrectAnswerListener> correctAnswerListeners;
 
@@ -32,23 +31,20 @@ public class GameBoardManager {
         this.correctAnswerListeners = new ArrayList<>();
     }
 
-    // receives the list returned from the API
-    public void setPersonList(List<Person> personList) {
-
-        this.personList = personList;
-        Log.d(TAG, "personList received");
-
-    }
-
     // the actions to be taken when the game is opened, and when the "next" button is clicked
-    public void generateGameBoard() {
+    public void generateGameBoard(List<Person> personList) {
         Log.d(TAG, "Generating new game board");
         // reset tracking of photos that have been clicked
         gameState.clearClickedIds();
         // grab a new set of people for the game board
-        shuffledList = peopleShuffler.chooseCoworkers(personList);
+        List<Person> shuffledList = peopleShuffler.chooseCoworkers(personList);
+        gameState.setShuffledList(shuffledList);
         // Choose a person to be the correct answer
         gameState.setCorrectAnswerIndex((int) (Math.random() * shuffledList.size()));
+        onNewShuffledList(shuffledList);
+    }
+
+    private void onNewShuffledList(List<Person> shuffledList) {
         // set up the adapter with the new list
         for (ShuffledListListener listener : shuffledListListeners)
             listener.onNewShuffledList(shuffledList);
@@ -60,6 +56,7 @@ public class GameBoardManager {
 
     public void setShuffledListListener(ShuffledListListener listener) {
         this.shuffledListListeners.add(listener);
+        List<Person> shuffledList = gameState.getShuffledList();
         if (shuffledList != null) listener.onNewShuffledList(shuffledList);
     }
 
@@ -75,7 +72,7 @@ public class GameBoardManager {
 
     /* GameState management
      *
-     * Mostly just a pass-through to GameState methods, but gathering them all here eliminates the
+     * Mostly just pass-throughs to GameState methods, but gathering them all here eliminates the
      * need to inject GameState and GameBoardManager into every class that needs access to the
      * GameState. Instead, inject GameBoardManager and access GameState via these methods.
      */
@@ -110,5 +107,13 @@ public class GameBoardManager {
         return gameState.getCorrectAnswerIndex();
     }
 
+    public void saveState(Bundle bundle) {
+        gameState.saveState(bundle);
+    }
+
+    public void restoreState(Bundle bundle) {
+        gameState.restoreState(bundle);
+        onNewShuffledList(gameState.getShuffledList());
+    }
 }
 
