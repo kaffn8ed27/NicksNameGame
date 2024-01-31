@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--settings menu title-->
+    <string name="action_settings">Ajustes</string>
+    <string name="pref_dark_theme_label">Tema (esquema de colores)</string>
+    <!--main activity-->
+    <string name="app_name">Juego de los Nombres de Nico</string>
+    <string name="launcher_label">Juego de Nombres de Nico</string>
+    <!--label for splash screen-->
+    <string name="launch_activity_name">Selecciona Modo de Juego</string>
+    <!--default game mode button text-->
+    <string name="default_game_button_text">Partido Sin Fin</string>
+    <!--default game mode button text-->
+    <string name="limit_game_button_text">Partida Breve</string>
+    <!--game activity-->
+    <!--label for default game screen-->
+    <string name="game_activity_name">¡Nombra a Ese Compañero del Trabajo!</string>
+    <!--misc-->
+    <!--User-friendly generic error message-->
+    <string name="generic_error">¡Lo siento! Algo salió mal.</string>
+</resources>
