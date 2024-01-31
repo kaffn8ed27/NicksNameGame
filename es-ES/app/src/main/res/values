@@ -15,7 +15,7 @@
     <string name="limit_game_button_text">Partida Breve</string>
     <!--game activity-->
     <!--label for default game screen-->
-    <string name="game_activity_name">¡Nombra a Ese Cotrabajandor!</string>
+    <string name="game_activity_name">¡Nombra a Ese Compañero del Trabajo!</string>
     <!--game board fragment tag-->
     <!--URL for the API-->
     <string name="api_url">http://www.willowtreeapps.com/api/v1.0/profiles</string>
