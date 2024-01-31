@@ -2,20 +2,20 @@
 <resources>
     <!--Preferences-->
     <!--settings menu title-->
-    <string name="action_settings">Settings</string>
-    <string name="pref_dark_theme_label">Theme (color scheme)</string>
+    <string name="action_settings">Ajustes</string>
+    <string name="pref_dark_theme_label">Tema (esquema de colores)</string>
     <!--main activity-->
     <string name="app_name">NicksNameGame</string>
-    <string name="launcher_label">Nick\'s Name Game</string>
+    <string name="launcher_label">Juego de Nombres de Nico</string>
     <!--label for splash screen-->
-    <string name="launch_activity_name">Select Game Mode</string>
+    <string name="launch_activity_name">Selecciona Modo de Juego</string>
     <!--default game mode button text-->
-    <string name="default_game_button_text">Never-Ending Game</string>
+    <string name="default_game_button_text">Partido Sin Fin</string>
     <!--default game mode button text-->
-    <string name="limit_game_button_text">Short Game</string>
+    <string name="limit_game_button_text">Partida Breve</string>
     <!--game activity-->
     <!--label for default game screen-->
-    <string name="game_activity_name">Name That Co-Worker!</string>
+    <string name="game_activity_name">¡Nombra a Ese Compañero del Trabajo!</string>
     <!--game board fragment tag-->
     <!--URL for the API-->
     <string name="api_url">http://www.willowtreeapps.com/api/v1.0/profiles</string>
@@ -24,5 +24,5 @@
     <!--key tags-->
     <!--misc-->
     <!--User-friendly generic error message-->
-    <string name="generic_error">Sorry! Something went wrong.</string>
+    <string name="generic_error">¡Lo siento! Algo salió mal.</string>
 </resources>
