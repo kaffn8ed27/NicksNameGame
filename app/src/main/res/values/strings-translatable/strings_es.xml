@@ -4,7 +4,7 @@
     <string name="action_settings">Ajustes</string>
     <string name="pref_dark_theme_label">Tema (esquema de colores)</string>
     <!--main activity-->
-    <string name="app_name">Juego de los Nombres de Nico</string>
+    <string name="app_name">Nick\'s Name Game</string>
     <string name="launcher_label">Juego de Nombres de Nico</string>
     <!--label for splash screen-->
     <string name="launch_activity_name">Selecciona Modo de Juego</string>
