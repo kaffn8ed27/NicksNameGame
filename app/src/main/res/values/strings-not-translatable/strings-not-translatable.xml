@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Preferences-->
+    <string name="pref_dark_theme_key" translatable="false">theme_dark</string>
+    <string name="pref_dark_theme_off" translatable="false">Light</string>
+    <string name="pref_dark_theme_on" translatable="false">Dark</string>
+
+    <!--Beatles prototype placeholders-->
+    <!--placeholders for the labels that will identify the recyclerView in the pictures-->
+    <string name="John" translatable="false">John</string>
+    <string name="Paul" translatable="false">Paul</string>
+    <string name="George" translatable="false">George</string>
+    <string name="Ringo" translatable="false">Ringo</string>
+    <string name="Yoko" translatable="false">Yoko</string>
+
+    <!--key tags-->
+    <string name="fragment_value_key" translatable="false">fragment_value</string>
+
+    <!--URL for the API-->
+    <string name="api_url" translatable="false">http://www.willowtreeapps.com/api/v1.0/profiles</string>
+
+    <!--game board fragment tag-->
+    <string name="game_board_tag" translatable="false">game_board_fragment</string>
+</resources>

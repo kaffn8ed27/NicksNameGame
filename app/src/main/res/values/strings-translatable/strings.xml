@@ -1,0 +1,25 @@
+<resources>
+    <!--settings menu title-->
+    <string name="action_settings">Settings</string>
+    <string name="pref_dark_theme_label">Theme (color scheme)</string>
+
+
+    <!--main activity-->
+    <string name="app_name">NicksNameGame</string>
+    <string name="launcher_label">Nick\'s Name Game</string>
+    <!--label for splash screen-->
+    <string name="launch_activity_name">Select Game Mode</string>
+    <!--default game mode button text-->
+    <string name="default_game_button_text">Never-Ending Game</string>
+    <!--default game mode button text-->
+    <string name="limit_game_button_text">Short Game</string>
+
+
+    <!--game activity-->
+    <!--label for default game screen-->
+    <string name="game_activity_name">Name That Co-Worker!</string>
+
+    <!--misc-->
+    <!--User-friendly generic error message-->
+    <string name="generic_error">Sorry! Something went wrong.</string>
+</resources>
